@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Slim Surfer",
+  "description": "Saves bandwidth by compressing images on the pages.",
+  "version": "0.1",
+  "icons": {
+    "64": "res/images/icon-64.png",
+    "128": "res/images/icon-128.png",
+    "256": "res/images/icon-256.png"
+  },
+  "browser_action": {
+    "default_icon": "res/images/icon-128.png",
+    "default_title": "Save bandwidth"
+  },
+  "background": {
+    "scripts": [
+      "src/background.js"
+    ]
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    "res/images/placeholder.png"
+  ]
+}

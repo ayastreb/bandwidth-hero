@@ -7,7 +7,7 @@ const skipUrls = [
     '.*\.svg'
 ];
 const placeholder = chrome.extension.getURL('/res/images/placeholder.png');
-const socket = new WebSocket('wss://young-eyrie-75602.herokuapp.com/');
+const socket = new WebSocket('wss://lit-inlet-44494.herokuapp.com/');
 var connected = false;
 
 socket.onopen = () => connected = true;

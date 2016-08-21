@@ -12,6 +12,16 @@
     "default_icon": "res/images/icon-128.png",
     "default_title": "Save bandwidth"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content.js"
+      ]
+    }
+  ],
   "background": {
     "scripts": [
       "src/background.js"

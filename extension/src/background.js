@@ -6,8 +6,9 @@ const skipUrls = [
     'favicon',
     '.*\.svg'
 ];
+const socketUri = 'wss://lit-inlet-44494.herokuapp.com/';
 const placeholder = chrome.extension.getURL('/res/images/placeholder.png');
-const socket = new WebSocket('wss://lit-inlet-44494.herokuapp.com/');
+var socket = new WebSocket(socketUri);
 var connected = false;
 
 socket.onopen = () => connected = true;
@@ -23,12 +24,13 @@ chrome.webRequest.onBeforeRequest.addListener(
     details => {
         if (details.url.match(RegExp(`(${skipUrls.join('|')})`, 'i'))) return;
         if (details.url.match(/https?:\/\/.+/i)) {
-            if (connected) {
-                socket.send(JSON.stringify({
-                    tabId: details.tabId,
-                    url: details.url
-                }));
+            if (!connected) {
+                socket = new WebSocket(socketUri);
             }
+            socket.send(JSON.stringify({
+                tabId: details.tabId,
+                url: details.url
+            }));
 
             return {
                 redirectUrl: placeholder

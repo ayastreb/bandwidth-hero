@@ -13,6 +13,8 @@ var connected = false;
 socket.onopen = () => connected = true;
 socket.onclose = () => connected = false;
 socket.onmessage = rawMessage => {
+    if (rawMessage == 'ping') return;
+
     const message = JSON.parse(rawMessage.data);
     setTimeout(() => chrome.tabs.sendMessage(message.tabId, message), 1000);
 };

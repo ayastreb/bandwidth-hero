@@ -1,0 +1,33 @@
+{
+  "name": "slim-surfer-server",
+  "version": "0.1.0",
+  "description": "**Work in Progress**",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayastreb/slim-surfer.git"
+  },
+  "keywords": [],
+  "author": "Anatoliy Yastreb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ayastreb/slim-surfer/issues"
+  },
+  "homepage": "https://github.com/ayastreb/slim-surfer/server#readme",
+  "dependencies": {
+    "aws-sdk": "^2.5.2",
+    "bufferutil": "1.2.1",
+    "express": "4.14.0",
+    "node-uuid": "^1.4.7",
+    "request": "^2.74.0",
+    "sharp": "^0.16.0",
+    "utf-8-validate": "1.2.1",
+    "ws": "1.1.1"
+  },
+  "engines": {
+    "node": "6.3.1"
+  }
+}

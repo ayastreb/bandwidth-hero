@@ -10,11 +10,11 @@ const express    = require('express'),
     fs           = require('fs');
 
 const PORT      = process.env.PORT || 5000;
-const S3_BUCKET = process.env.S3_BUCKET || 'slim-surfer';
+const S3_BUCKET = process.env.S3_BUCKET || 'bandwidth-hero';
 const JPEG_QLT  = process.env.JPEG_QUALITY || 40;
 
 const server = express()
-    .use((req, res) => res.end('Slim Surfer Server'))
+    .use((req, res) => res.end('Bandwidth Hero Server'))
     .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const wss = new SocketServer({server});

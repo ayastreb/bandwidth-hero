@@ -1,5 +1,5 @@
 {
-  "name": "slim-surfer-server",
+  "name": "bandwidth-hero-server",
   "version": "0.1.0",
   "description": "**Work in Progress**",
   "main": "server.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ayastreb/slim-surfer.git"
+    "url": "git+https://github.com/ayastreb/bandwidth-hero.git"
   },
   "keywords": [],
   "author": "Anatoliy Yastreb",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ayastreb/slim-surfer/issues"
+    "url": "https://github.com/ayastreb/bandwidth-hero/issues"
   },
-  "homepage": "https://github.com/ayastreb/slim-surfer/server#readme",
+  "homepage": "https://github.com/ayastreb/bandwidth-hero/server#readme",
   "dependencies": {
     "aws-sdk": "^2.5.2",
     "bufferutil": "1.2.1",

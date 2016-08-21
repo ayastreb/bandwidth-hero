@@ -1,5 +1,5 @@
 const skipUrls = [
-    'slim-surfer.s3.amazonaws.com',
+    'bandwidth-hero.s3.amazonaws.com',
     'syndication.twitter.com',
     'facebook.com/(tr/|rsrc.php|impression.php)',
     'google-analytics',

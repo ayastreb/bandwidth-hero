@@ -1,4 +1,4 @@
-# Slim Surfer Chrome Extension
+# Bandwidth Hero Chrome Extension
 
 **Work in Progress**
 

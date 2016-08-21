@@ -1,4 +1,4 @@
-# Server
+# Bandwidth Hero Server
 
 ## Deployment
 

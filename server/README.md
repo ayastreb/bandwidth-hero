@@ -16,15 +16,7 @@
   heroku create
   ```
   
-  it will create git repo like `https://git.heroku.com/lit-inlet-44494.git`
-  
-* Copy git repo URL from Heroku and add it to remote:
-  
-  ``` 
-  git remote add heroku https://git.heroku.com/lit-inlet-44494.git
-  ```
-  
-* Deploy to your Heroku app:
+* Deploy server sub folder to Heroku app:
   
   ```
   git subtree push --prefix server heroku master

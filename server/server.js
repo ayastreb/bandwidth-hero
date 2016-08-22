@@ -35,8 +35,9 @@ function processImage(socket, message) {
 
     s3.headObject(err => {
         if (!err) {
-            console.log(`From cache: ${message.url}`);
-            respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`);
+            const compressed = `https://${S3_BUCKET}.s3.amazonaws.com/${key}`;
+            console.log(`From cache: ${message.url} => ${compressed}`);
+            respond(compressed);
         } else if (err.code == 'NotFound') {
             var failed = false;
             const transformer = prepareImageTransformer();
@@ -50,7 +51,7 @@ function processImage(socket, message) {
 
             s3.upload({Body: stream}, (err, data) => {
                 if (!err && !failed) {
-                    console.log(`Compressed: ${message.url}`);
+                    console.log(`Compressed: ${message.url} => ${data.Location}`);
                     respond(data.Location);
                 }
             });
@@ -73,7 +74,7 @@ function generateS3FileKey(imageUrl) {
         .digest('hex');
     const filename = crypto
         .createHash('sha1')
-        .update(path.basename(imageUrl.pathname))
+        .update(path.basename(imageUrl.path))
         .digest('hex');
     const extension = path.extname(imageUrl.pathname);
 

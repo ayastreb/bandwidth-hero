@@ -39,6 +39,7 @@ wss.on('connection', ws => {
                 respond(compressed);
             } else if (err.code == 'NotFound') {
                 var failed = false;
+                console.log(`Uploading ${imageUrl}`);
                 const transformer = prepareImageTransformer();
                 const stream = request(imageUrl).pipe(transformer);
 

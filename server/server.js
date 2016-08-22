@@ -27,7 +27,7 @@ wss.on('connection', ws => {
 
     function processImage(imageUrl) {
         const parsedUrl = url.parse(imageUrl);
-        if (!parsedUrl) return;
+        if (!parsedUrl || !parsedUrl.protocol.match(/https?:/i)) return;
 
         const key = generateS3FileKey(parsedUrl);
         const s3 = new aws.S3({params: {Bucket: S3_BUCKET, Key: key}});
@@ -39,7 +39,6 @@ wss.on('connection', ws => {
                 respond(compressed);
             } else if (err.code == 'NotFound') {
                 var failed = false;
-                console.log(`Uploading ${imageUrl}`);
                 const transformer = prepareImageTransformer();
                 const stream = request(imageUrl).pipe(transformer);
 

@@ -24,8 +24,6 @@ wss.on('connection', ws => {
 
     ws.on('message', message => processImage(ws, JSON.parse(message)));
     ws.on('close', () => console.log('Client disconnected'));
-
-    setTimeout(() => ws.send('ping'), 10000);
 });
 
 function processImage(socket, message) {

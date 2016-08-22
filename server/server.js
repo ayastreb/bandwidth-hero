@@ -22,50 +22,49 @@ const wss = new SocketServer({server});
 wss.on('connection', ws => {
     console.log('Client connected');
 
-    ws.on('message', message => processImage(ws, JSON.parse(message)));
+    ws.on('message', processImage);
     ws.on('close', () => console.log('Client disconnected'));
-});
 
-function processImage(socket, message) {
-    const imageUrl = url.parse(message.url);
-    if (!imageUrl) return;
+    function processImage(imageUrl) {
+        const parsedUrl = url.parse(imageUrl);
+        if (!parsedUrl) return;
 
-    const key = generateS3FileKey(imageUrl);
-    const s3 = new aws.S3({params: {Bucket: S3_BUCKET, Key: key}});
+        const key = generateS3FileKey(parsedUrl);
+        const s3 = new aws.S3({params: {Bucket: S3_BUCKET, Key: key}});
 
-    s3.headObject(err => {
-        if (!err) {
-            const compressed = `https://${S3_BUCKET}.s3.amazonaws.com/${key}`;
-            console.log(`From cache: ${message.url} => ${compressed}`);
-            respond(compressed);
-        } else if (err.code == 'NotFound') {
-            var failed = false;
-            const transformer = prepareImageTransformer();
-            const stream = request(message.url).pipe(transformer);
+        s3.headObject(err => {
+            if (!err) {
+                const compressed = `https://${S3_BUCKET}.s3.amazonaws.com/${key}`;
+                console.log(`From cache: ${imageUrl} => ${compressed}`);
+                respond(compressed);
+            } else if (err.code == 'NotFound') {
+                var failed = false;
+                const transformer = prepareImageTransformer();
+                const stream = request(imageUrl).pipe(transformer);
 
-            transformer.on('error', err => {
-                console.log(`Error in ${message.url}:`);
-                console.log(err);
-                failed = true;
-            });
+                transformer.on('error', err => {
+                    console.log(`Error in ${imageUrl}:`);
+                    console.log(err);
+                    failed = true;
+                });
 
-            s3.upload({Body: stream}, (err, data) => {
-                if (!err && !failed) {
-                    console.log(`Compressed: ${message.url} => ${data.Location}`);
-                    respond(data.Location);
-                }
-            });
+                s3.upload({Body: stream}, (err, data) => {
+                    if (!err && !failed) {
+                        console.log(`Compressed: ${imageUrl} => ${data.Location}`);
+                        respond(data.Location);
+                    }
+                });
+            }
+        });
+
+        function respond(compressedImageUrl) {
+            ws.send(JSON.stringify({
+                original: imageUrl,
+                compressed: compressedImageUrl
+            }));
         }
-    });
-
-    function respond(compressedImageUrl) {
-        socket.send(JSON.stringify({
-            tabId: message.tabId,
-            original: message.url,
-            compressed: compressedImageUrl
-        }));
     }
-}
+});
 
 function generateS3FileKey(imageUrl) {
     const dir = crypto

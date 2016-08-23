@@ -49,12 +49,13 @@ function processNode(node) {
  * @param Node   node     node displaying the image
  */
 function requestImageCompression(imageUrl, node) {
+    if (node.hasAttribute('data-original-image')) return;
     if (!nodesByUrl[imageUrl]) {
         nodesByUrl[imageUrl] = [];
-        pendingUrls.push(imageUrl);
-        processPendingUrls();
     }
     nodesByUrl[imageUrl].push(node);
+    pendingUrls.push(imageUrl);
+    processPendingUrls();
 }
 
 /**
@@ -93,6 +94,7 @@ function processResponse(response) {
             } else {
                 node.style.backgroundImage = `url('${data.compressed}')`;
             }
+            node.setAttribute('data-original-image', data.original);
         });
     }
 }

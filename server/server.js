@@ -44,7 +44,7 @@ wss.on('connection', ws => {
             if (!err) {
                 respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`);
             } else if (err.code == 'NotFound') {
-                var failed        = false;
+                let failed        = false;
                 const transformer = prepareImageTransformer(parsedUrl);
 
                 transformer.on('error', err => {

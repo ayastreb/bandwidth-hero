@@ -1,9 +1,9 @@
 // TODO make server uri configurable
 const serverUri = 'wss://lit-inlet-44494.herokuapp.com/';
-var socket;
-var nodesByUrl  = {};
-var pendingUrls = [];
-var observer    = new MutationObserver(mutations => {
+let socket;
+let nodesByUrl  = {};
+let pendingUrls = [];
+let observer    = new MutationObserver(mutations => {
     mutations.forEach(mutation => mutation.addedNodes.forEach(processNode));
 });
 
@@ -22,7 +22,7 @@ function processNode(node) {
         if (node.nodeName == 'IMG' && node.hasAttribute('src')) {
             requestImageCompression(node.src, node);
         } else {
-            var url = window
+            const url = window
                 .getComputedStyle(node)
                 .backgroundImage
                 .match(/url\(['"]+(.*)['"]+\)/i);

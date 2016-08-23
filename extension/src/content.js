@@ -1,9 +1,9 @@
 // TODO make server uri configurable
-const serverUri   = 'wss://lit-inlet-44494.herokuapp.com/';
+const serverUri = 'wss://lit-inlet-44494.herokuapp.com/';
 var socket;
-var elementsByUrl = {};
-var pendingUrls   = [];
-var observer      = new MutationObserver(mutations => {
+var nodesByUrl  = {};
+var pendingUrls = [];
+var observer    = new MutationObserver(mutations => {
     mutations.forEach(mutation => mutation.addedNodes.forEach(processNode));
 });
 
@@ -15,7 +15,7 @@ observer.observe(document.body, {childList: true, subtree: true});
  * Try to find image URL in the element and add it to the processing queue.
  * Traverse all node children recursively.
  *
- * @param {Node} node to process
+ * @param Node node to process
  */
 function processNode(node) {
     if (node.nodeType == Node.ELEMENT_NODE && node.offsetParent !== null) {
@@ -45,13 +45,13 @@ function processNode(node) {
  * so that we can update this node when we receive
  * compressed image back from server.
  *
- * @param {String} imageUrl
- * @param {Node}   node
+ * @param String imageUrl original image URL
+ * @param Node   node     node, to which image belongs
  */
 function requestImageCompression(imageUrl, node) {
-    if (elementsByUrl[imageUrl]) return;
+    if (nodesByUrl[imageUrl]) return;
 
-    elementsByUrl[imageUrl] = node;
+    nodesByUrl[imageUrl] = node;
     pendingUrls.push(imageUrl);
     processPendingUrls();
 }
@@ -80,11 +80,11 @@ function processPendingUrls() {
  *
  * Look up node corresponding to the original image and update it.
  *
- * @param {String} response JSON as a string
+ * @param String response JSON as a string
  */
 function processResponse(response) {
     const data = JSON.parse(response.data);
-    const node = elementsByUrl[data.original];
+    const node = nodesByUrl[data.original];
     if (node !== undefined) {
         if (node.nodeName == 'IMG') {
             node.src = data.compressed;

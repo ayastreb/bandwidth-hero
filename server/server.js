@@ -29,37 +29,35 @@ wss.on('connection', ws => {
         const parsedUrl = url.parse(imageUrl);
         if (!parsedUrl || !parsedUrl.protocol.match(/https?:/i)) return;
 
-        const key = generateS3FileKey(parsedUrl);
-        const s3 = new aws.S3({params: {Bucket: S3_BUCKET, Key: key}});
+        const key      = generateS3FileKey(parsedUrl);
+        const amazonS3 = new aws.S3({params: {Bucket: S3_BUCKET, Key: key}});
 
-        s3.headObject(err => {
+        amazonS3.headObject(err => {
             if (!err) {
-                const compressed = `https://${S3_BUCKET}.s3.amazonaws.com/${key}`;
-                console.log(`From cache: ${imageUrl} => ${compressed}`);
-                respond(compressed);
+                respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`);
             } else if (err.code == 'NotFound') {
-                var failed = false;
+                var failed        = false;
                 const transformer = prepareImageTransformer();
-                const stream = request(imageUrl).pipe(transformer);
 
                 transformer.on('error', err => {
-                    console.log(`Error in ${imageUrl}:`);
+                    console.log(`Error compressing ${imageUrl}:`);
                     console.log(err);
                     failed = true;
                 });
 
-                s3.upload({Body: stream}, (err, data) => {
-                    if (!err && !failed) {
-                        console.log(`Compressed: ${imageUrl} => ${data.Location}`);
-                        respond(data.Location);
+                amazonS3.upload(
+                    {Body: request(imageUrl).pipe(transformer)},
+                    (err, data) => {
+                        if (!err && !failed) respond(data.Location);
                     }
-                });
+                );
             }
         });
 
         function respond(compressedImageUrl) {
+            console.log(`Processed ${imageUrl} => ${compressedImageUrl}`);
             ws.send(JSON.stringify({
-                original: imageUrl,
+                original:   imageUrl,
                 compressed: compressedImageUrl
             }));
         }
@@ -67,17 +65,17 @@ wss.on('connection', ws => {
 });
 
 function generateS3FileKey(imageUrl) {
-    const dir = crypto
+    const folder    = crypto
         .createHash('sha1')
         .update(imageUrl.host)
         .digest('hex');
-    const filename = crypto
+    const filename  = crypto
         .createHash('sha1')
         .update(path.basename(imageUrl.path))
         .digest('hex');
     const extension = path.extname(imageUrl.pathname);
 
-    return `${dir}/${filename}${extension}`;
+    return `${folder}/${filename}${extension}`;
 }
 
 function prepareImageTransformer() {

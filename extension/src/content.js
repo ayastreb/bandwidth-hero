@@ -1,9 +1,9 @@
-const socketUri = 'wss://lit-inlet-44494.herokuapp.com/';
+const socketUri   = 'wss://lit-inlet-44494.herokuapp.com/';
 var socket;
-var connected = false;
+var connected     = false;
 var elementsByUrl = {};
-var pendingUrls = [];
-var observer = new MutationObserver(mutations => {
+var pendingUrls   = [];
+var observer      = new MutationObserver(mutations => {
     mutations.forEach(mutation => mutation.addedNodes.forEach(traverse));
 });
 
@@ -19,15 +19,12 @@ function connect(socketUri) {
         processPendingUrls();
     };
 
-    socket.onclose = () => {
-        connected = false;
-        setTimeout(() => connect(socketUri), 1000);
-    };
+    socket.onclose = () => connected = false;
 
     socket.onmessage = rawMessage => {
         const message = JSON.parse(rawMessage.data);
-        if (elementsByUrl[message.original]) {
-            const node = elementsByUrl[message.original];
+        const node    = elementsByUrl[message.original];
+        if (node !== undefined) {
             if (node.nodeName == 'IMG') {
                 node.src = message.compressed;
             } else {
@@ -42,8 +39,10 @@ function traverse(node) {
         if (node.nodeName == 'IMG' && node.hasAttribute('src')) {
             replaceImage(node, node.src);
         } else {
-            var backgroundImage = window.getComputedStyle(node).backgroundImage;
-            var url = backgroundImage.match(/url\(['"]+(.*)['"]+\)/i);
+            var url = window
+                .getComputedStyle(node)
+                .backgroundImage
+                .match(/url\(['"]+(.*)['"]+\)/i);
             if (url && url.length) {
                 replaceImage(node, url[1]);
             }
@@ -66,7 +65,10 @@ function replaceImage(node, imageUrl) {
 }
 
 function processPendingUrls() {
-    if (!connected) return;
+    if (!connected) {
+        if (socket.readyState !== WebSocket.CONNECTING) connect(socketUri);
+        return;
+    }
 
     while (pendingUrls.length > 0) {
         socket.send(pendingUrls.pop());

@@ -1,3 +1,5 @@
+const placeholder  = chrome.extension.getURL('/res/images/placeholder.png');
+// TODO make skipped patterns configurable
 const skipPatterns = [
     'bandwidth-hero\.s3\.amazonaws\.com',
     'syndication\.twitter\.com',
@@ -6,7 +8,6 @@ const skipPatterns = [
     'favicon',
     '.*\.svg'
 ];
-const placeholder = chrome.extension.getURL('/res/images/placeholder.png');
 
 chrome.webRequest.onBeforeRequest.addListener(
     details => {
@@ -18,7 +19,7 @@ chrome.webRequest.onBeforeRequest.addListener(
         }
     },
     {
-        urls: ["<all_urls>"],
+        urls:  ["<all_urls>"],
         types: ["image"]
     },
     ["blocking"]

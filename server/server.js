@@ -25,11 +25,19 @@ wss.on('connection', ws => {
     ws.on('message', processImage);
     ws.on('close', () => console.log('Client disconnected'));
 
+    /**
+     * Generate unique hash key for image based on host and path,
+     * check if this file already exist in S3 bucket with HEAD request,
+     * if it does not exist yet - compress image and upload to S3,
+     * otherwise just respond with compressed image URL.
+     *
+     * @param String imageUrl original image URL
+     */
     function processImage(imageUrl) {
         const parsedUrl = url.parse(imageUrl);
         if (!parsedUrl || !parsedUrl.protocol.match(/https?:/i)) return;
 
-        const key      = generateS3FileKey(parsedUrl);
+        const key      = generateUniqueFileKey(parsedUrl);
         const amazonS3 = new aws.S3({params: {Bucket: S3_BUCKET, Key: key}});
 
         amazonS3.headObject(err => {
@@ -37,7 +45,7 @@ wss.on('connection', ws => {
                 respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`);
             } else if (err.code == 'NotFound') {
                 var failed        = false;
-                const transformer = prepareImageTransformer();
+                const transformer = prepareImageTransformer(imageUrl);
 
                 transformer.on('error', err => {
                     console.log(`Error compressing ${imageUrl}:`);
@@ -64,7 +72,17 @@ wss.on('connection', ws => {
     }
 });
 
-function generateS3FileKey(imageUrl) {
+/**
+ * Generate unique key based on image URL.
+ * It consist of folder, filename and extension.
+ * Folder is SHA-1 hashed host (e.g. pbs.twimg.com becomes da7f52ba4bc88b4b9f10918c6b82da182147b979),
+ * and filename is SHA-1 hashed URL path.
+ * Extension is taken from URL without changes.
+ *
+ * @param Url imageUrl parsed image URL object
+ * @returns String unique key
+ */
+function generateUniqueFileKey(imageUrl) {
     const folder    = crypto
         .createHash('sha1')
         .update(imageUrl.host)
@@ -78,11 +96,18 @@ function generateS3FileKey(imageUrl) {
     return `${folder}/${filename}${extension}`;
 }
 
-function prepareImageTransformer() {
+/**
+ * Prepare Sharp image transformer.
+ *
+ * @param Url imageUrl parsed image URL object
+ * @see http://sharp.readthedocs.io/en/stable/api/
+ */
+function prepareImageTransformer(imageUrl) {
+    const format = path.extname(imageUrl.pathname) == 'png' ? 'png' : 'jpeg';
     return sharp()
         .grayscale()
         .normalise()
         .quality(JPEG_QLT)
         .progressive()
-        .toFormat('jpeg');
+        .toFormat(format);
 }

@@ -34,6 +34,7 @@
     "tabs",
     "<all_urls>"
   ],
+  "content_security_policy": "image-src https://bandwidth-hero.s3.amazonaws.com; default-src 'self'",
   "web_accessible_resources": [
     "res/images/placeholder.png"
   ]

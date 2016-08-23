@@ -41,19 +41,20 @@ function processNode(node) {
 
 /**
  * Add image URL to the processing queue and
- * keep reference to the node it belongs to,
- * so that we can update this node when we receive
+ * keep reference of all nodes displaying this image,
+ * so that we can update those nodes when we receive
  * compressed image back from server.
  *
  * @param String imageUrl original image URL
- * @param Node   node     node, to which image belongs
+ * @param Node   node     node displaying the image
  */
 function requestImageCompression(imageUrl, node) {
-    if (nodesByUrl[imageUrl]) return;
-
-    nodesByUrl[imageUrl] = node;
-    pendingUrls.push(imageUrl);
-    processPendingUrls();
+    if (!nodesByUrl[imageUrl]) {
+        nodesByUrl[imageUrl] = [];
+        pendingUrls.push(imageUrl);
+        processPendingUrls();
+    }
+    nodesByUrl[imageUrl].push(node);
 }
 
 /**
@@ -83,14 +84,16 @@ function processPendingUrls() {
  * @param String response JSON as a string
  */
 function processResponse(response) {
-    const data = JSON.parse(response.data);
-    const node = nodesByUrl[data.original];
-    if (node !== undefined) {
-        if (node.nodeName == 'IMG') {
-            node.src = data.compressed;
-        } else {
-            node.style.backgroundImage = `url('${data.compressed}')`;
-        }
+    const data  = JSON.parse(response.data);
+    const nodes = nodesByUrl[data.original];
+    if (nodes && nodes.length) {
+        nodes.forEach(node => {
+            if (node.nodeName == 'IMG') {
+                node.src = data.compressed;
+            } else {
+                node.style.backgroundImage = `url('${data.compressed}')`;
+            }
+        });
     }
 }
 

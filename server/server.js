@@ -45,7 +45,7 @@ wss.on('connection', ws => {
                 respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`);
             } else if (err.code == 'NotFound') {
                 var failed        = false;
-                const transformer = prepareImageTransformer(imageUrl);
+                const transformer = prepareImageTransformer(parsedUrl);
 
                 transformer.on('error', err => {
                     console.log(`Error compressing ${imageUrl}:`);
@@ -79,19 +79,19 @@ wss.on('connection', ws => {
  * and filename is SHA-1 hashed URL path.
  * Extension is taken from URL without changes.
  *
- * @param Url imageUrl parsed image URL object
+ * @param Url parsedUrl parsed image URL object
  * @returns String unique key
  */
-function generateUniqueFileKey(imageUrl) {
+function generateUniqueFileKey(parsedUrl) {
     const folder    = crypto
         .createHash('sha1')
-        .update(imageUrl.host)
+        .update(parsedUrl.host)
         .digest('hex');
     const filename  = crypto
         .createHash('sha1')
-        .update(path.basename(imageUrl.path))
+        .update(path.basename(parsedUrl.path))
         .digest('hex');
-    const extension = path.extname(imageUrl.pathname);
+    const extension = path.extname(parsedUrl.pathname);
 
     return `${folder}/${filename}${extension}`;
 }
@@ -99,13 +99,13 @@ function generateUniqueFileKey(imageUrl) {
 /**
  * Prepare Sharp image transformer.
  *
- * @param Url imageUrl parsed image URL object
+ * @param Url parsedUrl parsed image URL object
  * @see http://sharp.readthedocs.io/en/stable/api/
  */
-function prepareImageTransformer(imageUrl) {
-    const format = path.extname(imageUrl.pathname) == 'png' ? 'png' : 'jpeg';
+function prepareImageTransformer(parsedUrl) {
+    const format = path.extname(parsedUrl.pathname) == 'png' ? 'png' : 'jpeg';
     return sharp()
-        .grayscale()
+        .toColorspace('b-w')
         .normalise()
         .quality(JPEG_QLT)
         .progressive()

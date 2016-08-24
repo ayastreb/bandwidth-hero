@@ -34,6 +34,7 @@ wss.on('connection', ws => {
      * @param String imageUrl original image URL
      */
     function processImage(imageUrl) {
+        console.log(`Received message: ${imageUrl}`);
         const parsedUrl = url.parse(imageUrl);
         if (!parsedUrl || !parsedUrl.protocol.match(/https?:/i)) return;
 

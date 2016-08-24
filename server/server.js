@@ -109,11 +109,16 @@ function generateUniqueFileKey(parsedUrl) {
  * @see http://sharp.readthedocs.io/en/stable/api/
  */
 function prepareImageTransformer(parsedUrl) {
-    const format = path.extname(parsedUrl.pathname) == 'png' ? 'png' : 'jpeg';
-    return sharp()
-        .toColorspace('b-w')
-        .normalise()
-        .quality(JPEG_QLT)
-        .progressive()
-        .toFormat(format);
+    if (path.extname(parsedUrl.pathname) == 'png') {
+        return sharp()
+            .toColorspace('b-w')
+            .toFormat('png');
+    } else {
+        return sharp()
+            .grayscale()
+            .normalise()
+            .quality(JPEG_QLT)
+            .progressive()
+            .toFormat('jpeg');
+    }
 }

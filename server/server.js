@@ -15,10 +15,6 @@ const PORT      = process.env.PORT || 5000;
 
 const server = express()
     .use((req, res) => res.end('Bandwidth Hero Server'))
-    .use((err, req, res, next) => {
-        console.log(err);
-        next(err);
-    })
     .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const wss = new SocketServer({server});
@@ -28,6 +24,7 @@ wss.on('connection', ws => {
 
     ws.on('message', processImage);
     ws.on('close', () => console.log('Client disconnected'));
+    ws.on('error', err => console.log(`WebSocket error: ${err}`));
 
     /**
      * Generate unique hash key for image based on host and path,

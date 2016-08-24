@@ -19,7 +19,6 @@ observer.observe(document.body, {childList: true, subtree: true});
  */
 function processNode(node) {
     if (node.nodeType == Node.ELEMENT_NODE) {
-        node.setAttribute('bh-seen', 'yes');
         if (node.nodeName == 'IMG') {
             const imageUrl = node.getAttribute('src') || node.getAttribute('data-src');
             requestImageCompression(imageUrl, node);
@@ -30,7 +29,6 @@ function processNode(node) {
             const urlMatch = styleUrl.match(/url\((.*)\)/i);
             if (urlMatch && urlMatch.length) {
                 const imageUrl = urlMatch[1].replace(/["']/g, '', urlMatch[1]);
-                console.log(imageUrl);
                 requestImageCompression(imageUrl, node);
             }
         }

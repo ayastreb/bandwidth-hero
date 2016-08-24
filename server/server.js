@@ -73,7 +73,7 @@ wss.on('connection', ws => {
     }
 });
 
-ws.on('error', err => {
+wss.on('error', err => {
     console.log(`WebSocket error: ${err}`);
 })
 

@@ -41,7 +41,7 @@ wss.on('connection', ws => {
     function processImage(imageUrl) {
         console.log(`Received message: ${imageUrl}`);
         const parsedUrl = url.parse(imageUrl);
-        if (!parsedUrl || !parsedUrl.protocol.match(/https?:/i)) return;
+        if (!imageUrl.match(/^https?:/i) || !parsedUrl) return;
 
         const key      = generateUniqueFileKey(parsedUrl);
         const amazonS3 = new aws.S3({params: {Bucket: S3_BUCKET, Key: key}});

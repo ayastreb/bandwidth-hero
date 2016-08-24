@@ -73,6 +73,10 @@ wss.on('connection', ws => {
     }
 });
 
+ws.on('error', err => {
+    console.log(`WebSocket error: ${err}`);
+})
+
 /**
  * Generate unique key based on image URL.
  * It consist of folder, filename and extension.

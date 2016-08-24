@@ -19,12 +19,16 @@ const server = express()
 
 const wss = new SocketServer({server});
 
+process.on('uncaughtException', function (err) {
+    console.log('process error');
+    console.log(err);
+});
+
 wss.on('connection', ws => {
     console.log('Client connected');
 
     ws.on('message', processImage);
     ws.on('close', () => console.log('Client disconnected'));
-    ws.on('error', err => console.log(`WebSocket error: ${err}`));
 
     /**
      * Generate unique hash key for image based on host and path,
@@ -73,10 +77,6 @@ wss.on('connection', ws => {
         }
     }
 });
-
-wss.on('error', err => {
-    console.log(`WebSocket error: ${err}`);
-})
 
 /**
  * Generate unique key based on image URL.

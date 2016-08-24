@@ -18,20 +18,22 @@ observer.observe(document.body, {childList: true, subtree: true});
  * @param Node node to process
  */
 function processNode(node) {
-    if (node.nodeType == Node.ELEMENT_NODE && node.offsetParent !== null) {
-        if (node.nodeName == 'IMG' && node.hasAttribute('src')) {
-            requestImageCompression(node.src, node);
+    if (node.nodeType == Node.ELEMENT_NODE) {
+        node.setAttribute('bh-seen', 'yes');
+        if (node.nodeName == 'IMG') {
+            const imageUrl = node.getAttribute('src') || node.getAttribute('data-src');
+            requestImageCompression(imageUrl, node);
         } else {
-            const url = window
-                .getComputedStyle(node)
-                .backgroundImage
-                .match(/url\(['"]+(.*)['"]+\)/i);
-            if (url && url.length) {
-                requestImageCompression(url[1], node);
+            const styleUrl = node.hasAttribute('data-style')
+                ? node.getAttribute('data-style')
+                : window.getComputedStyle(node).backgroundImage;
+            const urlMatch = styleUrl.match(/url\((.*)\)/i);
+            if (urlMatch && urlMatch.length) {
+                const imageUrl = urlMatch[1].replace(/["']/g, '', urlMatch[1]);
+                console.log(imageUrl);
+                requestImageCompression(imageUrl, node);
             }
         }
-
-        // TODO handle iframes
 
         if (node.hasChildNodes()) {
             node.childNodes.forEach(processNode);
@@ -52,9 +54,9 @@ function requestImageCompression(imageUrl, node) {
     if (node.hasAttribute('data-original-image')) return;
     if (!nodesByUrl[imageUrl]) {
         nodesByUrl[imageUrl] = [];
+        pendingUrls.push(imageUrl);
     }
     nodesByUrl[imageUrl].push(node);
-    pendingUrls.push(imageUrl);
     processPendingUrls();
 }
 
@@ -88,14 +90,16 @@ function processResponse(response) {
     const data  = JSON.parse(response.data);
     const nodes = nodesByUrl[data.original];
     if (nodes && nodes.length) {
-        nodes.forEach(node => {
+        while (nodes.length > 0) {
+            const node = nodes.pop();
+            node.setAttribute('data-original-image', data.original);
             if (node.nodeName == 'IMG') {
                 node.src = data.compressed;
             } else {
                 node.style.backgroundImage = `url('${data.compressed}')`;
             }
-            node.setAttribute('data-original-image', data.original);
-        });
+        }
+        delete nodesByUrl[data.original];
     }
 }
 

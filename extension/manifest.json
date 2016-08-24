@@ -20,7 +20,8 @@
       "js": [
         "src/content.js"
       ],
-      "run_at": "document_end"
+      "run_at": "document_end",
+      "all_frames": true
     }
   ],
   "background": {
@@ -34,7 +35,7 @@
     "tabs",
     "<all_urls>"
   ],
-  "content_security_policy": "image-src https://bandwidth-hero.s3.amazonaws.com; default-src 'self'",
+  "content_security_policy": "image-src 'self' https://*.s3.amazonaws.com; default-src 'self'",
   "web_accessible_resources": [
     "res/images/placeholder.png"
   ]

@@ -49,7 +49,7 @@ wss.on('connection', ws => {
             if (!err) {
                 respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`);
             } else if (err.code == 'NotFound') {
-                let failed        = false;
+                let failed      = false;
                 let transformer = prepareImageTransformer(parsedUrl);
 
                 transformer.on('error', err => {
@@ -108,15 +108,12 @@ function generateUniqueFileKey(parsedUrl) {
  * @see http://sharp.readthedocs.io/en/stable/api/
  */
 function prepareImageTransformer(parsedUrl) {
-    const extname = path.extname(parsedUrl.pathname);
-    if (extname == '.png') {
-        console.log(`Transforming PNG (${extname})`);
+    if (path.extname(parsedUrl.pathname) == '.png') {
         return sharp()
             .grayscale()
             .normalize()
             .toFormat('png');
     } else {
-        console.log(`Transforming JPEG (${extname})`);
         return sharp()
             .grayscale()
             .normalize()

@@ -39,7 +39,6 @@ wss.on('connection', ws => {
      * @param String imageUrl original image URL
      */
     function processImage(imageUrl) {
-        console.log(`Received message: ${imageUrl}`);
         const parsedUrl = url.parse(imageUrl);
         if (!imageUrl.match(/^https?:/i) || !parsedUrl) return;
 
@@ -109,14 +108,18 @@ function generateUniqueFileKey(parsedUrl) {
  * @see http://sharp.readthedocs.io/en/stable/api/
  */
 function prepareImageTransformer(parsedUrl) {
-    if (path.extname(parsedUrl.pathname) == 'png') {
-        return sharp()
-            .toColorspace('b-w')
-            .toFormat('png');
-    } else {
+    const extname = path.extname(parsedUrl.pathname);
+    if (extname == 'png') {
+        console.log(`Transforming PNG (${extname})`);
         return sharp()
             .grayscale()
-            .normalise()
+            .normalize()
+            .toFormat('png');
+    } else {
+        console.log(`Transforming JPEG (${extname})`);
+        return sharp()
+            .grayscale()
+            .normalize()
             .quality(JPEG_QLT)
             .progressive()
             .toFormat('jpeg');

@@ -50,7 +50,7 @@ wss.on('connection', ws => {
                 respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`);
             } else if (err.code == 'NotFound') {
                 let failed        = false;
-                const transformer = prepareImageTransformer(parsedUrl);
+                let transformer = prepareImageTransformer(parsedUrl);
 
                 transformer.on('error', err => {
                     console.log(`Error compressing ${imageUrl}:`);
@@ -109,7 +109,7 @@ function generateUniqueFileKey(parsedUrl) {
  */
 function prepareImageTransformer(parsedUrl) {
     const extname = path.extname(parsedUrl.pathname);
-    if (extname == 'png') {
+    if (extname == '.png') {
         console.log(`Transforming PNG (${extname})`);
         return sharp()
             .grayscale()

@@ -1,5 +1,7 @@
 // TODO make server uri configurable
 const serverUri = 'wss://lit-inlet-44494.herokuapp.com/';
+const baseUrl = document.createElement('a');
+baseUrl.href = document.URL;
 let socket;
 let nodesByUrl  = {};
 let pendingUrls = [];
@@ -50,12 +52,22 @@ function processNode(node) {
  */
 function requestImageCompression(imageUrl, node) {
     if (node.hasAttribute('data-original-image')) return;
+    imageUrl = normalizeUrl(imageUrl);
     if (!nodesByUrl[imageUrl]) {
         nodesByUrl[imageUrl] = [];
         pendingUrls.push(imageUrl);
     }
     nodesByUrl[imageUrl].push(node);
     processPendingUrls();
+
+    function normalizeUrl(input) {
+        if (input.startsWith('//')) {
+            return `${baseUrl.protocol}${input}`;
+        } else if (input.startsWith('/')) {
+            return `${baseUrl.protocol}//${baseUrl.host}${input}`;
+        }
+        return input;
+    }
 }
 
 /**

@@ -52,6 +52,7 @@ function processNode(node) {
  */
 function requestImageCompression(imageUrl, node) {
     if (node.hasAttribute('data-original-image') || !imageUrl) return;
+    if (imageUrl.test(/\.svg/i)) return;
     if (imageUrl.startsWith('//')) {
         imageUrl = `${baseUrl.protocol}${imageUrl}`;
     } else if (imageUrl.startsWith('/')) {

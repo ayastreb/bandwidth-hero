@@ -10,19 +10,16 @@ const aws          = require('aws-sdk');
 const fs           = require('fs');
 
 const S3_BUCKET = process.env.S3_BUCKET || 'bandwidth-hero';
-const JPEG_QLT  = process.env.JPEG_QUALITY || 40;
+const JPEG_QLT  = parseInt(process.env.JPEG_QUALITY) || 40;
 const PORT      = process.env.PORT || 5000;
+
+process.on('uncaughtException', err => console.log(`process error: ${err}`));
 
 const server = express()
     .use((req, res) => res.end('Bandwidth Hero Server'))
     .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const wss = new SocketServer({server});
-
-process.on('uncaughtException', function (err) {
-    console.log('process error');
-    console.log(err);
-});
 
 wss.on('connection', ws => {
     console.log('Client connected');
@@ -53,8 +50,7 @@ wss.on('connection', ws => {
                 let transformer = prepareImageTransformer(parsedUrl);
 
                 transformer.on('error', err => {
-                    console.log(`Error compressing ${imageUrl}:`);
-                    console.log(err);
+                    console.log(`Error compressing ${imageUrl}: ${err}`);
                     failed = true;
                 });
 
@@ -108,7 +104,8 @@ function generateUniqueFileKey(parsedUrl) {
  * @see http://sharp.readthedocs.io/en/stable/api/
  */
 function prepareImageTransformer(parsedUrl) {
-    if (path.extname(parsedUrl.pathname) == '.png') {
+    const ext = path.extname(parsedUrl.pathname);
+    if (ext == '.png' || ext == '.gif') {
         return sharp()
             .grayscale()
             .normalize()

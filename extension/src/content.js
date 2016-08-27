@@ -1,6 +1,6 @@
 'use strict';
 // TODO make server uri configurable
-const serverUri = 'wss://lit-inlet-44494.herokuapp.com/';
+const serverUri = 'wss://bandwidth-hero.herokuapp.com/';
 const baseUrl   = document.createElement('a');
 baseUrl.href    = document.URL;
 let socket;

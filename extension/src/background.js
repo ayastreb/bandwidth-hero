@@ -1,3 +1,4 @@
+'use strict';
 const placeholder             = chrome.extension.getURL('/res/images/placeholder.png');
 const compressedImagesBaseUrl = 'bandwidth-hero.s3.amazonaws.com';
 // TODO make skipped patterns configurable

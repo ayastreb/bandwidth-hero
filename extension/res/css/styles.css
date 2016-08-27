@@ -1,0 +1,12 @@
+.settings-card {
+    min-width: 25rem;
+    min-height: 5rem;
+}
+
+.settings-card__header {
+    width: 100%;
+}
+
+.right-side {
+    text-align: right;
+}

@@ -31,6 +31,7 @@
     ]
   },
   "permissions": [
+    "storage",
     "webRequest",
     "webRequestBlocking",
     "tabs",

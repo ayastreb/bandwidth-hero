@@ -48,8 +48,8 @@ function processNode(node) {
  * so that we can update those nodes when we receive
  * compressed image back from server.
  *
- * @param String imageUrl original image URL
- * @param Node   node     node displaying the image
+ * @param {String} imageUrl original image URL
+ * @param {Node}   node     node displaying the image
  */
 function requestImageCompression(imageUrl, node) {
     if (node.hasAttribute('data-original-image') || !imageUrl) return;
@@ -58,6 +58,9 @@ function requestImageCompression(imageUrl, node) {
         imageUrl = `${baseUrl.protocol}${imageUrl}`;
     } else if (imageUrl.startsWith('/')) {
         imageUrl = `${baseUrl.protocol}//${baseUrl.host}${imageUrl}`;
+    }
+    if (Object.keys(nodesByUrl).length == 0) {
+        chrome.extension.sendMessage({action: 'setActiveIcon'});
     }
     if (!nodesByUrl[imageUrl]) {
         nodesByUrl[imageUrl] = [];
@@ -91,7 +94,7 @@ function processPendingUrls() {
  *
  * Look up node corresponding to the original image and update it.
  *
- * @param String response JSON as a string
+ * @param {String} response JSON as a string
  */
 function processResponse(response) {
     const data  = JSON.parse(response.data);
@@ -107,6 +110,9 @@ function processResponse(response) {
             }
         }
         delete nodesByUrl[data.original];
+    }
+    if (Object.keys(nodesByUrl).length == 0) {
+        chrome.extension.sendMessage({action: 'setDefaultIcon'});
     }
 }
 

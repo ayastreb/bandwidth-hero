@@ -33,7 +33,7 @@ wss.on('connection', ws => {
      * if it does not exist yet - compress image and upload to S3,
      * otherwise just respond with compressed image URL.
      *
-     * @param String imageUrl original image URL
+     * @param {String} imageUrl original image URL
      */
     function processImage(imageUrl) {
         const parsedUrl = url.parse(imageUrl);
@@ -80,8 +80,8 @@ wss.on('connection', ws => {
  * and filename is SHA-1 hashed URL path.
  * Extension is taken from URL without changes.
  *
- * @param Url parsedUrl parsed image URL object
- * @returns String unique key
+ * @param {Url} parsedUrl parsed image URL object
+ * @returns {String} unique key
  */
 function generateUniqueFileKey(parsedUrl) {
     const folder    = crypto
@@ -100,7 +100,7 @@ function generateUniqueFileKey(parsedUrl) {
 /**
  * Prepare Sharp image transformer.
  *
- * @param Url parsedUrl parsed image URL object
+ * @param {Url} parsedUrl parsed image URL object
  * @see http://sharp.readthedocs.io/en/stable/api/
  */
 function prepareImageTransformer(parsedUrl) {

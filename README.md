@@ -14,13 +14,9 @@ Bandwidth Hero is a Chrome extension which compresses images on the page to save
 6. Bandwidth Hero finds corresponding element on the page an updates its image source with compressed one
 7. Browser loads compressed image from Amazon S3 bucket
 
-## Installation
-
-[![Get Extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png)](https://chrome.google.com/webstore/detail/bandwidth-hero/mmhippoadkhcflebgghophicgldbahdb?hl=en-US)
-
 ## Privacy Consideration
 
-Please consider, that extension has access to all the images you browse and stores compressed copies of them on my Amazon S3 bucket for up to 3 days.
+Please consider, that this extension has access to all the images you browse and stores compressed copies of them on my Amazon S3 bucket for up to 3 days.
 If you don't want your images to be stored on some stranger's server, you can run your own proxy server.
 
 You will need a free Heroku account and an Amazon AWS account, 
@@ -29,6 +25,15 @@ and after that it costs just pennies per gigabyte of traffic.
 
 Please refer to [Server Docs](https://github.com/ayastreb/bandwidth-hero/tree/master/server) 
 for detailed instructions on how to run your own proxy.
+
+## Installation
+
+[![Get Extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png)](https://chrome.google.com/webstore/detail/bandwidth-hero/mmhippoadkhcflebgghophicgldbahdb?hl=en-US)
+
+## Known Issues
+
+* Doesn't work with `img srcset` and responsive images
+* Glitches on GMail & GoogleMaps
 
 ## Credits
 

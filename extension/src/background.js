@@ -1,48 +1,51 @@
 'use strict';
-const placeholder             = chrome.extension.getURL('/res/images/placeholder.png');
-const compressedImagesBaseUrl = 'bandwidth-hero.s3.amazonaws.com';
-// TODO make skipped patterns configurable
-const skipPatterns            = [
-    compressedImagesBaseUrl,
-    'syndication\.twitter\.com',
-    'facebook\.com/(tr/|rsrc\.php|impression\.php)',
-    'google-analytics',
-    'favicon',
-    '.*\.svg'
-];
 
+const defaults = {
+    enabled:           true,
+    serverUrl:         'wss://bandwidth-hero.herokuapp.com/',
+    compressedBaseUrl: 'bandwidth-hero.s3.amazonaws.com'
+};
+
+/**
+ * Set default settings when extension is installed.
+ */
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.set({
-        enabled:   true,
-        serverUrl: 'wss://bandwidth-hero.herokuapp.com/',
-    });
+    chrome.storage.sync.set(defaults);
 });
 
-chrome.storage.sync.get(options => {
-    let enabled = options.enabled;
+chrome.storage.sync.get(runBackground);
 
-    chrome.extension.onMessage.addListener(onMessage);
-    chrome.webRequest.onBeforeRequest.addListener(onBeforeRequest,
+function runBackground(settings) {
+    settings     = Object.assign({}, defaults, settings);
+    let enabled = settings.enabled;
+
+    if (!enabled) {
+        chrome.browserAction.setIcon({path: 'res/images/icon-128-disabled.png'});
+    }
+
+    chrome.extension.onMessage.addListener(handleMessage);
+    chrome.webRequest.onBeforeRequest.addListener(replaceImagesWithPlaceholder,
         {
             urls:  ['<all_urls>'],
             types: ['image']
         },
         ['blocking']
     );
-    chrome.webRequest.onHeadersReceived.addListener(onHeadersReceived,
+    chrome.webRequest.onHeadersReceived.addListener(patchContentSecurityPolicy,
         {
             urls:  ['<all_urls>'],
             types: ['main_frame', 'sub_frame']
         },
         ['blocking', 'responseHeaders']
     );
+    return;
 
     /**
      * Handle incoming messages from extension/popup.
      *
      * @param {Object} request
      */
-    function onMessage(request) {
+    function handleMessage(request) {
         const actionHandlers = {
             'setActiveIcon':  () => {
                 chrome.browserAction.setIcon({
@@ -79,12 +82,17 @@ chrome.storage.sync.get(options => {
      * @param {Object} details
      * @returns {Object} object
      */
-    function onBeforeRequest(details) {
+    function replaceImagesWithPlaceholder(details) {
+        const allowPatterns = [
+            settings.compressedBaseUrl,
+            'favicon',
+            '.*\.svg'
+        ];
         if (enabled
-            && !details.url.match(RegExp(`(${skipPatterns.join('|')})`, 'i'))
+            && !details.url.match(RegExp(`(${allowPatterns.join('|')})`, 'i'))
             && details.url.match(/https?:\/\/.+/i)) {
             return {
-                redirectUrl: placeholder
+                redirectUrl: chrome.extension.getURL('/res/images/placeholder.png')
             };
         }
     }
@@ -95,13 +103,13 @@ chrome.storage.sync.get(options => {
      * @param {Object} details
      * @returns {Object} patched headeers
      */
-    function onHeadersReceived(details) {
+    function patchContentSecurityPolicy(details) {
         for (var i = 0; i < details.responseHeaders.length; i++) {
             if (/content-security-policy/i.test(details.responseHeaders[i].name)) {
                 details.responseHeaders[i].value = details
                     .responseHeaders[i]
                     .value
-                    .replace('img-src', `img-src ${compressedImagesBaseUrl}`);
+                    .replace('img-src', `img-src ${settings.compressedBaseUrl}`);
             }
         }
 
@@ -109,4 +117,4 @@ chrome.storage.sync.get(options => {
             responseHeaders: details.responseHeaders
         };
     }
-});
+}

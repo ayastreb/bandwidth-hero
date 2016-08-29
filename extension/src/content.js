@@ -2,8 +2,8 @@
 
 chrome.storage.sync.get(runExtension);
 
-function runExtension(options) {
-    if (!options.enabled) return;
+function runExtension(settings) {
+    if (!settings.enabled) return;
 
     const baseUrl   = document.createElement('a');
     baseUrl.href    = document.URL;
@@ -123,7 +123,7 @@ function runExtension(options) {
      * Connect to server via WebSocket and assign event handlers.
      */
     function connect() {
-        socket = new WebSocket(options.serverUrl);
+        socket = new WebSocket(settings.serverUrl);
 
         socket.onopen    = processPendingUrls;
         socket.onmessage = processResponse;

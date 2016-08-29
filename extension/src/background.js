@@ -16,7 +16,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.storage.sync.get(runBackground);
 
 function runBackground(settings) {
-    settings     = Object.assign({}, defaults, settings);
+    settings    = Object.assign({}, defaults, settings);
     let enabled = settings.enabled;
 
     if (!enabled) {

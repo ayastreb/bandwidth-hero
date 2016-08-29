@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Bandwidth Hero",
   "description": "Saves bandwidth by compressing images on the page.",
-  "version": "0.1",
+  "version": "0.1.0",
   "icons": {
     "64": "res/images/icon-128.png",
     "128": "res/images/icon-256.png",

@@ -10,9 +10,13 @@ function runExtension(settings) {
     let socket;
     let nodesByUrl  = {};
     let pendingUrls = [];
+    let compressed  = {};
     let observer    = new MutationObserver(mutations => {
         mutations.forEach(mutation => mutation.addedNodes.forEach(processNode));
     });
+    let imgObserver = new MutationObserver(mutations => {
+        mutations.forEach(mutation => processImageUpdate(mutation.target));
+    })
 
     document.body.childNodes.forEach(processNode);
     observer.observe(document.body, {childList: true, subtree: true});
@@ -30,6 +34,10 @@ function runExtension(settings) {
             if (node.nodeName == 'IMG') {
                 const imageUrl = node.getAttribute('src') || node.getAttribute('data-src');
                 requestImageCompression(imageUrl, node);
+                imgObserver.observe(node, {
+                    attributes:      true,
+                    attributeFilter: ['src']
+                });
             } else {
                 const styleUrl = node.hasAttribute('data-style')
                     ? node.getAttribute('data-style')
@@ -44,6 +52,15 @@ function runExtension(settings) {
             if (node.hasChildNodes()) {
                 node.childNodes.forEach(processNode);
             }
+        }
+    }
+
+    function processImageUpdate(node) {
+        if (!node.hasAttribute('data-original-image')
+            && node.src != node.currentSrc) {
+            requestImageCompression(node.src, node);
+        } else if (compressed[node.src]) {
+            node.src = compressed[node.src];
         }
     }
 
@@ -115,6 +132,9 @@ function runExtension(settings) {
                 }
             }
             delete nodesByUrl[data.original];
+        }
+        if (!compressed[data.original]) {
+            compressed[data.original] = data.compressed;
         }
         chrome.extension.sendMessage({action: 'setDefaultIcon'});
     }

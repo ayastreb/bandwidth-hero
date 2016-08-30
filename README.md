@@ -1,4 +1,4 @@
-# Bandwidth Hero
+![Bandwidth Hero](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/logo.png)
 
 Bandwidth Hero is a Chrome extension which compresses images on the page to save bandwidth.
 

@@ -10,3 +10,17 @@
 .right-side {
     text-align: right;
 }
+
+.bh-msg__error {
+    display: none;
+    float: left;
+    color: #E53935;
+    margin-top: 14px;
+}
+
+.bh-msg__success {
+    display: none;
+    float: left;
+    color: #4CAF50;
+    margin-top: 14px;
+}

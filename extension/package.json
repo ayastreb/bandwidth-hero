@@ -1,0 +1,26 @@
+{
+  "name": "bandwidth-hero-chrome",
+  "version": "0.1.0",
+  "description": "Chrome extension which saves bandwidth by compressing images on the page",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayastreb/bandwidth-hero.git"
+  },
+  "keywords": [
+    "chrome",
+    "extension",
+    "data",
+    "save",
+    "badnwidth",
+    "save"
+  ],
+  "author": "Anatoliy Yastreb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ayastreb/bandwidth-hero/issues"
+  },
+  "homepage": "https://github.com/ayastreb/bandwidth-hero#readme",
+  "devDependencies": {
+    "standard": "^8.0.0"
+  }
+}

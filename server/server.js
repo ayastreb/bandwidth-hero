@@ -1,100 +1,36 @@
 'use strict'
-const SocketServer = require('ws').Server
 const express = require('express')
 const request = require('request')
-const crypto = require('crypto')
 const sharp = require('sharp')
 const path = require('path')
 const url = require('url')
-const aws = require('aws-sdk')
 
-const S3_BUCKET = process.env.S3_BUCKET || 'bandwidth-hero'
 const JPEG_QLT = parseInt(process.env.JPEG_QUALITY) || 40
 const PORT = process.env.PORT || 5000
 
 process.on('uncaughtException', err => console.log(`process error: ${err}`))
 
-const server = express()
-  .use((req, res) => res.end('Bandwidth Hero Server'))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`))
+const app = express()
+app.listen(PORT, () => console.log(`Listening on ${PORT}`))
 
-const wss = new SocketServer({ server })
+app.get('/compress', (req, res) => {
+  const imageUrl = req.query.url
+  const parsedUrl = url.parse(imageUrl)
+  console.log(`Received: ${imageUrl}`)
+  if (!imageUrl.match(/^https?:/i) || !parsedUrl) return res.status(400).end()
 
-wss.on('connection', ws => {
-  console.log('Client connected')
+  let transformer = prepareImageTransformer(parsedUrl)
 
-  ws.on('message', processImage)
-  ws.on('close', () => console.log('Client disconnected'))
+  transformer.on('error', err => {
+    console.log(`Error compressing ${imageUrl}: ${err}`)
+  })
 
-  /**
-   * Generate unique hash key for image based on host and path,
-   * check if this file already exist in S3 bucket with HEAD request,
-   * if it does not exist yet - compress image and upload to S3,
-   * otherwise just respond with compressed image URL.
-   *
-   * @param string imageUrl original image URL
-   */
-  function processImage (imageUrl) {
-    const parsedUrl = url.parse(imageUrl)
-    if (!imageUrl.match(/^https?:/i) || !parsedUrl) return
-
-    const key = generateUniqueFileKey(parsedUrl)
-    const amazonS3 = new aws.S3({ params: { Bucket: S3_BUCKET, Key: key } })
-
-    amazonS3.headObject(err => {
-      if (!err) {
-        respond(`https://${S3_BUCKET}.s3.amazonaws.com/${key}`)
-      } else if (err.code === 'NotFound') {
-        let failed = false
-        let transformer = prepareImageTransformer(parsedUrl)
-
-        transformer.on('error', err => {
-          console.log(`Error compressing ${imageUrl}: ${err}`)
-          failed = true
-        })
-
-        amazonS3.upload(
-          { Body: request(imageUrl).pipe(transformer) },
-          (err, data) => {
-            if (!err && !failed) respond(data.Location)
-          }
-        )
-      }
-    })
-
-    function respond (compressedImageUrl) {
-      console.log(`Processed ${imageUrl} => ${compressedImageUrl}`)
-      ws.send(JSON.stringify({
-        original: imageUrl,
-        compressed: compressedImageUrl
-      }))
-    }
-  }
+  request(imageUrl)
+    .pipe(transformer)
+    .pipe(res)
+    .on('finish', () => console.log(`Compressed: ${imageUrl}`))
+    .on('error', () => console.log(`Error in: ${imageUrl}`))
 })
-
-/**
- * Generate unique key based on image URL.
- * It consist of folder, filename and extension.
- * Folder is SHA-1 hashed host (e.g. pbs.twimg.com becomes da7f52ba4bc88b4b9f10918c6b82da182147b979),
- * and filename is SHA-1 hashed URL path.
- * Extension is taken from URL without changes.
- *
- * @param Url parsedUrl parsed image URL object
- * @returns string unique key
- */
-function generateUniqueFileKey (parsedUrl) {
-  const folder = crypto
-    .createHash('sha1')
-    .update(parsedUrl.host)
-    .digest('hex')
-  const filename = crypto
-    .createHash('sha1')
-    .update(path.basename(parsedUrl.path))
-    .digest('hex')
-  const extension = path.extname(parsedUrl.pathname)
-
-  return `${folder}/${filename}${extension}`
-}
 
 /**
  * Prepare Sharp image transformer.

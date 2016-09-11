@@ -4,7 +4,7 @@ Bandwidth Hero is a Chrome extension which compresses images on the page to save
 
 ## How It Works?
 
-![Workflow](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/workflow.png)
+![Workflow](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/workflow-v2.png)
 
 1. When active, Bandwidth Hero intercepts all images loading requests
 2. It sends each image URL to the compression proxy server, hosted at Heroku

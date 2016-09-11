@@ -6,22 +6,16 @@ Bandwidth Hero is a Chrome extension which compresses images on the page to save
 
 ![Workflow](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/workflow.png)
 
-1. When active, Bandwidth Hero prevents original images loading and replaces them with a placeholder
+1. When active, Bandwidth Hero intercepts all images loading requests
 2. It sends each image URL to the compression proxy server, hosted at Heroku
-3. Proxy server downloads the original image and compresses it
-4. When image is compressed, proxy server uploads it to specified Amazon S3 bucket for storage
-5. Proxy server returns compressed image URL to Bandwidth Hero
-6. Bandwidth Hero finds corresponding element on the page an updates its image source with compressed one
-7. Browser loads compressed image from Amazon S3 bucket
+3. Proxy server downloads the original image
+4. Once image is downloaded it is then compressed to black and white
+5. Proxy server returns compressed image to the browser
 
 ## Privacy Consideration
 
-Please consider, that this extension has access to all the images you browse and stores compressed copies of them on my Amazon S3 bucket for up to 3 days.
-If you don't want your images to be stored on some stranger's server, you can run your own proxy server.
-
-You will need a free Heroku account and an Amazon AWS account, 
-which is also available for free for up to one year, 
-and after that it costs just pennies per gigabyte of traffic.
+Please note that proxy server does not store the images anywhere, it compresses them on the fly.
+However if you want to be 100% sure you can run your own proxy server instance.
 
 Please refer to [Server Docs](https://github.com/ayastreb/bandwidth-hero/tree/master/server) 
 for detailed instructions on how to run your own proxy.
@@ -32,7 +26,6 @@ for detailed instructions on how to run your own proxy.
 
 ## Known Issues
 
-* Doesn't work with `img srcset` and responsive images
 * Glitches on GMail & GoogleMaps
 
 ## Credits

@@ -1,6 +1,24 @@
 # Bandwidth Hero Server
 
+This simple proxy server is written in Node.js
+
+It uses Express as a server and Sharp for images compression.
+
+You can run your own instance if you like to.
+
 ## Deployment
+
+* Clone Bandwidth Hero repository:
+
+  ```
+  git clone https://github.com/ayastreb/bandwidth-hero.git ./bandwidth-hero
+  ```
+  
+* Go to checked out directory:
+
+  ```
+  cd bandwidth-hero
+  ```
 
 * Download [Heroku toolbelt](https://toolbelt.heroku.com): 
 
@@ -20,15 +38,4 @@
   
   ```
   git subtree push --prefix server heroku master
-  ```
-  
-* Set Amazon S3 credentials:
-
-  ```
-  heroku config:set AWS_ACCESS_KEY_ID =xxx AWS_SECRET_ACCESS_KEY =yyy
-  ```
-* Set Amazon S3 bucket in which compressed images will be stored:
-
-  ```
-  heroku config:set S3_BUCKET = zzz
   ```

@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Bandwidth Hero",
   "description": "Saves bandwidth by compressing images on the page.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "icons": {
     "64": "res/images/icon-128.png",
     "128": "res/images/icon-256.png",
@@ -13,18 +13,6 @@
     "default_title": "Saves bandwidth!",
     "default_popup": "popup.html"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "src/content.js"
-      ],
-      "run_at": "document_end",
-      "all_frames": true
-    }
-  ],
   "background": {
     "scripts": [
       "src/background.js"

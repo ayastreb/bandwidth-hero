@@ -3,15 +3,25 @@
 
 const defaults = {
   enabled: true,
-  serverUrl: 'wss://bandwidth-hero.herokuapp.com/',
-  compressedBaseUrl: 'bandwidth-hero.s3.amazonaws.com'
+  serverUrl: 'https://bandwidth-hero.herokuapp.com/'
 }
 
 /**
  * Set default settings when extension is installed.
  */
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set(defaults)
+chrome.runtime.onInstalled.addListener(details => {
+  if (details.reason === 'install') {
+    chrome.storage.sync.set(defaults)
+  } else if (details.reason === 'update') {
+    chrome.storage.sync.get(settings => {
+      // Replace old WebSocket server URL with HTTPS
+      if (settings.serverUrl.indexOf('wss:') !== -1) {
+        chrome.storage.sync.set({
+          serverUrl: defaults.serverUrl
+        })
+      }
+    })
+  }
 })
 
 chrome.storage.sync.get(runBackground)
@@ -25,7 +35,7 @@ function runBackground (settings) {
   }
 
   chrome.extension.onMessage.addListener(handleMessage)
-  chrome.webRequest.onBeforeRequest.addListener(replaceImagesWithPlaceholder,
+  chrome.webRequest.onBeforeRequest.addListener(redirectImagesToProxy,
     {
       urls: [ '<all_urls>' ],
       types: [ 'image' ]
@@ -39,7 +49,6 @@ function runBackground (settings) {
     },
     [ 'blocking', 'responseHeaders' ]
   )
-  return
 
   /**
    * Handle incoming messages from extension/popup.
@@ -78,21 +87,21 @@ function runBackground (settings) {
   }
 
   /**
-   * Redirect images to default placeholder to prevent full image loading.
+   * Redirect images to compression proxy.
    *
    * @param Object details
    * @returns Object object
    */
-  function replaceImagesWithPlaceholder (details) {
+  function redirectImagesToProxy (details) {
     const allowPatterns = [
-      settings.compressedBaseUrl,
+      settings.serverUrl,
       'favicon',
       '.*.svg'
     ]
     if (enabled && !details.url.match(RegExp(`(${allowPatterns.join('|')})`, 'i')) &&
       details.url.match(/https?:\/\/.+/i)) {
       return {
-        redirectUrl: chrome.extension.getURL('/res/images/placeholder.png')
+        redirectUrl: `${settings.serverUrl}compress?url=${encodeURIComponent(details.url)}`
       }
     }
   }
@@ -109,7 +118,7 @@ function runBackground (settings) {
         details.responseHeaders[ i ].value = details
           .responseHeaders[ i ]
           .value
-          .replace('img-src', `img-src ${settings.compressedBaseUrl}`)
+          .replace('img-src', `img-src ${settings.serverUrl}`)
       }
     }
 

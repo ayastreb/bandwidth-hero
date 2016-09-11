@@ -1,6 +1,6 @@
 {
   "name": "bandwidth-hero-chrome",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Chrome extension which saves bandwidth by compressing images on the page",
   "repository": {
     "type": "git",

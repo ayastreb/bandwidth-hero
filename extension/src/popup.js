@@ -1,5 +1,4 @@
 /* global chrome */
-/* global WebSocket */
 'use strict'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,9 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const enabledSwitch = document.getElementById('bh-enabled')
     const serverUrlInp = document.getElementById('bh-server_url')
     const updateButton = document.getElementById('bh-update')
-    const loadingSpin = document.getElementById('bh-spinner')
     const successMsg = document.getElementById('bh-success')
-    const errorMsg = document.getElementById('bh-error')
 
     if (settings.enabled && !enabledSwitch.checked) {
       enabledSwitch.click()
@@ -31,26 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleSettingsUpdate () {
-      if (settings.serverUrl !== serverUrlInp.value) {
-        if (serverUrlInp.value.length) {
-          loadingSpin.classList.add('is-active')
-
-          const ws = new WebSocket(serverUrlInp.value)
-          ws.onerror = () => {
-            loadingSpin.classList.remove('is-active')
-            errorMsg.style.display = 'block'
-            successMsg.style.display = 'none'
-          }
-          ws.onopen = () => {
-            loadingSpin.classList.remove('is-active')
-            chrome.storage.sync.set({
-              serverUrl: serverUrlInp.value
-            })
-            errorMsg.style.display = 'none'
-            successMsg.style.display = 'block'
-            ws.close()
-          }
-        }
+      if (settings.serverUrl !== serverUrlInp.value && serverUrlInp.value.length) {
+        chrome.storage.sync.set({
+          serverUrl: serverUrlInp.value
+        })
+        successMsg.style.display = 'block'
       }
     }
   }

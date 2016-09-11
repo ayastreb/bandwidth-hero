@@ -16,11 +16,9 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`))
 app.get('/compress', (req, res) => {
   const imageUrl = req.query.url
   const parsedUrl = url.parse(imageUrl)
-  console.log(`Received: ${imageUrl}`)
   if (!imageUrl.match(/^https?:/i) || !parsedUrl) return res.status(400).end()
 
   let transformer = prepareImageTransformer(parsedUrl)
-
   transformer.on('error', err => {
     console.log(`Error compressing ${imageUrl}: ${err}`)
   })

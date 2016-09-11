@@ -1,7 +1,7 @@
 {
   "name": "bandwidth-hero-server",
-  "version": "0.1.0",
-  "description": "**Work in Progress**",
+  "version": "1.0.0",
+  "description": "Proxy server for compressing images on the fly",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

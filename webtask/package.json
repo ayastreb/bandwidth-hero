@@ -1,12 +1,9 @@
 {
   "name": "bandwidth-hero-webtask",
   "main": "compress-webtask.js",
+  "private": true,
   "version": "1.0.0",
   "description": "Proxy webtask for compressing images on the fly.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ayastreb/bandwidth-hero.git"
-  },
   "author": "Anatoliy Yastreb",
   "license": "MIT",
   "dependencies": {

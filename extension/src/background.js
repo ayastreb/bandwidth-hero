@@ -3,7 +3,7 @@
 
 const defaults = {
   enabled: true,
-  serverUrl: 'https://bandwidth-hero.herokuapp.com/'
+  serverUrl: 'https://wt-e9c9a7a436fcd9273a7f8890849dae65-0.run.webtask.io/bandwidth-hero-webtask'
 }
 
 /**
@@ -18,6 +18,11 @@ chrome.runtime.onInstalled.addListener(details => {
       if (settings.serverUrl.indexOf('wss:') !== -1) {
         chrome.storage.sync.set({
           serverUrl: defaults.serverUrl
+        })
+      }
+      if (settings.serverUrl.indexOf('herokuapp.com:') !== -1) {
+        chrome.storage.sync.set({
+          serverUrl: `${settings.serverUrl}compress`
         })
       }
     })
@@ -101,7 +106,7 @@ function runBackground (settings) {
     if (enabled && !details.url.match(RegExp(`(${allowPatterns.join('|')})`, 'i')) &&
       details.url.match(/https?:\/\/.+/i)) {
       return {
-        redirectUrl: `${settings.serverUrl}compress?url=${encodeURIComponent(details.url)}`
+        redirectUrl: `${settings.serverUrl}?url=${encodeURIComponent(details.url)}`
       }
     }
   }

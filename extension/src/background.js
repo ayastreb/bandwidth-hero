@@ -31,7 +31,7 @@ chrome.runtime.onInstalled.addListener(details => {
 
 chrome.storage.sync.get(runBackground)
 
-function runBackground (settings) {
+function runBackground(settings) {
   settings = Object.assign({}, defaults, settings)
   let enabled = settings.enabled
 
@@ -40,45 +40,37 @@ function runBackground (settings) {
   }
 
   chrome.extension.onMessage.addListener(handleMessage)
-  chrome.webRequest.onBeforeRequest.addListener(redirectImagesToProxy,
+  chrome.webRequest.onBeforeRequest.addListener(
+    redirectImagesToProxy,
     {
-      urls: [ '<all_urls>' ],
-      types: [ 'image' ]
+      urls: ['<all_urls>'],
+      types: ['image']
     },
-    [ 'blocking' ]
+    ['blocking']
   )
-  chrome.webRequest.onHeadersReceived.addListener(patchContentSecurityPolicy,
+  chrome.webRequest.onHeadersReceived.addListener(
+    patchContentSecurityPolicy,
     {
-      urls: [ '<all_urls>' ],
-      types: [ 'main_frame', 'sub_frame' ]
+      urls: ['<all_urls>'],
+      types: ['main_frame', 'sub_frame']
     },
-    [ 'blocking', 'responseHeaders' ]
+    ['blocking', 'responseHeaders']
   )
 
   /**
    * Handle incoming messages from extension/popup.
    *
-   * @param Object request
+   * @param {object} request
    */
-  function handleMessage (request) {
+  function handleMessage(request) {
     const actionHandlers = {
-      'setActiveIcon': () => {
-        chrome.browserAction.setIcon({
-          path: 'res/images/icon-128-active.png'
-        })
-      },
-      'setDefaultIcon': () => {
-        chrome.browserAction.setIcon({
-          path: 'res/images/icon-128.png'
-        })
-      },
-      'enable': () => {
+      enable: () => {
         enabled = true
         chrome.browserAction.setIcon({
           path: 'res/images/icon-128.png'
         })
       },
-      'disable': () => {
+      disable: () => {
         enabled = false
         chrome.browserAction.setIcon({
           path: 'res/images/icon-128-disabled.png'
@@ -87,24 +79,23 @@ function runBackground (settings) {
     }
 
     if (request.action in actionHandlers) {
-      actionHandlers[ request.action ]()
+      actionHandlers[request.action]()
     }
   }
 
   /**
    * Redirect images to compression proxy.
    *
-   * @param Object details
-   * @returns Object object
+   * @param {object} details
+   * @returns {object}
    */
-  function redirectImagesToProxy (details) {
-    const allowPatterns = [
-      settings.serverUrl,
-      'favicon',
-      '.*.svg'
-    ]
-    if (enabled && !details.url.match(RegExp(`(${allowPatterns.join('|')})`, 'i')) &&
-      details.url.match(/https?:\/\/.+/i)) {
+  function redirectImagesToProxy(details) {
+    const allowPatterns = [settings.serverUrl, 'favicon', '.*.svg']
+    if (
+      enabled &&
+      !details.url.match(RegExp(`(${allowPatterns.join('|')})`, 'i')) &&
+      details.url.match(/https?:\/\/.+/i)
+    ) {
       return {
         redirectUrl: `${settings.serverUrl}?url=${encodeURIComponent(details.url)}`
       }
@@ -114,16 +105,15 @@ function runBackground (settings) {
   /**
    * Patch Content-Security-Policy header to allow compressed images loading.
    *
-   * @param Object details
-   * @returns Object patched headers
+   * @param {object} details
+   * @returns {object} patched headers
    */
-  function patchContentSecurityPolicy (details) {
+  function patchContentSecurityPolicy(details) {
     for (let i = 0; i < details.responseHeaders.length; i++) {
-      if (/content-security-policy/i.test(details.responseHeaders[ i ].name)) {
-        details.responseHeaders[ i ].value = details
-          .responseHeaders[ i ]
-          .value
-          .replace('img-src', `img-src ${settings.serverUrl}`)
+      if (/content-security-policy/i.test(details.responseHeaders[i].name)) {
+        details.responseHeaders[i].value = details.responseHeaders[
+          i
+        ].value.replace('img-src', `img-src ${settings.serverUrl}`)
       }
     }
 

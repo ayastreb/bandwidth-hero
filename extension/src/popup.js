@@ -4,7 +4,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.sync.get(runPopup)
 
-  function runPopup (settings) {
+  function runPopup(settings) {
     const enabledSwitch = document.getElementById('bh-enabled')
     const serverUrlInp = document.getElementById('bh-server_url')
     const updateButton = document.getElementById('bh-update')
@@ -20,15 +20,18 @@ document.addEventListener('DOMContentLoaded', () => {
     updateButton.addEventListener('click', handleSettingsUpdate)
     return
 
-    function handleEnabledSwitch () {
+    function handleEnabledSwitch() {
       chrome.storage.sync.set({ enabled: enabledSwitch.checked })
       chrome.extension.sendMessage({
         action: enabledSwitch.checked ? 'enable' : 'disable'
       })
     }
 
-    function handleSettingsUpdate () {
-      if (settings.serverUrl !== serverUrlInp.value && serverUrlInp.value.length) {
+    function handleSettingsUpdate() {
+      if (
+        settings.serverUrl !== serverUrlInp.value &&
+        serverUrlInp.value.length
+      ) {
         chrome.storage.sync.set({
           serverUrl: serverUrlInp.value
         })

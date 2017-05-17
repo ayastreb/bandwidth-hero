@@ -17,7 +17,10 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: [/node_modules/],
+        include: [
+          path.resolve(__dirname, './src'),
+          /pretty-bytes/ // <- ES6 module
+        ],
         use: [
           {
             loader: 'babel-loader',

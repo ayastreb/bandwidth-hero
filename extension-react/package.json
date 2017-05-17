@@ -10,6 +10,7 @@
     "watch": "webpack --watch"
   },
   "dependencies": {
+    "pretty-bytes": "^4.0.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "semantic-ui-css": "^2.2.10",

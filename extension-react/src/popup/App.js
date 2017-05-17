@@ -1,11 +1,18 @@
 import React from 'react'
-import { Container, Image } from 'semantic-ui-react'
-import logo from '../assets/logo.png'
+import Header from './components/Header'
+import Statistic from './components/Statistic'
+import WhitelistButton from './components/WhitelistButton'
+import SettingsAccordion from './components/SettingsAccordion'
+import Footer from './components/Footer'
 
 export default () => {
   return (
-    <Container>
-      <Image centered={true} src={logo} />
-    </Container>
+    <div>
+      <Header />
+      <Statistic />
+      <WhitelistButton />
+      <SettingsAccordion />
+      <Footer />
+    </div>
   )
 }

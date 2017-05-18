@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders statistics with default values correctly 1`] = `
+<div
+  className="ui attached segment"
+>
+  <div
+    className="ui blue mini two statistics"
+  >
+    <div
+      className="ui statistic"
+    >
+      <div
+        className="value"
+      >
+        0
+      </div>
+      <div
+        className="label"
+      >
+        Images processed
+      </div>
+    </div>
+    <div
+      className="ui statistic"
+    >
+      <div
+        className="value"
+      >
+        0 B
+      </div>
+      <div
+        className="label"
+      >
+        Data saved
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders statistics with prop values correctly 1`] = `
+<div
+  className="ui attached segment"
+>
+  <div
+    className="ui blue mini two statistics"
+  >
+    <div
+      className="ui statistic"
+    >
+      <div
+        className="value"
+      >
+        3
+      </div>
+      <div
+        className="label"
+      >
+        Images processed
+      </div>
+    </div>
+    <div
+      className="ui statistic"
+    >
+      <div
+        className="value"
+      >
+        1.02 kB
+      </div>
+      <div
+        className="label"
+      >
+        Data saved
+      </div>
+    </div>
+  </div>
+</div>
+`;

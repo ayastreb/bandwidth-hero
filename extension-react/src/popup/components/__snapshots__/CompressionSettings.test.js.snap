@@ -1,26 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders compression settings correctly 1`] = `
-<form
-  className="ui form"
+<div
+  className="ui fluid action labeled input"
 >
   <div
-    className="field"
+    className="ui label label"
+    onClick={[Function]}
   >
-    <label
-      htmlFor={undefined}
-    >
-      Webtask URL
-    </label>
-    <div
-      className="ui input"
-    >
-      <input
-        required={undefined}
-        type="url"
-        value=""
-      />
-    </div>
+    URL
   </div>
-</form>
+  <input
+    onChange={[Function]}
+    type="url"
+    value="http://test.io"
+  />
+  <button
+    className="ui icon button button"
+    onClick={[Function]}
+    tabIndex={undefined}
+  >
+    <i
+      aria-hidden="true"
+      className="history icon"
+    />
+     
+  </button>
+</div>
 `;

@@ -49,28 +49,31 @@ exports[`renders settings accordion correctly 1`] = `
     <div
       className="content"
     >
-      <form
-        className="ui form"
+      <div
+        className="ui fluid action labeled input"
       >
         <div
-          className="field"
+          className="ui label label"
+          onClick={[Function]}
         >
-          <label
-            htmlFor={undefined}
-          >
-            Webtask URL
-          </label>
-          <div
-            className="ui input"
-          >
-            <input
-              required={undefined}
-              type="url"
-              value=""
-            />
-          </div>
+          URL
         </div>
-      </form>
+        <input
+          type="url"
+          value={undefined}
+        />
+        <button
+          className="ui icon button button"
+          onClick={[Function]}
+          tabIndex={undefined}
+        >
+          <i
+            aria-hidden="true"
+            className="history icon"
+          />
+           
+        </button>
+      </div>
     </div>
   </div>
 </div>

@@ -5,10 +5,14 @@ import CompressionSettings from './CompressionSettings'
 
 export default ({
   whitelist,
-  proxyUrl
+  proxyUrl,
+  proxyUrlOnChange,
+  proxyUrlOnReset
 }: {
   whitelist: string[],
-  proxyUrl: string
+  proxyUrl: string,
+  proxyUrlOnChange: (event: Event, data: {}) => void,
+  proxyUrlOnReset: () => void
 }) => {
   return (
     <Segment attached>
@@ -25,7 +29,11 @@ export default ({
           Compression settings
         </Accordion.Title>
         <Accordion.Content>
-          <CompressionSettings proxyUrl={proxyUrl} />
+          <CompressionSettings
+            proxyUrl={proxyUrl}
+            onChange={proxyUrlOnChange}
+            onReset={proxyUrlOnReset}
+          />
         </Accordion.Content>
       </Accordion>
     </Segment>

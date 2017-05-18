@@ -1,8 +1,8 @@
 html, body {
   min-width: 360px;
-  height: auto !important;
+  height: auto;
 }
 
 .ui.toggle.checkbox .box:before, .ui.toggle.checkbox label:before {
-  background: rgba(0, 0, 0, 0.15) !important;
+  background: rgba(0, 0, 0, 0.15);
 }

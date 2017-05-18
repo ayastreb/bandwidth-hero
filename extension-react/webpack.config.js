@@ -21,12 +21,7 @@ module.exports = {
           path.resolve(__dirname, './src'),
           /pretty-bytes/ // <- ES6 module
         ],
-        use: [
-          {
-            loader: 'babel-loader',
-            options: { presets: ['env', 'react'] }
-          }
-        ]
+        use: 'babel-loader'
       },
       {
         test: /\.css$/,

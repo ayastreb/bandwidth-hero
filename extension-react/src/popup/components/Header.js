@@ -4,10 +4,10 @@ import logo from '../../assets/logo.png'
 
 export default ({
   enabled,
-  onEnabledClick
+  onChange
 }: {
   enabled: boolean,
-  onEnabledClick?: (event: Event) => void
+  onChange?: (event: Event) => void
 }) => {
   return (
     <Container style={{ padding: '1em 0' }}>
@@ -16,7 +16,7 @@ export default ({
           <Image src={logo} />
         </Grid.Column>
         <Grid.Column width={4} verticalAlign="middle" textAlign="center">
-          <Checkbox toggle checked={enabled} onChange={onEnabledClick} />
+          <Checkbox toggle checked={enabled} onChange={onChange} />
         </Grid.Column>
       </Grid>
     </Container>

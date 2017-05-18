@@ -2,7 +2,13 @@ import React from 'react'
 import { Grid, Image, Container, Checkbox } from 'semantic-ui-react'
 import logo from '../../assets/logo.png'
 
-export default ({ enabled, onEnabledClick }) => {
+export default ({
+  enabled,
+  onEnabledClick
+}: {
+  enabled: boolean,
+  onEnabledClick?: (event: Event) => void
+}) => {
   return (
     <Container style={{ padding: '1em 0' }}>
       <Grid>

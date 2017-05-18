@@ -1,0 +1,10 @@
+[ignore]
+.*\.test\.js
+.*/node_modules/fbjs/.*
+.*/node_modules/react-color/.*
+.*/node_modules/react-infinite/.*
+[include]
+
+[libs]
+
+[options]

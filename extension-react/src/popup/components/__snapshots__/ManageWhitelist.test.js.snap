@@ -12,7 +12,7 @@ exports[`renders whitelist management correctly 1`] = `
       required={undefined}
       rows={4}
       type={undefined}
-      value={undefined}
+      value=""
     />
   </div>
 </form>

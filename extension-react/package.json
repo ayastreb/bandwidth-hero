@@ -8,7 +8,8 @@
   "scripts": {
     "build": "webpack -p",
     "watch": "webpack --watch",
-    "test": "jest"
+    "test": "flow && jest",
+    "flow": "flow"
   },
   "dependencies": {
     "pretty-bytes": "^4.0.2",
@@ -18,14 +19,17 @@
     "semantic-ui-react": "^0.68.3"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
     "babel-preset-env": "^1.4.0",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
+    "flow-bin": "^0.46.0",
     "html-webpack-plugin": "^2.28.0",
     "img-loader": "^2.0.0",
     "jest": "^20.0.3",

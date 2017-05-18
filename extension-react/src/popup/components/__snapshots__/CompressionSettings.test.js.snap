@@ -18,6 +18,7 @@ exports[`renders compression settings correctly 1`] = `
       <input
         required={undefined}
         type="url"
+        value=""
       />
     </div>
   </div>

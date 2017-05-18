@@ -3,7 +3,13 @@ import { Segment, Accordion, Icon } from 'semantic-ui-react'
 import ManageWhitelist from './ManageWhitelist'
 import CompressionSettings from './CompressionSettings'
 
-export default () => {
+export default ({
+  whitelist,
+  proxyUrl
+}: {
+  whitelist: string[],
+  proxyUrl: string
+}) => {
   return (
     <Segment attached>
       <Accordion>
@@ -12,14 +18,14 @@ export default () => {
           Manage whitelist
         </Accordion.Title>
         <Accordion.Content>
-          <ManageWhitelist />
+          <ManageWhitelist whitelist={whitelist} />
         </Accordion.Content>
         <Accordion.Title>
           <Icon name="dropdown" />
           Compression settings
         </Accordion.Title>
         <Accordion.Content>
-          <CompressionSettings />
+          <CompressionSettings proxyUrl={proxyUrl} />
         </Accordion.Content>
       </Accordion>
     </Segment>

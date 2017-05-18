@@ -1,7 +1,7 @@
 import React from 'react'
 import { Segment, Accordion, Icon } from 'semantic-ui-react'
-import ProxySettings from './ProxySettings'
-import WhitelistManage from './WhitelistManage'
+import ManageWhitelist from './ManageWhitelist'
+import CompressionSettings from './CompressionSettings'
 
 export default () => {
   return (
@@ -12,14 +12,14 @@ export default () => {
           Manage whitelist
         </Accordion.Title>
         <Accordion.Content>
-          <WhitelistManage />
+          <ManageWhitelist />
         </Accordion.Content>
         <Accordion.Title>
           <Icon name="dropdown" />
-          Change proxy URL
+          Compression settings
         </Accordion.Title>
         <Accordion.Content>
-          <ProxySettings />
+          <CompressionSettings />
         </Accordion.Content>
       </Accordion>
     </Segment>

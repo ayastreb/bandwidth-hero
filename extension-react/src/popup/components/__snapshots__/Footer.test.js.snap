@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders footer correctly 1`] = `
+<div
+  className="ui right aligned container"
+  style={
+    Object {
+      "padding": "1em 0",
+    }
+  }
+>
+  <a
+    className="ui right labeled basic icon button"
+    href="https://github.com/ayastreb/bandwidth-hero#how-it-works"
+    onClick={[Function]}
+    tabIndex={undefined}
+    target="_blank"
+  >
+    <i
+      aria-hidden="true"
+      className="github icon"
+    />
+     
+    How it works?
+  </a>
+</div>
+`;

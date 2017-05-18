@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack -p",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "test": "jest"
   },
   "dependencies": {
     "pretty-bytes": "^4.0.2",
@@ -27,8 +28,16 @@
     "file-loader": "^0.11.1",
     "html-webpack-plugin": "^2.28.0",
     "img-loader": "^2.0.0",
+    "jest": "^20.0.3",
+    "react-test-renderer": "^15.5.4",
     "style-loader": "^0.17.0",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.2"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|svg)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   }
 }

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders compression settings correctly 1`] = `
+<form
+  className="ui form"
+>
+  <div
+    className="field"
+  >
+    <label
+      htmlFor={undefined}
+    >
+      Webtask URL
+    </label>
+    <div
+      className="ui input"
+    >
+      <input
+        required={undefined}
+        type="url"
+      />
+    </div>
+  </div>
+</form>
+`;

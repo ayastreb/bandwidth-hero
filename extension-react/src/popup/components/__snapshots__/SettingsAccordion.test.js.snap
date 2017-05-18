@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders settings accordion correctly 1`] = `
+<div
+  className="ui attached segment"
+>
+  <div
+    className="ui accordion"
+  >
+    <div
+      className="title"
+      onClick={[Function]}
+    >
+      <i
+        aria-hidden="true"
+        className="dropdown icon"
+      />
+      Manage whitelist
+    </div>
+    <div
+      className="content"
+    >
+      <form
+        className="ui form"
+      >
+        <div
+          className="field"
+        >
+          <textarea
+            onChange={[Function]}
+            required={undefined}
+            rows={4}
+            type={undefined}
+            value={undefined}
+          />
+        </div>
+      </form>
+    </div>
+    <div
+      className="title"
+      onClick={[Function]}
+    >
+      <i
+        aria-hidden="true"
+        className="dropdown icon"
+      />
+      Compression settings
+    </div>
+    <div
+      className="content"
+    >
+      <form
+        className="ui form"
+      >
+        <div
+          className="field"
+        >
+          <label
+            htmlFor={undefined}
+          >
+            Webtask URL
+          </label>
+          <div
+            className="ui input"
+          >
+            <input
+              required={undefined}
+              type="url"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders whitelist management correctly 1`] = `
+<form
+  className="ui form"
+>
+  <div
+    className="field"
+  >
+    <textarea
+      onChange={[Function]}
+      required={undefined}
+      rows={4}
+      type={undefined}
+      value={undefined}
+    />
+  </div>
+</form>
+`;

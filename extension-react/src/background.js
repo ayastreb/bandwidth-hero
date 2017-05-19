@@ -7,7 +7,7 @@ import defaultState from './defaults'
 import type { AppState } from './types'
 
 chrome.storage.sync.get((storedState: AppState) => {
-  let state
+  let state: AppState
   setState({ ...defaultState, ...storedState })
 
   /**

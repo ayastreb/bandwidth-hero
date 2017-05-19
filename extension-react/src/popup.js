@@ -1,19 +1,23 @@
-/* global chrome */
+/* @flow */
+declare var chrome: any
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Popup from './popup/Popup'
 import defaultState from './defaults'
 import 'semantic-ui-css/semantic.css'
 import './popup/index.css'
+import type { AppState } from './types'
 
-chrome.storage.sync.get(storedState => {
-  const popupState = { ...defaultState, ...storedState }
+chrome.storage.sync.get((storedState: AppState) => {
+  const initialState = { ...defaultState, ...storedState }
+  const { enabled, statistics, whitelist, proxyUrl } = initialState
+
   ReactDOM.render(
     <Popup
-      enabled={popupState.enabled}
-      statistics={popupState.statistics}
-      whitelist={popupState.whitelist}
-      proxyUrl={popupState.proxyUrl}
+      enabled={enabled}
+      statistics={statistics}
+      whitelist={whitelist}
+      proxyUrl={proxyUrl}
     />,
     document.getElementById('root')
   )

@@ -7,58 +7,59 @@ import WhitelistButton from './components/WhitelistButton'
 import SettingsAccordion from './components/SettingsAccordion'
 import Footer from './components/Footer'
 import defaults from '../defaults'
+import type { AppState } from '../types'
 
-type popupState = {
-  enabled: boolean,
-  statistics: {
-    filesProcessed: number,
-    bytesSaved: number
-  },
-  whitelist: string[],
-  proxyUrl: string
-}
+export default class Popup extends React.Component {
+  state: AppState
 
-class Popup extends React.Component {
-  state: popupState
+  constructor(initialProps: AppState) {
+    super(initialProps)
+    this.state = initialProps
 
-  constructor(props: popupState) {
-    super(props)
-    this.state = props
+    chrome.extension.onMessage.addListener(this.stateWasUpdatedFromBackground)
   }
 
-  enableSwitchClicked = () => {
-    chrome.browserAction.setIcon({
-      path: !this.state.enabled
-        ? 'assets/icon-128.png'
-        : 'assets/icon-128-disabled.png'
-    })
+  enableSwitchWasChanged = () => {
     this.setState(
       prevState => ({ enabled: !prevState.enabled }),
-      this.stateWasUpdated
+      this.stateWasUpdatedFromUI
     )
   }
 
-  proxyUrlChanged = (e: Event, { value }: { value: string }) => {
-    this.setState(prevState => ({ proxyUrl: value }), this.stateWasUpdated)
+  proxyUrlWasChanged = (_: Event, { value }: { value: string }) => {
+    this.setState(
+      prevState => ({ proxyUrl: value }),
+      this.stateWasUpdatedFromUI
+    )
   }
 
   proxyUrlWasReset = () => {
     this.setState(
       prevState => ({ proxyUrl: defaults.proxyUrl }),
-      this.stateWasUpdated
+      this.stateWasUpdatedFromUI
     )
   }
 
-  stateWasUpdated = () => {
+  /**
+   * Sync every UI state change with local storage and background process.
+   */
+  stateWasUpdatedFromUI = () => {
     chrome.storage.sync.set(this.state)
     chrome.extension.sendMessage(this.state)
+  }
+
+  /**
+   * Receive state changes from background process and update UI.
+   */
+  stateWasUpdatedFromBackground = (newState: AppState) => {
+    this.setState(newState)
   }
 
   render() {
     const { enabled, statistics, whitelist, proxyUrl } = this.state
     return (
       <div>
-        <Header enabled={enabled} onChange={this.enableSwitchClicked} />
+        <Header enabled={enabled} onChange={this.enableSwitchWasChanged} />
         <UsageStatistic
           filesProcessed={statistics.filesProcessed}
           bytesSaved={statistics.bytesSaved}
@@ -67,7 +68,7 @@ class Popup extends React.Component {
         <SettingsAccordion
           whitelist={whitelist}
           proxyUrl={proxyUrl}
-          proxyUrlOnChange={this.proxyUrlChanged}
+          proxyUrlOnChange={this.proxyUrlWasChanged}
           proxyUrlOnReset={this.proxyUrlWasReset}
         />
         <Footer />
@@ -75,5 +76,3 @@ class Popup extends React.Component {
     )
   }
 }
-
-export default Popup

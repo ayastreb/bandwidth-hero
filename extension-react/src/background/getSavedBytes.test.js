@@ -18,6 +18,16 @@ it('gets data from headers with lower case names correctly', () => {
   expect(getSavedBytes(headers)).toEqual(45)
 })
 
+it('returns zero when header is empty', () => {
+  const headers = [
+    { name: 'Content-Length', value: '100' },
+    { name: 'x-bytes-saved', value: '' }
+  ]
+
+  expect(getSavedBytes(headers)).toEqual(0)
+
+})
+
 it('returns false when no header found', () => {
   const headers = [
     { name: 'Content-Length', value: '100' }

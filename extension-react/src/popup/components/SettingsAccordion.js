@@ -5,11 +5,13 @@ import CompressionSettings from './CompressionSettings'
 
 export default ({
   whitelist,
+  whitelistOnChange,
   proxyUrl,
   proxyUrlOnChange,
   proxyUrlOnReset
 }: {
   whitelist: string[],
+  whitelistOnChange: (event: Event, data: {}) => void,
   proxyUrl: string,
   proxyUrlOnChange: (event: Event, data: {}) => void,
   proxyUrlOnReset: () => void
@@ -22,7 +24,7 @@ export default ({
           Manage whitelist
         </Accordion.Title>
         <Accordion.Content>
-          <ManageWhitelist whitelist={whitelist} />
+          <ManageWhitelist whitelist={whitelist} onChange={whitelistOnChange} />
         </Accordion.Content>
         <Accordion.Title>
           <Icon name="dropdown" />

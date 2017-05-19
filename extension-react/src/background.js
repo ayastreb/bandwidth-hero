@@ -3,11 +3,13 @@ declare var chrome: any
 import shouldCompress from './background/shouldCompress'
 import patchContentSecurity from './background/patchContentSecurity'
 import getSavedBytes from './background/getSavedBytes'
+import parseUrl from './utils/parseUrl'
 import defaultState from './defaults'
 import type { AppState } from './types'
 
 chrome.storage.sync.get((storedState: AppState) => {
   let state: AppState
+  let pageUrl: string
   setState({ ...defaultState, ...storedState })
 
   /**
@@ -28,7 +30,15 @@ chrome.storage.sync.get((storedState: AppState) => {
    * Intercept image loading request and decide if we need to compress it.
    */
   function onBeforeRequestListener({ url }) {
-    if (shouldCompress(url, state)) {
+    if (
+      shouldCompress({
+        imageUrl: url,
+        pageUrl,
+        proxyUrl: state.proxyUrl,
+        whitelist: state.whitelist,
+        enabled: state.enabled
+      })
+    ) {
       return { redirectUrl: `${state.proxyUrl}?url=${encodeURIComponent(url)}` }
     }
   }
@@ -83,4 +93,7 @@ chrome.storage.sync.get((storedState: AppState) => {
     },
     ['blocking', 'responseHeaders']
   )
+  chrome.tabs.onActivated.addListener(({ tabId }) => {
+    chrome.tabs.get(tabId, tab => (pageUrl = parseUrl(tab.url).hostname))
+  })
 })

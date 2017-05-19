@@ -1,46 +1,143 @@
 import shouldCompress from './shouldCompress'
 
 it('should not compress when app is disabled', () => {
-  const state = {
-    enabled: false,
-    proxyUrl: 'https://webtask.io/bandwidth-hero'
-  }
-
-  expect(shouldCompress('https://google.com/logo.png', state)).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://google.com/logo.png',
+      pageUrl: 'https://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: false
+    })
+  ).toBeFalsy()
 })
 
 it('should only compress http or https schema URLs', () => {
-  const state = {
-    enabled: true,
-    proxyUrl: 'https://webtask.io/bandwidth-hero'
-  }
+  expect(
+    shouldCompress({
+      imageUrl: 'http://google.com/logo.png',
+      pageUrl: 'http://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeTruthy()
 
-  expect(shouldCompress('file:///foo/bar.png', state)).toBeFalsy()
-  expect(shouldCompress('chrome-extension:///logo.png', state)).toBeFalsy()
-  expect(shouldCompress('http://google.com/logo.png', state)).toBeTruthy()
-  expect(shouldCompress('https://google.com/logo.png', state)).toBeTruthy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://google.com/logo.png',
+      pageUrl: 'https://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeTruthy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'file:///foo/bar.png',
+      pageUrl: 'http://localhost',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeFalsy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'chrome-extension:///logo.png',
+      pageUrl: 'chrome-extension:///foo',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeFalsy()
 })
 
 it('should not compress favicons or .svg', () => {
-  const state = {
-    enabled: true,
-    proxyUrl: 'https://webtask.io/bandwidth-hero'
-  }
+  expect(
+    shouldCompress({
+      imageUrl: 'http://google.com/favicon.png',
+      pageUrl: 'http://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeFalsy()
 
-  expect(shouldCompress('http://google.com/favicon.png', state)).toBeFalsy()
-  expect(shouldCompress('http://google.com/favicon-64.png', state)).toBeFalsy()
-  expect(shouldCompress('http://google.com/fav.ico', state)).toBeFalsy()
-  expect(shouldCompress('http://google.com/logo.svg', state)).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'http://google.com/favicon-64.png',
+      pageUrl: 'http://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeFalsy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'http://google.com/fav.ico',
+      pageUrl: 'http://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeFalsy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'http://google.com/logo.svg',
+      pageUrl: 'http://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeFalsy()
 })
 
 it('should not compress images from its own proxy', () => {
-  const state = {
-    enabled: true,
-    proxyUrl: 'https://webtask.io/bandwidth-hero'
-  }
+  expect(
+    shouldCompress({
+      imageUrl: 'https://webtask.io/bandwidth-hero/logo.png',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      pageUrl: 'http://google.com',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeFalsy()
 
   expect(
-    shouldCompress('https://webtask.io/bandwidth-hero/logo.png', state)
+    shouldCompress({
+      imageUrl: 'https://webtask.io/logo.png',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      pageUrl: 'https://webtask.io',
+      whitelist: [],
+      enabled: true
+    })
+  ).toBeTruthy()
+})
+
+it('should not compress if current page is in whitelist', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://foo.com/logo.png',
+      pageUrl: 'google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      whitelist: ['google.com', 'bing.com'],
+      enabled: true
+    })
   ).toBeFalsy()
-  expect(shouldCompress('https://webtask.io/logo.png', state)).toBeTruthy()
+})
+
+it('should not compress if url is in whitelist', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://bing.com/logo.png',
+      whitelist: ['google.com', 'bing.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
 })

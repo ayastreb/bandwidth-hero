@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`renders remove from whitelist button correctly 1`] = `
+<div
+  className="ui attached segment"
+>
+  <button
+    className="ui basic fluid negative button"
+    onClick={[Function]}
+    tabIndex={undefined}
+  >
+    Remove from whitelist
+  </button>
+</div>
+`;
+
 exports[`renders whitelist button correctly 1`] = `
 <div
   className="ui attached segment"
@@ -9,7 +23,7 @@ exports[`renders whitelist button correctly 1`] = `
     onClick={[Function]}
     tabIndex={undefined}
   >
-    Whitelist This Site
+    Whitelist this site
   </button>
 </div>
 `;

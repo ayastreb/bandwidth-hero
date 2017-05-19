@@ -12,13 +12,17 @@ chrome.storage.sync.get((storedState: AppState) => {
   const initialState = { ...defaultState, ...storedState }
   const { enabled, statistics, whitelist, proxyUrl } = initialState
 
-  ReactDOM.render(
-    <Popup
-      enabled={enabled}
-      statistics={statistics}
-      whitelist={whitelist}
-      proxyUrl={proxyUrl}
-    />,
-    document.getElementById('root')
-  )
+  chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
+    const [activeTab] = tabs
+    ReactDOM.render(
+      <Popup
+        currentUrl={activeTab.url}
+        enabled={enabled}
+        statistics={statistics}
+        whitelist={whitelist}
+        proxyUrl={proxyUrl}
+      />,
+      document.getElementById('root')
+    )
+  })
 })

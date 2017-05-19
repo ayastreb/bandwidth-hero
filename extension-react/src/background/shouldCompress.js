@@ -1,14 +1,24 @@
 // @flow
-export default (
+export default ({
+  imageUrl,
+  pageUrl,
+  proxyUrl,
+  whitelist,
+  enabled
+}: {
   imageUrl: string,
-  state: { enabled: boolean, whitelist: string[], proxyUrl: string }
-): boolean => {
-  const skip = [state.proxyUrl, 'favicon', '.*\.ico', '.*\.svg']
+  pageUrl: string,
+  proxyUrl: string,
+  whitelist: string[],
+  enabled: boolean
+}): boolean => {
+  const skip = [proxyUrl, 'favicon', '.*\.ico', '.*\.svg'].concat(whitelist)
   const skipRegExp = new RegExp(`(${skip.join('|')})`, 'i')
 
   return (
-    state.enabled &&
+    enabled &&
     /https?:\/\/.+/i.test(imageUrl) &&
+    !whitelist.includes(pageUrl) &&
     !skipRegExp.test(imageUrl)
   )
 }

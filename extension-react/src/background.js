@@ -4,10 +4,12 @@ import shouldCompress from './background/shouldCompress'
 import patchContentSecurity from './background/patchContentSecurity'
 import getSavedBytes from './background/getSavedBytes'
 import parseUrl from './utils/parseUrl'
+import deferredStateStorage from './utils/deferredStateStorage'
 import defaultState from './defaults'
 import type { AppState } from './types'
 
 chrome.storage.sync.get((storedState: AppState) => {
+  const storage = deferredStateStorage()
   let state: AppState
   let pageUrl: string
   setState({ ...defaultState, ...storedState })
@@ -53,7 +55,7 @@ chrome.storage.sync.get((storedState: AppState) => {
       state.statistics.filesProcessed += 1
       state.statistics.bytesSaved += bytesSaved
 
-      chrome.storage.sync.set(state)
+      storage.set(state)
       chrome.extension.sendMessage(state)
     }
   }

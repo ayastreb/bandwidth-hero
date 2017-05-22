@@ -9,7 +9,7 @@ it('renders statistics with default values correctly', () => {
 
 it('renders statistics with prop values correctly', () => {
   const tree = renderer
-    .create(<UsageStatistic filesProcessed={3} bytesSaved={1024} />)
+    .create(<UsageStatistic filesProcessed={3} bytesProcessed={2048} bytesSaved={1024} />)
     .toJSON()
   expect(tree).toMatchSnapshot()
 })

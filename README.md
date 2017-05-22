@@ -27,10 +27,6 @@ for detailed instructions on how to run your own proxy.
 
 [![Get Extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png)](https://chrome.google.com/webstore/detail/bandwidth-hero/mmhippoadkhcflebgghophicgldbahdb?hl=en-US)
 
-## Known Issues
-
-* Glitches on GMail & GoogleMaps
-
 ## Credits
 
 daredevil logo by Daniel Pineda from the Noun Project

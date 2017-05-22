@@ -5,11 +5,19 @@ import prettyBytes from 'pretty-bytes'
 
 export default ({
   filesProcessed = 0,
+  bytesProcessed = 0,
   bytesSaved = 0
 }: {
   filesProcessed: number,
+  bytesProcessed: number,
   bytesSaved: number
 }) => {
+  const dataSavedPercentage = () => {
+    if (bytesProcessed === 0) return `0%`
+    const percentage = Math.round(bytesSaved / bytesProcessed * 100)
+    return `${percentage}%`
+  }
+
   return (
     <Segment attached>
       <Statistic.Group size="mini" color="blue" widths={2}>
@@ -21,7 +29,7 @@ export default ({
         </Statistic>
         <Statistic>
           <Statistic.Value>
-            {prettyBytes(bytesSaved)}
+            {prettyBytes(bytesSaved)}{' '}({dataSavedPercentage()})
           </Statistic.Value>
           <Statistic.Label>Data saved</Statistic.Label>
         </Statistic>

@@ -2,7 +2,7 @@
 declare var chrome: any
 import shouldCompress from './background/shouldCompress'
 import patchContentSecurity from './background/patchContentSecurity'
-import getSavedBytes from './background/getSavedBytes'
+import getHeaderValue from './background/getHeaderIntValue'
 import parseUrl from './utils/parseUrl'
 import deferredStateStorage from './utils/deferredStateStorage'
 import defaultState from './defaults'
@@ -50,9 +50,11 @@ chrome.storage.sync.get((storedState: AppState) => {
    * app storage and notify UI about state changes.
    */
   function onCompletedListener({ responseHeaders }) {
-    const bytesSaved = getSavedBytes(responseHeaders)
-    if (bytesSaved !== false) {
+    const bytesSaved = getHeaderValue(responseHeaders, 'x-bytes-saved')
+    const bytesProcessed = getHeaderValue(responseHeaders, 'x-original-size')
+    if (bytesSaved !== false && bytesProcessed !== false) {
       state.statistics.filesProcessed += 1
+      state.statistics.bytesProcessed += bytesProcessed
       state.statistics.bytesSaved += bytesSaved
 
       storage.set(state)

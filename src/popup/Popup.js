@@ -96,6 +96,7 @@ export default class Popup extends React.Component {
         <Header enabled={enabled} onChange={this.enableSwitchWasChanged} />
         <UsageStatistic
           filesProcessed={statistics.filesProcessed}
+          bytesProcessed={statistics.bytesProcessed}
           bytesSaved={statistics.bytesSaved}
         />
         <WhitelistButton

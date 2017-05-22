@@ -1,9 +1,9 @@
 // @flow
 import type { HttpHeader } from '../types'
 
-export default (headers: HttpHeader[]): boolean | number => {
+export default (headers: HttpHeader[], header: string): boolean | number => {
   for (let i = 0; i < headers.length; i++) {
-    if (/x-bytes-saved/i.test(headers[i].name)) {
+    if (headers[i].name.toLowerCase() === header.toLowerCase()) {
       return parseInt(headers[i].value) || 0
     }
   }

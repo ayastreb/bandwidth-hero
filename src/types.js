@@ -3,6 +3,7 @@ export type AppState = {
   enabled: boolean,
   statistics: {
     filesProcessed: number,
+    bytesProcessed: number,
     bytesSaved: number
   },
   whitelist: string[],
@@ -14,6 +15,7 @@ export type AppProps = {
   enabled: boolean,
   statistics: {
     filesProcessed: number,
+    bytesProcessed: number,
     bytesSaved: number
   },
   whitelist: string[],

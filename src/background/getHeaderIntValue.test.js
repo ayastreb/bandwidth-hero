@@ -1,4 +1,4 @@
-import getSavedBytes from './getSavedBytes'
+import getHeaderIntValue from './getHeaderIntValue'
 
 it('gets data from headers correctly', () => {
   const headers = [
@@ -6,7 +6,8 @@ it('gets data from headers correctly', () => {
     { name: 'X-Bytes-Saved', value: '55' }
   ]
 
-  expect(getSavedBytes(headers)).toEqual(55)
+  expect(getHeaderIntValue(headers, 'x-bytes-saved')).toEqual(55)
+  expect(getHeaderIntValue(headers, 'content-length')).toEqual(100)
 })
 
 it('gets data from headers with lower case names correctly', () => {
@@ -15,7 +16,7 @@ it('gets data from headers with lower case names correctly', () => {
     { name: 'x-bytes-saved', value: '45' }
   ]
 
-  expect(getSavedBytes(headers)).toEqual(45)
+  expect(getHeaderIntValue(headers, 'x-bytes-saved')).toEqual(45)
 })
 
 it('returns zero when header is empty', () => {
@@ -24,7 +25,7 @@ it('returns zero when header is empty', () => {
     { name: 'x-bytes-saved', value: '' }
   ]
 
-  expect(getSavedBytes(headers)).toEqual(0)
+  expect(getHeaderIntValue(headers, 'x-bytes-saved')).toEqual(0)
 
 })
 
@@ -33,5 +34,5 @@ it('returns false when no header found', () => {
     { name: 'Content-Length', value: '100' }
   ]
 
-  expect(getSavedBytes(headers)).toEqual(false)
+  expect(getHeaderIntValue(headers, 'x-bytes-saved')).toEqual(false)
 })

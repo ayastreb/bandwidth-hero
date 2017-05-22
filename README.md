@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/ayastreb/bandwidth-hero.svg?branch=master)](https://travis-ci.org/ayastreb/bandwidth-hero)
-
 ![Bandwidth Hero](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/logo.png)
+[![Build Status](https://travis-ci.org/ayastreb/bandwidth-hero.svg?branch=master)](https://travis-ci.org/ayastreb/bandwidth-hero)
+[![Code Climate](https://codeclimate.com/github/ayastreb/bandwidth-hero/badges/gpa.svg)](https://codeclimate.com/github/ayastreb/bandwidth-hero)
 
 Bandwidth Hero is a Chrome extension which compresses images on the page to save bandwidth.
 

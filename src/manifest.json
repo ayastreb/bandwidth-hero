@@ -14,6 +14,7 @@
   },
   "background": {
     "scripts": [
+      "update.bundle.js",
       "background.bundle.js"
     ]
   },

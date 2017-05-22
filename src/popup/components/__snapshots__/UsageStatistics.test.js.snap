@@ -28,6 +28,10 @@ exports[`renders statistics with default values correctly 1`] = `
         className="value"
       >
         0 B
+         
+        (
+        0%
+        )
       </div>
       <div
         className="label"
@@ -67,6 +71,10 @@ exports[`renders statistics with prop values correctly 1`] = `
         className="value"
       >
         1.02 kB
+         
+        (
+        0%
+        )
       </div>
       <div
         className="label"

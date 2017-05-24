@@ -1,22 +1,14 @@
 {
-  "name": "bandwidth-hero-server",
+  "name": "bandwidth-hero-webtask",
+  "main": "compress-webtask.js",
+  "private": true,
   "version": "1.0.0",
-  "description": "Proxy server for compressing images on the fly",
-  "main": "server.js",
+  "description": "Proxy webtask for compressing images on the fly.",
+  "author": "Anatoliy Yastreb",
+  "license": "MIT",
   "scripts": {
     "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ayastreb/bandwidth-hero.git"
-  },
-  "keywords": [],
-  "author": "Anatoliy Yastreb",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ayastreb/bandwidth-hero/issues"
-  },
-  "homepage": "https://github.com/ayastreb/bandwidth-hero/server#readme",
   "dependencies": {
     "express": "4.14.0",
     "request": "^2.81.0",
@@ -24,8 +16,5 @@
   },
   "engines": {
     "node": "6.3.1"
-  },
-  "devDependencies": {
-    "standard": "^8.0.0"
   }
 }

@@ -9,7 +9,7 @@ const QUALITY = 40
 process.on('uncaughtException', err => console.log(`process error: ${err}`))
 
 const app = express()
-if (PORT) {
+if (PORT > 0) {
   app.listen(PORT, () => console.log(`Listening on ${PORT}`))
 }
 

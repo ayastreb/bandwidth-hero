@@ -1,7 +1,0 @@
-{
-  "name": "Bandwidth Hero Compression Proxy",
-  "description": "A proxy server that compresses images to WebP, used by Bandwidth Hero Chrome extension.",
-  "repository": "https://github.com/ayastreb/bandwidth-hero/tree/master/server",
-  "logo": "https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/logo.png",
-  "keywords": ["proxy", "compression", "data saving", "webp"]
-}

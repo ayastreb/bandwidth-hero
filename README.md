@@ -25,6 +25,8 @@ However if you want to be 100% sure you can run your own proxy server instance.
 Please refer to [compression proxy docs](https://github.com/ayastreb/bandwidth-hero-proxy)
 for detailed instructions on how to run your own proxy.
 
+Once you have your own instance running, just update the URL under "Compression settings" in the extension popup.
+
 ## Installation
 
 [![Get Extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png)](https://chrome.google.com/webstore/detail/bandwidth-hero/mmhippoadkhcflebgghophicgldbahdb?hl=en-US)

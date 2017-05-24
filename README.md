@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/ayastreb/bandwidth-hero.svg?branch=master)](https://travis-ci.org/ayastreb/bandwidth-hero)
 [![Code Climate](https://codeclimate.com/github/ayastreb/bandwidth-hero/badges/gpa.svg)](https://codeclimate.com/github/ayastreb/bandwidth-hero)
 
-![Bandwidth Hero](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/logo.png)
+![Bandwidth Hero](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/src/assets/logo.png)
 
 Bandwidth Hero is a Chrome extension which compresses images on the page to save data.
 
@@ -9,7 +9,7 @@ It uses [compression proxy](https://github.com/ayastreb/bandwidth-hero-proxy) to
 
 ## How It Works?
 
-![Workflow](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/docs/workflow-v2.png)
+![Workflow](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/how-it-works.png)
 
 1. When active, Bandwidth Hero intercepts all images loading requests
 2. It sends each image URL to the compression proxy server

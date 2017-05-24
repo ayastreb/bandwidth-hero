@@ -3,11 +3,16 @@ const express = require('express')
 const request = require('request')
 const sharp = require('sharp')
 
+const PORT = process.env.PORT
 const QUALITY = 40
 
 process.on('uncaughtException', err => console.log(`process error: ${err}`))
 
 const app = express()
+if (PORT) {
+  app.listen(PORT, () => console.log(`Listening on ${PORT}`))
+}
+
 app.get('/', (req, res) => {
   const imageUrl = req.query.url
   if (!imageUrl.match(/^https?:/i)) return res.status(400).end()

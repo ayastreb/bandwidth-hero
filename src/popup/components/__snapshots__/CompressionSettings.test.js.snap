@@ -11,20 +11,23 @@ exports[`renders compression settings correctly 1`] = `
     URL
   </div>
   <input
+    disabled={undefined}
     onChange={[Function]}
+    tabIndex={undefined}
     type="url"
     value="http://test.io"
   />
   <button
-    className="ui icon button button"
+    className="ui icon button"
+    disabled={undefined}
     onClick={[Function]}
+    role="button"
     tabIndex={undefined}
   >
     <i
       aria-hidden="true"
       className="history icon"
     />
-     
   </button>
 </div>
 `;

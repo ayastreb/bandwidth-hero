@@ -6,7 +6,7 @@ export type AppState = {
     bytesProcessed: number,
     bytesSaved: number
   },
-  whitelist: string[],
+  disabledHosts: string[],
   proxyUrl: string
 }
 
@@ -18,7 +18,7 @@ export type AppProps = {
     bytesProcessed: number,
     bytesSaved: number
   },
-  whitelist: string[],
+  disabledHosts: string[],
   proxyUrl: string
 }
 

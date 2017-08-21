@@ -2,10 +2,10 @@ import React from 'react'
 import { Form, TextArea } from 'semantic-ui-react'
 
 export default ({
-  whitelist = [],
+  disabledHosts = [],
   onChange
 }: {
-  whitelist?: string[],
+  disabledHosts?: string[],
   onChange: (event: Event, data: {}) => void
 }) => {
   return (
@@ -13,7 +13,7 @@ export default ({
       <Form.Field
         control={TextArea}
         rows={4}
-        value={whitelist.join('\n')}
+        value={disabledHosts.join('\n')}
         onChange={onChange}
       />
     </Form>

@@ -3,22 +3,22 @@ export default ({
   imageUrl,
   pageUrl,
   proxyUrl,
-  whitelist,
+  disabledHosts,
   enabled
 }: {
   imageUrl: string,
   pageUrl: string,
   proxyUrl: string,
-  whitelist: string[],
+  disabledHosts: string[],
   enabled: boolean
 }): boolean => {
-  const skip = [proxyUrl, 'favicon', '.*\.ico', '.*\.svg'].concat(whitelist)
+  const skip = [proxyUrl, 'favicon', '.*\.ico', '.*\.svg'].concat(disabledHosts)
   const skipRegExp = new RegExp(`(${skip.join('|')})`, 'i')
 
   return (
     enabled &&
     /https?:\/\/.+/i.test(imageUrl) &&
-    !whitelist.includes(pageUrl) &&
+    !disabledHosts.includes(pageUrl) &&
     !skipRegExp.test(imageUrl)
   )
 }

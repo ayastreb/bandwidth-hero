@@ -1,17 +1,17 @@
 import React from 'react'
 import { Segment, Accordion, Icon } from 'semantic-ui-react'
-import ManageWhitelist from './ManageWhitelist'
+import ManageDisabled from './ManageDisabled'
 import CompressionSettings from './CompressionSettings'
 
 export default ({
-  whitelist,
-  whitelistOnChange,
+  disabledHosts,
+  disabledOnChange,
   proxyUrl,
   proxyUrlOnChange,
   proxyUrlOnReset
 }: {
-  whitelist: string[],
-  whitelistOnChange: (event: Event, data: {}) => void,
+  disabledHosts: string[],
+  disabledOnChange: (event: Event, data: {}) => void,
   proxyUrl: string,
   proxyUrlOnChange: (event: Event, data: {}) => void,
   proxyUrlOnReset: () => void
@@ -21,10 +21,13 @@ export default ({
       <Accordion>
         <Accordion.Title>
           <Icon name="dropdown" />
-          Manage whitelist
+          Manage disabled sites
         </Accordion.Title>
         <Accordion.Content>
-          <ManageWhitelist whitelist={whitelist} onChange={whitelistOnChange} />
+          <ManageDisabled
+            disabledHosts={disabledHosts}
+            onChange={disabledOnChange}
+          />
         </Accordion.Content>
         <Accordion.Title>
           <Icon name="dropdown" />

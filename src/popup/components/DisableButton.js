@@ -3,25 +3,25 @@ import { Segment, Button } from 'semantic-ui-react'
 import parseUrl from '../../utils/parseUrl'
 
 export default ({
-  whitelist,
+  disabledHosts,
   currentUrl,
-  onAddToWhitelist,
-  onRemoveFromWhitelist
+  onSiteDisable,
+  onSiteEnable
 }: {
-  whitelist: string[],
+  disabledHosts: string[],
   currentUrl: string,
-  onAddToWhiteList: () => void,
-  onRemoveFromWhitelist: () => void
+  onSiteDisable: () => void,
+  onSiteEnable: () => void
 }) => {
   const { schema, hostname } = parseUrl(currentUrl)
 
   if (!/^https?:/i.test(schema)) return null
-  if (whitelist.includes(hostname)) {
+  if (disabledHosts.includes(hostname)) {
     return (
       <Segment attached>
         <Button
-          content="Remove from whitelist"
-          onClick={onRemoveFromWhitelist}
+          content="Enable on this site"
+          onClick={onSiteEnable}
           basic
           negative
           fluid
@@ -32,8 +32,8 @@ export default ({
     return (
       <Segment attached>
         <Button
-          content="Whitelist this site"
-          onClick={onAddToWhitelist}
+          content="Disable on this site"
+          onClick={onSiteDisable}
           basic
           positive
           fluid

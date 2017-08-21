@@ -3,7 +3,7 @@ declare var chrome: any
 import React from 'react'
 import Header from './components/Header'
 import UsageStatistic from './components/UsageStatistic'
-import WhitelistButton from './components/WhitelistButton'
+import DisableButton from './components/DisableButton'
 import SettingsAccordion from './components/SettingsAccordion'
 import Footer from './components/Footer'
 import parseUrl from '../utils/parseUrl'
@@ -19,7 +19,7 @@ export default class Popup extends React.Component {
     this.state = {
       enabled: props.enabled,
       statistics: props.statistics,
-      whitelist: props.whitelist,
+      disabledHosts: props.disabledHosts,
       proxyUrl: props.proxyUrl
     }
 
@@ -33,29 +33,29 @@ export default class Popup extends React.Component {
     )
   }
 
-  siteWasAddedToWhitelist = () => {
+  siteWasDisabled = () => {
     const { hostname } = parseUrl(this.props.currentUrl)
     this.setState(
       prevState => ({
-        whitelist: prevState.whitelist.concat(hostname)
+        disabledHosts: prevState.disabledHosts.concat(hostname)
       }),
       this.stateWasUpdatedFromUI
     )
   }
 
-  siteWasRemovedFromWhitelist = () => {
+  siteWasEnabled = () => {
     const { hostname } = parseUrl(this.props.currentUrl)
     this.setState(
       prevState => ({
-        whitelist: prevState.whitelist.filter(site => site !== hostname)
+        disabledHosts: prevState.disabledHosts.filter(site => site !== hostname)
       }),
       this.stateWasUpdatedFromUI
     )
   }
 
-  whitelistWasChanged = (_: Event, { value }: { value: string }) => {
+  disabledHostsWasChanged = (_: Event, { value }: { value: string }) => {
     this.setState(
-      prevState => ({ whitelist: value.split('\n') }),
+      prevState => ({ disabledHosts: value.split('\n') }),
       this.stateWasUpdatedFromUI
     )
   }
@@ -90,7 +90,7 @@ export default class Popup extends React.Component {
   }
 
   render() {
-    const { enabled, statistics, whitelist, proxyUrl } = this.state
+    const { enabled, statistics, disabledHosts, proxyUrl } = this.state
     return (
       <div>
         <Header enabled={enabled} onChange={this.enableSwitchWasChanged} />
@@ -99,15 +99,15 @@ export default class Popup extends React.Component {
           bytesProcessed={statistics.bytesProcessed}
           bytesSaved={statistics.bytesSaved}
         />
-        <WhitelistButton
-          whitelist={whitelist}
+        <DisableButton
+          disabledHosts={disabledHosts}
           currentUrl={this.props.currentUrl}
-          onAddToWhitelist={this.siteWasAddedToWhitelist}
-          onRemoveFromWhitelist={this.siteWasRemovedFromWhitelist}
+          onSiteDisable={this.siteWasDisabled}
+          onSiteEnable={this.siteWasEnabled}
         />
         <SettingsAccordion
-          whitelist={whitelist}
-          whitelistOnChange={this.whitelistWasChanged}
+          disabledHosts={disabledHosts}
+          disabledOnChange={this.disabledHostsWasChanged}
           proxyUrl={proxyUrl}
           proxyUrlOnChange={this.proxyUrlWasChanged}
           proxyUrlOnReset={this.proxyUrlWasReset}

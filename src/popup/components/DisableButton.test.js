@@ -1,21 +1,21 @@
 import React from 'react'
-import WhitelistButton from './WhitelistButton'
+import DisableButton from './DisableButton'
 import renderer from 'react-test-renderer'
 
-it('renders whitelist button correctly', () => {
+it('renders disable button correctly', () => {
   const tree = renderer
     .create(
-      <WhitelistButton whitelist={[]} currentUrl="https://google.com/foo.png" />
+      <DisableButton disabledHosts={[]} currentUrl="https://google.com/foo.png" />
     )
     .toJSON()
   expect(tree).toMatchSnapshot()
 })
 
-it('renders remove from whitelist button correctly', () => {
+it('renders enable button correctly', () => {
   const tree = renderer
     .create(
-      <WhitelistButton
-        whitelist={['google.com']}
+      <DisableButton
+        disabledHosts={['google.com']}
         currentUrl="https://google.com/foo.png"
       />
     )
@@ -25,7 +25,7 @@ it('renders remove from whitelist button correctly', () => {
 
 it('does not render on non-URL pages', () => {
   const tree = renderer
-    .create(<WhitelistButton whitelist={[]} currentUrl="file:///foo.png" />)
+    .create(<DisableButton disabledHosts={[]} currentUrl="file:///foo.png" />)
     .toJSON()
   expect(tree).toBeNull()
 })

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders whitelist management correctly 1`] = `
+exports[`renders disabled sites management correctly 1`] = `
 <form
   className="ui form"
 >

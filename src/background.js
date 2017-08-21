@@ -37,7 +37,7 @@ chrome.storage.sync.get((storedState: AppState) => {
         imageUrl: url,
         pageUrl,
         proxyUrl: state.proxyUrl,
-        whitelist: state.whitelist,
+        disabledHosts: state.disabledHosts,
         enabled: state.enabled
       })
     ) {

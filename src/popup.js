@@ -10,18 +10,11 @@ import type { AppState } from './types'
 
 chrome.storage.sync.get((storedState: AppState) => {
   const initialState = { ...defaultState, ...storedState }
-  const { enabled, statistics, whitelist, proxyUrl } = initialState
 
   chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
     const [activeTab] = tabs
     ReactDOM.render(
-      <Popup
-        currentUrl={activeTab.url}
-        enabled={enabled}
-        statistics={statistics}
-        whitelist={whitelist}
-        proxyUrl={proxyUrl}
-      />,
+      <Popup currentUrl={activeTab.url} {...initialState} />,
       document.getElementById('root')
     )
   })

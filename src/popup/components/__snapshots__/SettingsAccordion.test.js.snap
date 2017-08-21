@@ -6,6 +6,7 @@ exports[`renders settings accordion correctly 1`] = `
 >
   <div
     className="ui accordion"
+    exclusive={true}
   >
     <div
       className="title"
@@ -15,7 +16,7 @@ exports[`renders settings accordion correctly 1`] = `
         aria-hidden="true"
         className="dropdown icon"
       />
-      Manage whitelist
+      Manage disabled sites
     </div>
     <div
       className="content"

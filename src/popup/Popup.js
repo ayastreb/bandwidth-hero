@@ -23,7 +23,7 @@ export default class Popup extends React.Component {
       proxyUrl: props.proxyUrl
     }
 
-    chrome.extension.onMessage.addListener(this.stateWasUpdatedFromBackground)
+    chrome.runtime.onMessage.addListener(this.stateWasUpdatedFromBackground)
   }
 
   enableSwitchWasChanged = () => {
@@ -79,7 +79,7 @@ export default class Popup extends React.Component {
    */
   stateWasUpdatedFromUI = () => {
     chrome.storage.sync.set(this.state)
-    chrome.extension.sendMessage(this.state)
+    chrome.runtime.sendMessage(this.state)
   }
 
   /**

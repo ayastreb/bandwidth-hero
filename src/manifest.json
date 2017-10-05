@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Bandwidth Hero",
   "description": "Saves data by compressing images on the page.",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "icons": {
     "64": "assets/icon-128.png",
     "128": "assets/icon-256.png"
@@ -13,17 +13,13 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": [
-      "update.bundle.js",
-      "background.bundle.js"
-    ]
+    "scripts": ["update.bundle.js", "background.bundle.js"]
   },
   "permissions": [
     "tabs",
     "storage",
     "webRequest",
     "webRequestBlocking",
-    "tabs",
     "<all_urls>"
   ]
 }

@@ -12,7 +12,22 @@ chrome.storage.sync.get((storedState: AppState) => {
   const storage = deferredStateStorage()
   let state: AppState
   let pageUrl: string
+  let isWebpSupported
+
   setState({ ...defaultState, ...storedState })
+
+  checkWebpSupport().then(isSupported => {
+    isWebpSupported = isSupported
+  })
+
+  async function checkWebpSupport() {
+    if (!self.createImageBitmap) return false
+
+    const webpData =
+      'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA='
+    const blob = await fetch(webpData).then(r => r.blob())
+    return createImageBitmap(blob).then(() => true, () => false)
+  }
 
   /**
    * Sync state.
@@ -41,7 +56,10 @@ chrome.storage.sync.get((storedState: AppState) => {
         enabled: state.enabled
       })
     ) {
-      return { redirectUrl: `${state.proxyUrl}?url=${encodeURIComponent(url)}` }
+      let redirectUrl = `${state.proxyUrl}?url=${encodeURIComponent(url)}`
+      if (!isWebpSupported) redirectUrl += '&jpeg=1'
+
+      return { redirectUrl }
     }
   }
 
@@ -58,7 +76,7 @@ chrome.storage.sync.get((storedState: AppState) => {
       state.statistics.bytesSaved += bytesSaved
 
       storage.set(state)
-      chrome.extension.sendMessage(state)
+      chrome.runtime.sendMessage(state)
     }
   }
 
@@ -72,7 +90,7 @@ chrome.storage.sync.get((storedState: AppState) => {
     }
   }
 
-  chrome.extension.onMessage.addListener(setState)
+  chrome.runtime.onMessage.addListener(setState)
   chrome.webRequest.onBeforeRequest.addListener(
     onBeforeRequestListener,
     {

@@ -3,9 +3,9 @@
 
 ![Bandwidth Hero](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/src/assets/logo.png)
 
-Bandwidth Hero is a Chrome extension which compresses images on the page to save data.
+Bandwidth Hero is a browser (Chrome/Firefox) extension which compresses images on the page to save data.
 
-It uses [compression proxy](https://github.com/ayastreb/bandwidth-hero-proxy) to convert all images to greyscale [WebP](https://developers.google.com/speed/webp/) images.
+It uses [compression proxy](https://github.com/ayastreb/bandwidth-hero-proxy) to convert all images to greyscale [WebP](https://developers.google.com/speed/webp/) or JPEG images.
 
 ## How It Works?
 
@@ -14,7 +14,7 @@ It uses [compression proxy](https://github.com/ayastreb/bandwidth-hero-proxy) to
 1. When active, Bandwidth Hero intercepts all images loading requests
 2. It sends each image URL to the compression proxy server
 3. Proxy server downloads the original image
-4. Once image is downloaded it is then converted to greyscale [WebP](https://developers.google.com/speed/webp/) image.
+4. Once image is downloaded it is then converted to greyscale [WebP](https://developers.google.com/speed/webp/)/JPEG image.
 5. Proxy server returns compressed image to the browser
 
 ## Privacy Consideration
@@ -30,6 +30,9 @@ Once you have your own instance running, just update the URL under "Compression 
 ## Installation
 
 [![Get Extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png)](https://chrome.google.com/webstore/detail/bandwidth-hero/mmhippoadkhcflebgghophicgldbahdb?hl=en-US)
+
+[![Get Firefox Addon](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/ff-addon-badge.png)]
+(https://addons.mozilla.org/en-US/firefox/addon/bandwidth-hero/)
 
 ## Credits
 

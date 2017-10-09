@@ -5,6 +5,6 @@ import type { AppState } from '../types'
 module.exports = (state: AppState) => {
   if (!state.disabledHosts) {
     state.disabledHosts = state.whitelist
-    chrome.storage.sync.set(state)
+    chrome.storage.local.set(state)
   }
 }

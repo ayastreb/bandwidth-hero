@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(
     previousVersion: string
   }) => {
     if (reason === 'update') {
-      chrome.storage.sync.get((storedState: AppState) => {
+      chrome.storage.local.get((storedState: AppState) => {
         require(`./updates/${previousVersion}.js`)(storedState)
       })
     }

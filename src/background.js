@@ -8,7 +8,7 @@ import deferredStateStorage from './utils/deferredStateStorage'
 import defaultState from './defaults'
 import type { AppState } from './types'
 
-chrome.storage.sync.get((storedState: AppState) => {
+chrome.storage.local.get((storedState: AppState) => {
   const storage = deferredStateStorage()
   let state: AppState
   let pageUrl: string

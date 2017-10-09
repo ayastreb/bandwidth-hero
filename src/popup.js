@@ -8,7 +8,7 @@ import 'semantic-ui-css/semantic.css'
 import './popup/index.css'
 import type { AppState } from './types'
 
-chrome.storage.sync.get((storedState: AppState) => {
+chrome.storage.local.get((storedState: AppState) => {
   const initialState = { ...defaultState, ...storedState }
 
   chrome.tabs.query({ currentWindow: true, active: true }, tabs => {

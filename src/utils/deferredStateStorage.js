@@ -10,7 +10,7 @@ export default (delay: number = 1000) => {
     set(state: AppState) {
       if (pendingState === null) {
         timerId = window.setTimeout(() => {
-          chrome.storage.sync.set(pendingState, () => {
+          chrome.storage.local.set(pendingState, () => {
             window.clearTimeout(timerId)
             pendingState = null
           })

@@ -78,7 +78,7 @@ export default class Popup extends React.Component {
    * Sync every UI state change with local storage and background process.
    */
   stateWasUpdatedFromUI = () => {
-    chrome.storage.sync.set(this.state)
+    chrome.storage.local.set(this.state)
     chrome.runtime.sendMessage(this.state)
   }
 

@@ -1,21 +1,27 @@
 {
+  "applications": {
+    "gecko": {
+      "id": "bandwidth-hero@example.com"
+    }
+  },
   "manifest_version": 2,
   "name": "Bandwidth Hero",
   "description": "Saves data by compressing images on the page.",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "icons": {
     "64": "assets/icon-128.png",
     "128": "assets/icon-256.png"
   },
   "browser_action": {
     "default_icon": "assets/icon-128.png",
-    "default_title": "Saves bandwidth!",
+    "default_title": "Bandwidth Hero",
     "default_popup": "popup.html"
   },
   "background": {
     "scripts": ["update.bundle.js", "background.bundle.js"]
   },
   "permissions": [
+    "activeTab",
     "tabs",
     "storage",
     "webRequest",

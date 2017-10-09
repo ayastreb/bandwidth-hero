@@ -33,7 +33,10 @@ chrome.storage.local.get((storedState: AppState) => {
    * Sync state.
    */
   function setState(newState: AppState) {
-    if (!state || state.enabled !== newState.enabled) {
+    if (
+      chrome.browserAction.setIcon &&
+      (!state || state.enabled !== newState.enabled)
+    ) {
       chrome.browserAction.setIcon({
         path: newState.enabled
           ? 'assets/icon-128.png'

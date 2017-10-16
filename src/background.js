@@ -61,8 +61,21 @@ chrome.storage.local.get((storedState: AppState) => {
     ) {
       let redirectUrl = `${state.proxyUrl}?url=${encodeURIComponent(url)}`
       if (!isWebpSupported) redirectUrl += '&jpeg=1'
+      if (!state.convertBw) redirectUrl += '&bw=0'
+      if (state.compressionLevel) {
+        redirectUrl += '&l=' + parseInt(state.compressionLevel, 10)
+      }
 
       return { redirectUrl }
+    }
+  }
+
+  /**
+   * Do not send cookies to the proxy.
+   */
+  function onBeforeSendHeadersListener({ requestHeaders }) {
+    return {
+      requestHeaders: requestHeaders.filter(header => header.name !== 'Cookie')
     }
   }
 
@@ -101,6 +114,14 @@ chrome.storage.local.get((storedState: AppState) => {
       types: ['image']
     },
     ['blocking']
+  )
+  chrome.webRequest.onBeforeSendHeaders.addListener(
+    onBeforeSendHeadersListener,
+    {
+      urls: ['<all_urls>'],
+      types: ['image']
+    },
+    ['blocking', 'requestHeaders']
   )
   chrome.webRequest.onCompleted.addListener(
     onCompletedListener,

@@ -7,6 +7,8 @@ export type AppState = {
     bytesSaved: number
   },
   disabledHosts: string[],
+  convertBw: boolean,
+  compressionLevel: number,
   proxyUrl: string
 }
 
@@ -19,6 +21,8 @@ export type AppProps = {
     bytesSaved: number
   },
   disabledHosts: string[],
+  convertBw: boolean,
+  compressionLevel: number,
   proxyUrl: string
 }
 

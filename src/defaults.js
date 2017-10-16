@@ -6,5 +6,8 @@ export default {
     bytesSaved: 0
   },
   disabledHosts: [],
-  proxyUrl: 'https://wt-e9c9a7a436fcd9273a7f8890849dae65-0.run.webtask.io/bandwidth-hero-proxy'
+  convertBw: true,
+  compressionLevel: 40,
+  proxyUrl:
+    'https://wt-e9c9a7a436fcd9273a7f8890849dae65-0.run.webtask.io/bandwidth-hero-proxy'
 }

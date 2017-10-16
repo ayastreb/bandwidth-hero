@@ -6,13 +6,21 @@ import CompressionSettings from './CompressionSettings'
 export default ({
   disabledHosts,
   disabledOnChange,
+  convertBw,
+  compressionLevel,
   proxyUrl,
+  convertBwOnChange,
+  compressionLevelOnChange,
   proxyUrlOnChange,
   proxyUrlOnReset
 }: {
   disabledHosts: string[],
   disabledOnChange: (event: Event, data: {}) => void,
+  convertBw: boolean,
+  compressionLevel: number,
   proxyUrl: string,
+  convertBwOnChange: (event: Event, data: {}) => void,
+  compressionLevelOnChange: (event: Event, data: {}) => void,
   proxyUrlOnChange: (event: Event, data: {}) => void,
   proxyUrlOnReset: () => void
 }) => {
@@ -35,9 +43,13 @@ export default ({
         </Accordion.Title>
         <Accordion.Content>
           <CompressionSettings
+            convertBw={convertBw}
+            compressionLevel={compressionLevel}
             proxyUrl={proxyUrl}
-            onChange={proxyUrlOnChange}
-            onReset={proxyUrlOnReset}
+            onConvertBwChange={convertBwOnChange}
+            onCompressionLevelChange={compressionLevelOnChange}
+            onUrlChange={proxyUrlOnChange}
+            onUrlReset={proxyUrlOnReset}
           />
         </Accordion.Content>
       </Accordion>

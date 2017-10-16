@@ -20,6 +20,8 @@ export default class Popup extends React.Component {
       enabled: props.enabled,
       statistics: props.statistics,
       disabledHosts: props.disabledHosts,
+      convertBw: props.convertBw,
+      compressionLevel: props.compressionLevel,
       proxyUrl: props.proxyUrl
     }
 
@@ -60,6 +62,20 @@ export default class Popup extends React.Component {
     )
   }
 
+  convertBwWasChanged = () => {
+    this.setState(
+      prevState => ({ convertBw: !prevState.convertBw }),
+      this.stateWasUpdatedFromUI
+    )
+  }
+
+  compressionLevelWasChanged = (_: Event, { value }: { value: string }) => {
+    this.setState(
+      prevState => ({ compressionLevel: value }),
+      this.stateWasUpdatedFromUI
+    )
+  }
+
   proxyUrlWasChanged = (_: Event, { value }: { value: string }) => {
     this.setState(
       prevState => ({ proxyUrl: value }),
@@ -90,7 +106,14 @@ export default class Popup extends React.Component {
   }
 
   render() {
-    const { enabled, statistics, disabledHosts, proxyUrl } = this.state
+    const {
+      enabled,
+      statistics,
+      disabledHosts,
+      convertBw,
+      compressionLevel,
+      proxyUrl
+    } = this.state
     return (
       <div>
         <Header enabled={enabled} onChange={this.enableSwitchWasChanged} />
@@ -108,7 +131,11 @@ export default class Popup extends React.Component {
         <SettingsAccordion
           disabledHosts={disabledHosts}
           disabledOnChange={this.disabledHostsWasChanged}
+          convertBw={convertBw}
+          compressionLevel={compressionLevel}
           proxyUrl={proxyUrl}
+          convertBwOnChange={this.convertBwWasChanged}
+          compressionLevelOnChange={this.compressionLevelWasChanged}
           proxyUrlOnChange={this.proxyUrlWasChanged}
           proxyUrlOnReset={this.proxyUrlWasReset}
         />

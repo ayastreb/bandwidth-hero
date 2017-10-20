@@ -71,15 +71,6 @@ chrome.storage.local.get((storedState: AppState) => {
   }
 
   /**
-   * Do not send cookies to the proxy.
-   */
-  function onBeforeSendHeadersListener({ requestHeaders }) {
-    return {
-      requestHeaders: requestHeaders.filter(header => header.name !== 'Cookie')
-    }
-  }
-
-  /**
    * Retrieve saved bytes info from response headers, update statistics in
    * app storage and notify UI about state changes.
    */
@@ -114,14 +105,6 @@ chrome.storage.local.get((storedState: AppState) => {
       types: ['image']
     },
     ['blocking']
-  )
-  chrome.webRequest.onBeforeSendHeaders.addListener(
-    onBeforeSendHeadersListener,
-    {
-      urls: ['<all_urls>'],
-      types: ['image']
-    },
-    ['blocking', 'requestHeaders']
   )
   chrome.webRequest.onCompleted.addListener(
     onCompletedListener,

@@ -10,9 +10,7 @@ This extension is open-source, source code available at [GitHub](https://github.
 
 When you use "Bandwidth Hero" browser extension it forwards all images loading
 requests to the compression proxy server, including images from secure and
-authenticated web pages (e.g. Facebook, Twitter etc). However this extension
-does not send your cookies to the proxy server - it removes "Cookies" header
-before forwarding image loading to the compression proxy.
+authenticated web pages (e.g. Facebook, Twitter etc).
 By default this extension uses following proxy server URL:
 
 https://wt-e9c9a7a436fcd9273a7f8890849dae65-0.run.webtask.io/bandwidth-hero-proxy

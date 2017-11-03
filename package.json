@@ -2,17 +2,17 @@
   "name": "bandwidth-hero-extension",
   "private": true,
   "version": "1.2.2",
-  "description":
-    "Browser extension which saves data by compressing images on the page",
+  "description": "Browser extension which saves data by compressing images on the page",
   "author": "Anatoliy Yastreb",
   "license": "MIT",
   "scripts": {
     "build": "webpack -p",
     "watch": "webpack --watch",
-    "test": "flow && jest",
+    "test": "NODE_ENV=test flow && jest",
     "flow": "flow"
   },
   "dependencies": {
+    "netmask": "^1.0.6",
     "pretty-bytes": "^4.0.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

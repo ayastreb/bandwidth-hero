@@ -141,3 +141,69 @@ it('should not compress if url is in disabled hosts list', () => {
     })
   ).toBeFalsy()
 })
+
+it('should not compress private IP address network', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://localhost/logo.png',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'http://127.0.0.1/logo.png',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://192.168.0.10/logo.png',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://10.0.0.15/logo.png',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://172.16.0.100/logo.png',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://192.169.0.1/logo.png',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeTruthy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://172.32.0.1/logo.png',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeTruthy()
+})

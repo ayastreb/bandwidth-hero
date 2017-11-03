@@ -23,8 +23,7 @@ chrome.storage.local.get((storedState: AppState) => {
   async function checkWebpSupport() {
     if (!self.createImageBitmap) return false
 
-    const webpData =
-      'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA='
+    const webpData = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA='
     const blob = await fetch(webpData).then(r => r.blob())
     return self.createImageBitmap(blob).then(() => true, () => false)
   }
@@ -33,14 +32,9 @@ chrome.storage.local.get((storedState: AppState) => {
    * Sync state.
    */
   function setState(newState: AppState) {
-    if (
-      chrome.browserAction.setIcon &&
-      (!state || state.enabled !== newState.enabled)
-    ) {
+    if (chrome.browserAction.setIcon && (!state || state.enabled !== newState.enabled)) {
       chrome.browserAction.setIcon({
-        path: newState.enabled
-          ? 'assets/icon-128.png'
-          : 'assets/icon-128-disabled.png'
+        path: newState.enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
       })
     }
     state = newState
@@ -59,6 +53,13 @@ chrome.storage.local.get((storedState: AppState) => {
         enabled: state.enabled
       })
     ) {
+      // TODO: remove after all migrated to custom domain
+      if (
+        state.proxyUrl ===
+        'https://wt-e9c9a7a436fcd9273a7f8890849dae65-0.run.webtask.io/bandwidth-hero-proxy'
+      ) {
+        state.proxyUrl = 'https://compressor.bandwidth-hero.com'
+      }
       let redirectUrl = `${state.proxyUrl}?url=${encodeURIComponent(url)}`
       if (!isWebpSupported) redirectUrl += '&jpeg=1'
       if (!state.convertBw) redirectUrl += '&bw=0'

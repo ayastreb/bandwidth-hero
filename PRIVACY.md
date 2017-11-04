@@ -13,7 +13,7 @@ requests to the compression proxy server, including images from secure and
 authenticated web pages (e.g. Facebook, Twitter etc).
 By default this extension uses following proxy server URL:
 
-https://wt-e9c9a7a436fcd9273a7f8890849dae65-0.run.webtask.io/bandwidth-hero-proxy
+https://compressor.bandwidth-hero.com
 
 The proxy server does not store downloaded images.
 It processes images on the fly, downloading them from original server and converting in memory.

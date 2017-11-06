@@ -3,33 +3,33 @@
 
 ![Bandwidth Hero](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/src/assets/logo.png)
 
-Bandwidth Hero is a browser (Chrome/Firefox) extension which compresses images on the page to save data.
-
-It uses [compression proxy](https://github.com/ayastreb/bandwidth-hero-proxy) to convert all images to greyscale [WebP](https://developers.google.com/speed/webp/) or JPEG images.
+Bandwidth Hero is an open-source browser extension which reduces the amount of data consumed when you browse
+web pages by compressing all images on the page.
+It uses [data compression service](https://github.com/ayastreb/bandwidth-hero-proxy) to convert images to low-resolution [WebP](https://developers.google.com/speed/webp/) or JPEG images.
 
 ## How It Works?
 
 ![Workflow](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/how-it-works.png)
 
 1. When active, Bandwidth Hero intercepts all images loading requests
-2. It sends each image URL to the compression proxy server
-3. Proxy server downloads the original image
-4. Once image is downloaded it is then converted to greyscale [WebP](https://developers.google.com/speed/webp/)/JPEG image.
-5. Proxy server returns compressed image to the browser
+2. It sends each image URL to the data compression service
+3. Compression service downloads the original image
+4. Once image is downloaded it is then converted to low-resolution [WebP](https://developers.google.com/speed/webp/)/JPEG image.
+5. Compression service returns processed image to the browser
 
 ## Privacy Consideration
 
-Please note that proxy server does not store the images anywhere, it compresses them on the fly.
-However if you want to be 100% sure you can run your own proxy server instance.
+Please note that compression service does not store the images anywhere, it processes them on the fly.
+However if you want to be 100% sure you can run your own service instance.
 
-Please refer to [compression proxy docs](https://github.com/ayastreb/bandwidth-hero-proxy)
-for detailed instructions on how to run your own proxy.
+Please refer to [data compression service docs](https://github.com/ayastreb/bandwidth-hero-proxy)
+for detailed instructions on how to run your own service.
 
 Once you have your own instance running, just update the URL under "Compression settings" in the extension popup.
 
 ## Installation
 
-[![Get Extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png)](https://chrome.google.com/webstore/detail/bandwidth-hero/mmhippoadkhcflebgghophicgldbahdb?hl=en-US)
+[![Get Extension](https://developer.chrome.com/webstore/images/ChromeWebStore_v2_340x96.png)](https://chrome.google.com/webstore/detail/bandwidth-hero/mmhippoadkhcflebgghophicgldbahdb?hl=en-US)
 
 [![Get Firefox Addon](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/ff-addon-badge.png)](https://addons.mozilla.org/en-US/firefox/addon/bandwidth-hero/)
 

@@ -37,3 +37,8 @@ a:hover, a:focus {
   font-weight: normal;
   text-decoration: none;
 }
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+}

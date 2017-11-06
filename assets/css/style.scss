@@ -1,3 +1,16 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.wrapper {
+  width: 940px;
+}
+
+section {
+  width: 640px;
+}
+
 .view.ext-button {
   margin-bottom: 10px;
 }
@@ -8,4 +21,13 @@
   -webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
+}
+
+a {
+  text-decoration: underline;
+}
+
+a:hover, a:focus {
+  font-weight: normal;
+  text-decoration: none;
 }

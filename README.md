@@ -1,7 +1,6 @@
-## What is Bandwidth Hero?
+# What is Bandwidth Hero?
 
-It's a browser extension which compresses images on the page to save data.
-
+It's an open-source browser extension which compresses images on the page to save data.
 It uses [compression proxy](https://github.com/ayastreb/bandwidth-hero-proxy) to convert all images to greyscale [WebP](https://developers.google.com/speed/webp/) or JPEG images.
 
 ## How It Works?

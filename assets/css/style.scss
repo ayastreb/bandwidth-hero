@@ -1,18 +1,24 @@
 ---
 ---
-
+@import url('https://fonts.googleapis.com/css?family=PT+Serif');
 @import "{{ site.theme }}";
 
+body {
+  font-family: 'PT Serif', serif;
+  font-size: 1em;
+}
+
 .wrapper {
-  width: 940px;
+  width: 960px;
 }
 
 section {
   width: 640px;
+  padding-top: 6px;
 }
 
 .view.ext-button {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .view.ext-button img {

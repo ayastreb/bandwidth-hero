@@ -12,7 +12,7 @@ exports[`renders footer correctly 1`] = `
   <a
     className="ui basic icon right labeled button"
     disabled={undefined}
-    href="https://github.com/ayastreb/bandwidth-hero#how-it-works"
+    href="https://bandwidth-hero.com/"
     onClick={[Function]}
     role="button"
     tabIndex={undefined}
@@ -20,7 +20,7 @@ exports[`renders footer correctly 1`] = `
   >
     <i
       aria-hidden="true"
-      className="github icon"
+      className="home icon"
     />
     How it works?
   </a>

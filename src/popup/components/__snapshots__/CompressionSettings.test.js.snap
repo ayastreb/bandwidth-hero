@@ -4,7 +4,7 @@ exports[`renders compression settings correctly 1`] = `
 <div>
   <div>
     <div
-      className="ui toggle checkbox"
+      className="ui checkbox"
       onChange={[Function]}
       onClick={[Function]}
       onMouseDown={[Function]}

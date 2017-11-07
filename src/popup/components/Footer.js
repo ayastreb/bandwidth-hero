@@ -7,9 +7,9 @@ export default () => {
       <Button
         basic
         content="How it works?"
-        href="https://github.com/ayastreb/bandwidth-hero#how-it-works"
+        href="https://bandwidth-hero.com/"
         target="_blank"
-        icon="github"
+        icon="home"
         labelPosition="right"
       />
     </Container>

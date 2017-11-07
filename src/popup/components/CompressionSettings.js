@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Input, Checkbox, Dropdown, Button } from 'semantic-ui-react'
+import defaults from '../../defaults'
 
 export default ({
   convertBw,
@@ -28,7 +29,6 @@ export default ({
     <div>
       <div>
         <Checkbox
-          toggle
           label="Convert to black & white"
           checked={convertBw}
           onChange={onConvertBwChange}
@@ -52,6 +52,14 @@ export default ({
           onChange={onUrlChange}
           action={<Button icon="history" onClick={onUrlReset} />}
         />
+        {proxyUrl === defaults.proxyUrl && (
+          <small>
+            By using compression service you agree with{' '}
+            <a href="https://bandwidth-hero.com/terms" target="_blank">
+              Terms and Conditions of Use
+            </a>.
+          </small>
+        )}
       </div>
     </div>
   )

@@ -47,8 +47,12 @@ function isPrivateNetwork(url) {
 function hasTracking(url) {
   if (
     /pixel\.*(gif|jpg|jpeg)/i.test(url) ||
+    /pagead/i.test(url) ||
     url.startsWith('https://www.youtube.com/api') ||
-    url.startsWith('https://www.google-analytics.com/r/collect')
+    url.startsWith('https://www.youtube.com/ptracking') ||
+    url.startsWith('https://www.google.com/ads/measurement') ||
+    url.startsWith('https://www.google-analytics.com/r/collect') ||
+    url.startsWith('https://securepubads.g.doubleclick.net/pcs')
   ) {
     return true
   }

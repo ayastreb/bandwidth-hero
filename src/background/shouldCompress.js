@@ -21,6 +21,7 @@ export default ({
     enabled &&
     /https?:\/\/.+/i.test(imageUrl) &&
     !isPrivateNetwork(imageUrl) &&
+    !hasTracking(imageUrl) &&
     !disabledHosts.includes(pageUrl) &&
     !skipRegExp.test(imageUrl)
   )
@@ -38,6 +39,18 @@ function isPrivateNetwork(url) {
     for (const block of privateBlocks) {
       if (block.contains(ipAddress[1])) return true
     }
+  }
+
+  return false
+}
+
+function hasTracking(url) {
+  if (
+    /pixel\.*(gif|jpg|jpeg)/i.test(url) ||
+    url.startsWith('https://www.youtube.com/api') ||
+    url.startsWith('https://www.google-analytics.com/r/collect')
+  ) {
+    return true
   }
 
   return false

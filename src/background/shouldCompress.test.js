@@ -207,3 +207,33 @@ it('should not compress private IP address network', () => {
     })
   ).toBeTruthy()
 })
+
+it('should not compress tracking pixels', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://connect.facebook.net/security/hsts-pixel.gif',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://ad-domain.com/pixel.jpg',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
+      imageUrl: 'https://www.youtube.com/api/stats?url=foo.com',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+})

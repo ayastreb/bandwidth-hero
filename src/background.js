@@ -6,6 +6,7 @@ import getHeaderValue from './background/getHeaderIntValue'
 import parseUrl from './utils/parseUrl'
 import deferredStateStorage from './utils/deferredStateStorage'
 import defaultState from './defaults'
+import axios from 'axios'
 import type { AppState } from './types'
 
 chrome.storage.local.get((storedState: AppState) => {
@@ -53,22 +54,37 @@ chrome.storage.local.get((storedState: AppState) => {
         enabled: state.enabled
       })
     ) {
-      // TODO: remove after all migrated to custom domain
-      if (
-        state.proxyUrl ===
-        'https://wt-e9c9a7a436fcd9273a7f8890849dae65-0.run.webtask.io/bandwidth-hero-proxy'
-      ) {
-        state.proxyUrl = 'https://compressor.bandwidth-hero.com'
-      }
       let redirectUrl = `${state.proxyUrl}?url=${encodeURIComponent(url)}`
       if (!isWebpSupported) redirectUrl += '&jpeg=1'
       if (!state.convertBw) redirectUrl += '&bw=0'
       if (state.compressionLevel) {
         redirectUrl += '&l=' + parseInt(state.compressionLevel, 10)
       }
-
-      return { redirectUrl }
+      if (!isFirefox()) return { redirectUrl }
+      // Firefox allows onBeforeRequest event listener to return a Promise
+      // and perform redirect when this Promise is resolved.
+      // This allows us to run HEAD request before redirecting to compression
+      // to make sure that the image should be compressed.
+      return axios.head(url).then(res => {
+        console.log(res)
+        if (
+          res.status === 200 &&
+          res.headers['content-length'] > 1024 &&
+          res.headers['content-type'] &&
+          res.headers['content-type'].startsWith('image')
+        ) {
+          return { redirectUrl }
+        }
+      })
     }
+  }
+
+  /**
+   * Firefox user agent always has "rv:" and "Gecko"
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox
+   */
+  function isFirefox() {
+    return /rv\:.*Gecko/.test(window.navigator.userAgent)
   }
 
   /**

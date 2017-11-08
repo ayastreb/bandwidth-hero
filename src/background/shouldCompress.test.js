@@ -229,6 +229,15 @@ it('should not compress tracking pixels', () => {
   ).toBeFalsy()
   expect(
     shouldCompress({
+      imageUrl: 'https://ad-domain.com/cleardot.jpg',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeFalsy()
+  expect(
+    shouldCompress({
       imageUrl: 'https://www.youtube.com/api/stats?url=foo.com',
       disabledHosts: ['google.com'],
       pageUrl: 'foo.com',

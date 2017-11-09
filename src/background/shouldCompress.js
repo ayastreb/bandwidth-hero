@@ -20,6 +20,7 @@ export default ({
   return (
     enabled &&
     /https?:\/\/.+/i.test(imageUrl) &&
+    !imageUrl.endsWith('bh-no-compress=1') &&
     !isPrivateNetwork(imageUrl) &&
     !hasTracking(imageUrl) &&
     !disabledHosts.includes(pageUrl) &&

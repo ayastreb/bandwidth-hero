@@ -54,6 +54,18 @@ it('should only compress http or https schema URLs', () => {
   ).toBeFalsy()
 })
 
+it('should not compress when img is redirected', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://google.com/logo.png?bh-no-compress=1',
+      pageUrl: 'https://google.com',
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      disabledHosts: [],
+      enabled: true
+    })
+  ).toBeFalsy()
+})
+
 it('should not compress favicons or .svg', () => {
   expect(
     shouldCompress({

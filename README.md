@@ -1,3 +1,7 @@
+<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/GNA5BNmoDRUjxvuDQsxXY3kW/ayastreb/bandwidth-hero'>
+  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/GNA5BNmoDRUjxvuDQsxXY3kW/ayastreb/bandwidth-hero.svg' />
+</a>
+
 [![Build Status](https://travis-ci.org/ayastreb/bandwidth-hero.svg?branch=master)](https://travis-ci.org/ayastreb/bandwidth-hero)
 [![Code Climate](https://codeclimate.com/github/ayastreb/bandwidth-hero/badges/gpa.svg)](https://codeclimate.com/github/ayastreb/bandwidth-hero)
 

@@ -54,7 +54,8 @@ function hasTracking(url) {
     'https://www.google.com/ads/measurement',
     'https://www.google-analytics.com/r/collect',
     'https://www.google-analytics.com/collect',
-    'https://securepubads.g.doubleclick.net/pcs'
+    'https://securepubads.g.doubleclick.net/pcs',
+    'https://www.facebook.com/impression.php'
   ]
 
   for (const link of trackingLinks) {

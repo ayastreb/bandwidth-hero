@@ -9,3 +9,9 @@ body {
 .ui.toggle.checkbox label:before {
   background: rgba(0, 0, 0, 0.15);
 }
+
+.ui.container.footer {
+  padding: 1em 0;
+  display: flex;
+  justify-content: space-between;
+}

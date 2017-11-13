@@ -12,9 +12,11 @@ body {
   width: 960px;
 }
 
-section {
-  width: 640px;
-  padding-top: 6px;
+@media screen and (min-width: 960px) {
+  section {
+    width: 640px;
+    padding-top: 6px;
+  }
 }
 
 .view.ext-button {
@@ -27,6 +29,12 @@ section {
   -webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (max-width: 960px) {
+  .view.ext-button img {
+    width: 100%;
+  }
 }
 
 a {

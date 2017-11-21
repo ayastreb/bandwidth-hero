@@ -4,9 +4,7 @@ import renderer from 'react-test-renderer'
 
 it('renders disable button correctly', () => {
   const tree = renderer
-    .create(
-      <DisableButton disabledHosts={[]} currentUrl="https://google.com/foo.png" />
-    )
+    .create(<DisableButton disabledHosts={[]} currentUrl="https://google.com/foo.png" />)
     .toJSON()
   expect(tree).toMatchSnapshot()
 })
@@ -14,10 +12,7 @@ it('renders disable button correctly', () => {
 it('renders enable button correctly', () => {
   const tree = renderer
     .create(
-      <DisableButton
-        disabledHosts={['google.com']}
-        currentUrl="https://google.com/foo.png"
-      />
+      <DisableButton disabledHosts={['google.com']} currentUrl="https://google.com/foo.png" />
     )
     .toJSON()
   expect(tree).toMatchSnapshot()

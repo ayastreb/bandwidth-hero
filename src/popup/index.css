@@ -1,7 +1,7 @@
 html,
 body {
-  min-width: 400px;
-  width: 400px;
+  width: 340px;
+  min-height: 360px;
   height: auto;
 }
 

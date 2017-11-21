@@ -1,13 +1,7 @@
 import React from 'react'
 import { Form, TextArea } from 'semantic-ui-react'
 
-export default ({
-  disabledHosts = [],
-  onChange
-}: {
-  disabledHosts?: string[],
-  onChange: (event: Event, data: {}) => void
-}) => {
+export default ({ disabledHosts = [], onChange }) => {
   return (
     <Form>
       <Form.Field

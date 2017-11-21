@@ -10,14 +10,6 @@ export default ({
   onCompressionLevelChange,
   onUrlChange,
   onUrlReset
-}: {
-  convertBw: boolean,
-  compressionLevel: number,
-  proxyUrl: string,
-  onConvertBwChange: (event: Event, data: {}) => void,
-  onCompressionLevelChange: (event: Event, data: {}) => void,
-  onUrlChange: (event: Event, data: {}) => void,
-  onUrlReset: () => void
 }) => {
   const compressionLevelOptions = [
     { key: 80, value: 80, text: 'Low compression (JPG 80)' },
@@ -56,8 +48,8 @@ export default ({
           <small>
             By using compression service you agree with{' '}
             <a href="https://bandwidth-hero.com/terms" target="_blank">
-              Terms and Conditions of Use
-            </a>.
+              terms of use
+            </a>
           </small>
         )}
       </div>

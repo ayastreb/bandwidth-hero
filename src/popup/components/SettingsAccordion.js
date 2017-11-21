@@ -13,16 +13,6 @@ export default ({
   compressionLevelOnChange,
   proxyUrlOnChange,
   proxyUrlOnReset
-}: {
-  disabledHosts: string[],
-  disabledOnChange: (event: Event, data: {}) => void,
-  convertBw: boolean,
-  compressionLevel: number,
-  proxyUrl: string,
-  convertBwOnChange: (event: Event, data: {}) => void,
-  compressionLevelOnChange: (event: Event, data: {}) => void,
-  proxyUrlOnChange: (event: Event, data: {}) => void,
-  proxyUrlOnReset: () => void
 }) => {
   return (
     <Segment attached>
@@ -32,10 +22,7 @@ export default ({
           Manage disabled sites
         </Accordion.Title>
         <Accordion.Content>
-          <ManageDisabled
-            disabledHosts={disabledHosts}
-            onChange={disabledOnChange}
-          />
+          <ManageDisabled disabledHosts={disabledHosts} onChange={disabledOnChange} />
         </Accordion.Content>
         <Accordion.Title>
           <Icon name="dropdown" />

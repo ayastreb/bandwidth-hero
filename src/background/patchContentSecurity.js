@@ -1,7 +1,4 @@
-// @flow
-import type { HttpHeader } from '../types'
-
-export default (headers: HttpHeader[], proxyUrl: string): HttpHeader[] =>
+export default (headers, proxyUrl) =>
   headers.map(header => {
     return /content-security-policy/i.test(header.name)
       ? {

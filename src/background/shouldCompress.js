@@ -1,19 +1,6 @@
-// @flow
 import { Netmask } from 'netmask'
 
-export default ({
-  imageUrl,
-  pageUrl,
-  proxyUrl,
-  disabledHosts,
-  enabled
-}: {
-  imageUrl: string,
-  pageUrl: string,
-  proxyUrl: string,
-  disabledHosts: string[],
-  enabled: boolean
-}): boolean => {
+export default ({ imageUrl, pageUrl, proxyUrl, disabledHosts, enabled }) => {
   const skip = [proxyUrl, 'favicon', '.*.ico', '.*.svg'].concat(disabledHosts)
   const skipRegExp = new RegExp(`(${skip.join('|')})`, 'i')
 
@@ -51,10 +38,12 @@ function hasTracking(url) {
   const trackingLinks = [
     'https://www.youtube.com/api',
     'https://www.youtube.com/ptracking',
-    'https://www.google.com/ads/measurement',
+    'https://www.google.com/ads',
     'https://www.google-analytics.com/r/collect',
     'https://www.google-analytics.com/collect',
+    'https://ssl.google-analytics.com/r/',
     'https://securepubads.g.doubleclick.net/pcs',
+    'https://cm.g.doubleclick.net/pixel',
     'https://www.facebook.com/impression.php'
   ]
 

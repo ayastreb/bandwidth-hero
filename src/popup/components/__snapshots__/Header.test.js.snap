@@ -20,7 +20,7 @@ exports[`renders header correctly 1`] = `
         className="ui image"
         height={undefined}
         src="test-file-stub"
-        width={undefined}
+        width={280}
       />
     </div>
     <div

@@ -16,7 +16,7 @@ export default () => (
       <Button
         basic
         fluid
-        content="Pateron"
+        content="Patreon"
         href="https://www.patreon.com/bandwidthhero"
         target="_blank"
         icon="users"

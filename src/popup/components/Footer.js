@@ -12,7 +12,14 @@ export default () => {
         target="_blank"
         icon="home"
       />
-      <Button basic color="orange" as={Link} to="/donate" content="Support us!" icon="diamond" />
+      <Button
+        basic
+        color="orange"
+        as={Link}
+        to="/donate"
+        content="Support us!"
+        icon="heart outline"
+      />
     </Container>
   )
 }

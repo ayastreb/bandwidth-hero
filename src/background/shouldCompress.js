@@ -1,15 +1,16 @@
 import { Netmask } from 'netmask'
 
-export default ({ imageUrl, pageUrl, proxyUrl, disabledHosts, enabled }) => {
+export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enabled }) => {
+  imageUrl = imageUrl.replace('#bh-no-compress=1', '')
   const skip = [proxyUrl, 'favicon', '.*.ico', '.*.svg'].concat(disabledHosts)
   const skipRegExp = new RegExp(`(${skip.join('|')})`, 'i')
 
   return (
     enabled &&
     /https?:\/\/.+/i.test(imageUrl) &&
-    !imageUrl.endsWith('bh-no-compress=1') &&
+    !compressed.has(imageUrl) &&
     !isPrivateNetwork(imageUrl) &&
-    !hasTracking(imageUrl) &&
+    !isTracking(imageUrl) &&
     !disabledHosts.includes(pageUrl) &&
     !skipRegExp.test(imageUrl)
   )
@@ -32,23 +33,22 @@ function isPrivateNetwork(url) {
   return false
 }
 
-function hasTracking(url) {
-  if (/(pixel|px|cleardot)\.*(gif|jpg|jpeg)/i.test(url) || /pagead/i.test(url)) return true
-
+function isTracking(url) {
   const trackingLinks = [
-    'https://www.youtube.com/api',
-    'https://www.youtube.com/ptracking',
-    'https://www.google.com/ads',
-    'https://www.google-analytics.com/r/collect',
-    'https://www.google-analytics.com/collect',
-    'https://ssl.google-analytics.com/r/',
-    'https://securepubads.g.doubleclick.net/pcs',
-    'https://cm.g.doubleclick.net/pixel',
-    'https://www.facebook.com/impression.php'
+    /pagead/i,
+    /(pixel|px|cleardot)\.*(gif|jpg|jpeg)/i,
+    /google\.([a-z\.])+\/(ads|generate_204)+\//i,
+    /google-analytics\.([a-z\.])+\/(r|collect)+\//i,
+    /youtube\.([a-z\.])+\/(api|ptracking)+/i,
+    /doubleclick\.([a-z\.])+\/(pcs|pixel)+/i,
+    /googlesyndication\.([a-z\.])+\/ddm/i,
+    /pixel\.facebook\.([a-z\.])+/i,
+    /facebook\.([a-z\.])+\/impression\.php/i,
+    /ad\.bitmedia\.io/i
   ]
 
   for (const link of trackingLinks) {
-    if (url.startsWith(link)) return true
+    if (link.test(url)) return true
   }
 
   return false

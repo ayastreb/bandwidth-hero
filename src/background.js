@@ -10,6 +10,7 @@ chrome.storage.local.get(storedState => {
   const storage = deferredStateStorage()
   let state
   let pageUrl
+  let compressed
   let isWebpSupported
 
   setState({ ...defaultState, ...storedState })
@@ -46,11 +47,13 @@ chrome.storage.local.get(storedState => {
       shouldCompress({
         imageUrl: url,
         pageUrl,
+        compressed,
         proxyUrl: state.proxyUrl,
         disabledHosts: state.disabledHosts,
         enabled: state.enabled
       })
     ) {
+      compressed.add(url)
       let redirectUrl = `${state.proxyUrl}?url=${encodeURIComponent(url)}`
       if (!isWebpSupported) redirectUrl += '&jpeg=1'
       if (!state.convertBw) redirectUrl += '&bw=0'
@@ -63,7 +66,6 @@ chrome.storage.local.get(storedState => {
       // This allows us to run HEAD request before redirecting to compression
       // to make sure that the image should be compressed.
       return axios.head(url).then(res => {
-        console.log(res)
         if (
           res.status === 200 &&
           res.headers['content-length'] > 1024 &&
@@ -139,4 +141,5 @@ chrome.storage.local.get(storedState => {
   chrome.tabs.onActivated.addListener(({ tabId }) => {
     chrome.tabs.get(tabId, tab => (pageUrl = parseUrl(tab.url).hostname))
   })
+  chrome.tabs.onUpdated.addListener(() => (compressed = new Set()))
 })

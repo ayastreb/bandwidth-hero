@@ -37,14 +37,16 @@ function isTracking(url) {
   const trackingLinks = [
     /pagead/i,
     /(pixel|px|cleardot)\.*(gif|jpg|jpeg)/i,
-    /google\.([a-z\.])+\/(ads|generate_204)+\//i,
-    /google-analytics\.([a-z\.])+\/(r|collect)+\//i,
-    /youtube\.([a-z\.])+\/(api|ptracking)+/i,
-    /doubleclick\.([a-z\.])+\/(pcs|pixel)+/i,
-    /googlesyndication\.([a-z\.])+\/ddm/i,
-    /pixel\.facebook\.([a-z\.])+/i,
-    /facebook\.([a-z\.])+\/impression\.php/i,
-    /ad\.bitmedia\.io/i
+    /google\.([a-z\.]+)\/(ads|generate_204|.*\/log204)+/i,
+    /google-analytics\.([a-z\.]+)\/(r|collect)+/i,
+    /youtube\.([a-z\.]+)\/(api|ptracking|player_204|live_204)+/i,
+    /doubleclick\.([a-z\.]+)\/(pcs|pixel|r)+/i,
+    /googlesyndication\.([a-z\.]+)\/ddm/i,
+    /pixel\.facebook\.([a-z\.]+)/i,
+    /facebook\.([a-z\.]+)\/(impression\.php|tr)+/i,
+    /ad\.bitmedia\.io/i,
+    /yahoo\.([a-z\.]+)\/pixel/i,
+    /criteo\.net\/img/i
   ]
 
   for (const link of trackingLinks) {

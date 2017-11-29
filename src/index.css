@@ -1,0 +1,40 @@
+body.popup {
+  width: 340px;
+  min-height: 360px;
+  height: auto;
+}
+
+.ui.toggle.checkbox .box:before,
+.ui.toggle.checkbox label:before {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.popup .header {
+  padding-top: 1em;
+}
+
+.popup .ui.container.footer {
+  padding: 1em 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.settings .wrapper {
+  width: 100%;
+  padding: 0 !important;
+}
+
+@media screen and (min-width: 960px) {
+  body.settings {
+    padding-top: 1em;
+  }
+
+  .settings .wrapper {
+    width: 640px;
+    margin: auto;
+  }
+}
+
+.settings .ui.container.header {
+  padding: 1em 1em 0 1em;
+}

@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = {
   entry: {
     popup: './src/popup.js',
+    setup: './src/setup.js',
     background: './src/background.js',
     update: './src/update.js'
   },
@@ -64,6 +65,12 @@ module.exports = {
       chunks: ['popup'],
       filename: 'popup.html',
       template: './src/popup.html'
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      chunks: ['setup'],
+      filename: 'setup.html',
+      template: './src/setup.html'
     }),
     // copy extension manifest and icons
     new CopyWebpackPlugin([

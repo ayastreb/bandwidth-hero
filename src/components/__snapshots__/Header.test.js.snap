@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders header correctly 1`] = `
+<div
+  className="ui container header"
+>
+  <div
+    className="ui grid"
+  >
+    <div
+      className="twelve wide column"
+    >
+      <img
+        alt={undefined}
+        className="ui image"
+        height={undefined}
+        src="test-file-stub"
+        width={280}
+      />
+    </div>
+    <div
+      className="right aligned middle aligned four wide column"
+    />
+  </div>
+</div>
+`;

@@ -10,14 +10,11 @@ export default ({
   convertBw,
   compressionLevel,
   currentUrl,
-  proxyUrl,
   onSiteDisable,
   onSiteEnable,
   disabledOnChange,
   convertBwOnChange,
-  compressionLevelOnChange,
-  proxyUrlOnChange,
-  proxyUrlOnReset
+  compressionLevelOnChange
 }) => (
   <div>
     <UsageStatistic
@@ -36,11 +33,8 @@ export default ({
       disabledOnChange={disabledOnChange}
       convertBw={convertBw}
       compressionLevel={compressionLevel}
-      proxyUrl={proxyUrl}
       convertBwOnChange={convertBwOnChange}
       compressionLevelOnChange={compressionLevelOnChange}
-      proxyUrlOnChange={proxyUrlOnChange}
-      proxyUrlOnReset={proxyUrlOnReset}
     />
   </div>
 )

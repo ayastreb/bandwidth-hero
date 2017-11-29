@@ -8,10 +8,15 @@ import axios from 'axios'
 
 chrome.storage.local.get(storedState => {
   const storage = deferredStateStorage()
+  let setupOpen
   let state
   let pageUrl
   let compressed
   let isWebpSupported
+
+  if (/compressor\.bandwidth-hero\.com/i.test(storedState.proxyUrl)) {
+    chrome.storage.local.set({ ...storedState, proxyUrl: '' })
+  }
 
   setState({ ...defaultState, ...storedState })
 
@@ -39,10 +44,23 @@ chrome.storage.local.get(storedState => {
     state = newState
   }
 
+  function checkSetup() {
+    if (
+      state.enabled &&
+      (state.proxyUrl === '' || /compressor\.bandwidth-hero\.com/i.test(state.proxyUrl))
+    ) {
+      if (!setupOpen) {
+        setupOpen = true
+        chrome.tabs.create({ url: 'setup.html' })
+      }
+    }
+  }
+
   /**
    * Intercept image loading request and decide if we need to compress it.
    */
   function onBeforeRequestListener({ url }) {
+    checkSetup()
     if (
       shouldCompress({
         imageUrl: url,
@@ -142,4 +160,5 @@ chrome.storage.local.get(storedState => {
     chrome.tabs.get(tabId, tab => (pageUrl = parseUrl(tab.url).hostname))
   })
   chrome.tabs.onUpdated.addListener(() => (compressed = new Set()))
+  chrome.runtime.onInstalled.addListener(checkSetup)
 })

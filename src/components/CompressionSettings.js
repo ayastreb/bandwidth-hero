@@ -1,16 +1,8 @@
 import React from 'react'
 import { Form, Input, Checkbox, Dropdown, Button } from 'semantic-ui-react'
-import defaults from '../../defaults'
+import defaults from '../defaults'
 
-export default ({
-  convertBw,
-  compressionLevel,
-  proxyUrl,
-  onConvertBwChange,
-  onCompressionLevelChange,
-  onUrlChange,
-  onUrlReset
-}) => {
+export default ({ convertBw, compressionLevel, onConvertBwChange, onCompressionLevelChange }) => {
   const compressionLevelOptions = [
     { key: 80, value: 80, text: 'Low compression (JPG 80)' },
     { key: 60, value: 60, text: 'Medium compression (JPG 60)' },
@@ -36,22 +28,13 @@ export default ({
         />
       </div>
       <div style={{ marginTop: '1em' }}>
-        <Input
-          label="URL"
-          type="url"
+        <Button
+          basic
           fluid
-          value={proxyUrl}
-          onChange={onUrlChange}
-          action={<Button icon="history" onClick={onUrlReset} />}
+          content="Configure data compression service"
+          icon="setting"
+          onClick={() => chrome.tabs.create({ url: 'setup.html' })}
         />
-        {proxyUrl === defaults.proxyUrl && (
-          <small>
-            By using compression service you agree with{' '}
-            <a href="https://bandwidth-hero.com/terms" target="_blank">
-              terms of use
-            </a>
-          </small>
-        )}
       </div>
     </div>
   )

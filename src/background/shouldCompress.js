@@ -7,6 +7,8 @@ export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enable
 
   return (
     enabled &&
+    proxyUrl !== '' &&
+    !/compressor\.bandwidth-hero\.com/i.test(proxyUrl) &&
     /https?:\/\/.+/i.test(imageUrl) &&
     !compressed.has(imageUrl) &&
     !isPrivateNetwork(imageUrl) &&

@@ -1,9 +1,8 @@
 import React from 'react'
 import { HashRouter as Router, Route } from 'react-router-dom'
-import Header from './components/Header'
-import Home from './components/Home'
-import Donate from './components/Donate'
-import Footer from './components/Footer'
+import Header from '../components/Header'
+import Home from '../components/Home'
+import Footer from '../components/Footer'
 import parseUrl from '../utils/parseUrl'
 import defaults from '../defaults'
 
@@ -98,12 +97,9 @@ export default class Popup extends React.Component {
                 disabledOnChange={this.disabledHostsWasChanged}
                 convertBwOnChange={this.convertBwWasChanged}
                 compressionLevelOnChange={this.compressionLevelWasChanged}
-                proxyUrlOnChange={this.proxyUrlWasChanged}
-                proxyUrlOnReset={this.proxyUrlWasReset}
               />
             )}
           />
-          <Route path="/donate" render={() => <Donate />} />
           <Footer />
         </div>
       </Router>

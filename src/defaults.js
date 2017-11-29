@@ -8,5 +8,5 @@ export default {
   disabledHosts: [],
   convertBw: true,
   compressionLevel: 40,
-  proxyUrl: 'https://compressor.bandwidth-hero.com'
+  proxyUrl: ''
 }

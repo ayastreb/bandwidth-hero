@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Container } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
 
 export default () => {
   return (
@@ -15,9 +14,9 @@ export default () => {
       <Button
         basic
         color="orange"
-        as={Link}
-        to="/donate"
-        content="Support us!"
+        href="https://paypal.me/ayastreb"
+        target="_blank"
+        content="Donate!"
         icon="heart outline"
       />
     </Container>

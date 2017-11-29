@@ -1,6 +1,6 @@
 import React from 'react'
 import { Segment, Button } from 'semantic-ui-react'
-import parseUrl from '../../utils/parseUrl'
+import parseUrl from '../utils/parseUrl'
 
 export default ({ disabledHosts, currentUrl, onSiteDisable, onSiteEnable }) => {
   const { schema, hostname } = parseUrl(currentUrl)

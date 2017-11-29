@@ -21,14 +21,13 @@ low-resolution [WebP](https://developers.google.com/speed/webp/) or JPEG images.
 
 ## Privacy Consideration
 
-Please note that compression service does not store the images anywhere, it processes them on the
-fly. However if you want to be 100% sure you can run your own service instance.
+After installing the extension you need to setup data compression service.
 
 Please refer to [data compression service docs](https://github.com/ayastreb/bandwidth-hero-proxy)
 for detailed instructions on how to run your own service.
 
-Once you have your own instance running, just update the URL under "Compression settings" in the
-extension popup.
+Once you have your own instance running, click "Configure data compression service" button under
+"Compression settings" in the extension popup.
 
 ## Installation
 

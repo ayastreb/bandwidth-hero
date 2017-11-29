@@ -8,7 +8,6 @@ export default class Setup extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      enabled: props.enabled,
       proxyUrl: props.proxyUrl,
       isLoading: false,
       isValid: true
@@ -49,7 +48,7 @@ export default class Setup extends React.Component {
   render() {
     return (
       <Segment className="wrapper">
-        <Header enabled={this.state.enabled} />
+        <Header />
         <Segment basic attached>
           <Message icon warning>
             <Icon name="power cord" />
@@ -67,21 +66,18 @@ export default class Setup extends React.Component {
           {this.state.proxyUrl.length > 0 &&
             !this.state.isLoading &&
             !this.state.isValid && (
-              <Message error>
-                <Message.Content>
-                  <Message.Header>Invalid compression service address</Message.Header>
-                  <p>
-                    Given URL does not appear to be running Bandwidth Hero data compression service.
-                  </p>
-                </Message.Content>
-              </Message>
+              <Message
+                error
+                header="Invalid compression service address"
+                content="Given URL does not appear to be running Bandwidth Hero data compression service."
+              />
             )}
           <Input
             fluid
+            type="url"
             label="URL"
             loading={this.state.isLoading}
             icon={this.inputIcon()}
-            type="url"
             value={this.state.proxyUrl}
             onChange={this.proxyUrlOnChange}
           />

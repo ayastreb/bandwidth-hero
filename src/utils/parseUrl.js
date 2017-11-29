@@ -1,14 +1,4 @@
-// @flow
-export default (
-  url: string
-): {
-  schema: string,
-  hostname: string,
-  port: string,
-  pathname: string,
-  search: string,
-  hash: string
-} => {
+export default url => {
   const parser = document.createElement('a')
   parser.href = url
 

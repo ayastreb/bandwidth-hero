@@ -1,13 +1,9 @@
-// @flow
-declare var chrome: any
-import type { AppState } from '../types'
-
-export default (delay: number = 1000) => {
-  let pendingState: null | AppState = null
-  let timerId: number
+export default (delay = 1000) => {
+  let pendingState = null
+  let timerId
 
   return {
-    set(state: AppState) {
+    set(state) {
       if (pendingState === null) {
         timerId = window.setTimeout(() => {
           chrome.storage.local.set(pendingState, () => {

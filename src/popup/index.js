@@ -57,14 +57,6 @@ export default class Popup extends React.Component {
     this.setState(prevState => ({ compressionLevel: value }), this.stateWasUpdatedFromUI)
   }
 
-  proxyUrlWasChanged = (_, { value }) => {
-    this.setState(prevState => ({ proxyUrl: value }), this.stateWasUpdatedFromUI)
-  }
-
-  proxyUrlWasReset = () => {
-    this.setState(prevState => ({ proxyUrl: defaults.proxyUrl }), this.stateWasUpdatedFromUI)
-  }
-
   /**
    * Sync every UI state change with local storage and background process.
    */

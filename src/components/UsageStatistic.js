@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { Segment, Statistic } from 'semantic-ui-react'
 import prettyBytes from 'pretty-bytes'

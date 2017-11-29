@@ -46,13 +46,12 @@ chrome.storage.local.get(storedState => {
 
   function checkSetup() {
     if (
+      !setupOpen &&
       state.enabled &&
       (state.proxyUrl === '' || /compressor\.bandwidth-hero\.com/i.test(state.proxyUrl))
     ) {
-      if (!setupOpen) {
-        setupOpen = true
-        chrome.tabs.create({ url: 'setup.html' })
-      }
+      chrome.tabs.create({ url: 'setup.html' })
+      setupOpen = true
     }
   }
 

@@ -4,12 +4,11 @@ import DisableButton from './DisableButton'
 import SettingsAccordion from './SettingsAccordion'
 
 export default ({
-  enabled,
   statistics,
   disabledHosts,
-  convertBw,
-  compressionLevel,
   currentUrl,
+  compressionLevel,
+  convertBw,
   onSiteDisable,
   onSiteEnable,
   disabledOnChange,
@@ -30,9 +29,9 @@ export default ({
     />
     <SettingsAccordion
       disabledHosts={disabledHosts}
-      disabledOnChange={disabledOnChange}
       convertBw={convertBw}
       compressionLevel={compressionLevel}
+      disabledOnChange={disabledOnChange}
       convertBwOnChange={convertBwOnChange}
       compressionLevelOnChange={compressionLevelOnChange}
     />

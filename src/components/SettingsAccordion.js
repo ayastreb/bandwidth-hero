@@ -5,14 +5,11 @@ import CompressionSettings from './CompressionSettings'
 
 export default ({
   disabledHosts,
-  disabledOnChange,
   convertBw,
   compressionLevel,
-  proxyUrl,
+  disabledOnChange,
   convertBwOnChange,
-  compressionLevelOnChange,
-  proxyUrlOnChange,
-  proxyUrlOnReset
+  compressionLevelOnChange
 }) => {
   return (
     <Segment attached>
@@ -32,11 +29,8 @@ export default ({
           <CompressionSettings
             convertBw={convertBw}
             compressionLevel={compressionLevel}
-            proxyUrl={proxyUrl}
             onConvertBwChange={convertBwOnChange}
             onCompressionLevelChange={compressionLevelOnChange}
-            onUrlChange={proxyUrlOnChange}
-            onUrlReset={proxyUrlOnReset}
           />
         </Accordion.Content>
       </Accordion>

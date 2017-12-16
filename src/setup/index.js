@@ -1,6 +1,13 @@
 import React from 'react'
 import debounce from 'lodash/debounce'
-import { Segment, Divider, Message, Icon, Input, Accordion } from 'semantic-ui-react'
+import {
+  Segment,
+  Divider,
+  Message,
+  Icon,
+  Input,
+  Accordion
+} from 'semantic-ui-react'
 import Header from '../components/Header'
 import axios from 'axios'
 
@@ -27,7 +34,8 @@ export default class Setup extends React.Component {
       axios
         .get(this.state.proxyUrl)
         .then(res => {
-          if (res.status !== 200 || res.data !== 'bandwidth-hero-proxy') throw new Error()
+          if (res.status !== 200 || res.data !== 'bandwidth-hero-proxy')
+            throw new Error()
 
           this.setState({ isLoading: false, isValid: true })
           const localState = { ...this.props, proxyUrl: this.state.proxyUrl }
@@ -40,7 +48,11 @@ export default class Setup extends React.Component {
 
   inputIcon() {
     if (!this.state.isValid) return 'warning circle'
-    if (!this.state.isLoading && this.state.isValid && this.state.proxyUrl.length > 0) {
+    if (
+      !this.state.isLoading &&
+      this.state.isValid &&
+      this.state.proxyUrl.length > 0
+    ) {
       return 'check'
     }
   }
@@ -53,12 +65,18 @@ export default class Setup extends React.Component {
           <Message icon warning>
             <Icon name="power cord" />
             <Message.Content>
-              <Message.Header>Public data compression service shutdown</Message.Header>
+              <Message.Header>
+                Public data compression service shutdown
+              </Message.Header>
               <p>
-                Due to increased load and complains from ISP we are shutting down public data
-                compression service under <strong>https://compressor.bandwidth-hero.com</strong>
+                Due to increased load and complains from ISP we are shutting
+                down public data compression service under{' '}
+                <strong>https://compressor.bandwidth-hero.com</strong>
               </p>
-              <p>You can continue using extension and save data by installing your own service.</p>
+              <p>
+                You can continue using extension and save data by installing
+                your own service.
+              </p>
             </Message.Content>
           </Message>
 
@@ -84,10 +102,14 @@ export default class Setup extends React.Component {
 
           {this.state.proxyUrl === '' && (
             <div style={{ paddingTop: '1em' }}>
-              <p>To start using Bandwidth Hero you need to setup a data compression service.</p>
               <p>
-                Check out the installation guide bellow.<br /> Once you have your data compression
-                service running &mdash; put its URL into the field above.
+                To start using Bandwidth Hero you need to setup a data
+                compression service.
+              </p>
+              <p>
+                Check out the installation guide bellow.<br /> Once you have
+                your data compression service running &mdash; put its URL into
+                the field above.
               </p>
             </div>
           )}
@@ -100,10 +122,13 @@ export default class Setup extends React.Component {
             <Accordion.Content>
               <p>
                 Heroku is a cloud-based app hosting provider.<br />
-                They offer a free plan which has limited resources and needs to sleep 8 hours per
-                day.
+                They offer a free plan which has limited resources and needs to
+                sleep 8 hours per day.
               </p>
-              <p>Click the button bellow to deploy an instance of compression service to Heroku.</p>
+              <p>
+                Click the button bellow to deploy an instance of compression
+                service to Heroku.
+              </p>
               <a
                 href="https://heroku.com/deploy?template=https://github.com/ayastreb/bandwidth-hero-proxy"
                 rel="nofollow"
@@ -115,6 +140,17 @@ export default class Setup extends React.Component {
                   data-canonical-src="https://www.herokucdn.com/deploy/button.svg"
                 />
               </a>
+              <p style={{ marginTop: '1em' }}>
+                <iframe
+                  width="580"
+                  height="335"
+                  src="https://www.youtube.com/embed/y3tkYEXAics"
+                  frameborder="0"
+                  gesture="media"
+                  allow="encrypted-media"
+                  allowfullscreen
+                />
+              </p>
             </Accordion.Content>
 
             <Accordion.Title>
@@ -122,8 +158,8 @@ export default class Setup extends React.Component {
             </Accordion.Title>
             <Accordion.Content>
               <p>
-                Data compression service is a Node.js app which you can run on any server that
-                supports Node.js. Check out{' '}
+                Data compression service is a Node.js app which you can run on
+                any server that supports Node.js. Check out{' '}
                 <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04">
                   this guide
                 </a>{' '}
@@ -131,7 +167,9 @@ export default class Setup extends React.Component {
               </p>
               <p>
                 DigitalOcean also provides an{' '}
-                <a href="https://www.digitalocean.com/products/one-click-apps/node-js/">easy way</a>{' '}
+                <a href="https://www.digitalocean.com/products/one-click-apps/node-js/">
+                  easy way
+                </a>{' '}
                 to setup a server ready to host Node.js apps.
               </p>
             </Accordion.Content>

@@ -13,4 +13,4 @@ ratings:
   paths:
   - "**.js"
 exclude_patterns:
-- "**.test.js"
+- "**/*.test.js"

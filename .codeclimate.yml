@@ -12,5 +12,5 @@ engines:
 ratings:
   paths:
   - "**.js"
-exclude_paths:
+exclude_patterns:
 - "**.test.js"

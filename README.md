@@ -38,6 +38,7 @@ Once you have your own instance running, click "Configure data compression servi
 ## Build From Source
 
 If you want to build this extension from source, you will need to install [Node.js](https://nodejs.org/en/download/package-manager/)
+
 Here's how to install it on Ubuntu 16:
 
 ```
@@ -87,7 +88,8 @@ npm run build
 ->...
 ```
 
-Webpack will produce compiled extension code and assets into `./dist/` directory.
+Webpack will produce compiled extension code and assets into `dist` directory.
+
 You can zip this directory and load it into the browser as local extension.
 
 ```

@@ -35,6 +35,66 @@ Once you have your own instance running, click "Configure data compression servi
 
 [![Get Firefox Addon](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/ff-addon-badge.png)](https://addons.mozilla.org/en-US/firefox/addon/bandwidth-hero/)
 
+## Build From Source
+
+If you want to build this extension from source, you will need to install [Node.js](https://nodejs.org/en/download/package-manager/)
+Here's how to install it on Ubuntu 16:
+
+```
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+and make sure it works:
+
+```
+node -v
+->v8.9.4
+npm -v
+->5.6.0
+```
+
+When you have `node` and `npm` available, get the latest source code from GitHub:
+
+```
+git clone https://github.com/ayastreb/bandwidth-hero.git
+cd bandwidth-hero/
+```
+
+and install dependencies:
+
+```
+npm install
+->...
+->added 1108 packages in 30.127s
+```
+
+run test suite to check that everything is ok:
+
+```
+npm test
+->all tests should pass
+```
+
+and build the extension:
+
+```
+npm run build
+->...
+->Hash: 75fb60eaf349759be26e
+->Version: webpack 3.8.1
+->Time: 42588ms
+->...
+```
+
+Webpack will produce compiled extension code and assets into `./dist/` directory.
+You can zip this directory and load it into the browser as local extension.
+
+```
+cd dist/
+tar -zcvf bandwidth-hero.zip .
+```
+
 ## Credits
 
 daredevil logo by Daniel Pineda from the Noun Project

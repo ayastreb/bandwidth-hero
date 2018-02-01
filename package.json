@@ -1,7 +1,7 @@
 {
   "name": "bandwidth-hero-extension",
   "private": true,
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description":
     "Browser extension which saves data by compressing images on the page",
   "author": "Anatoliy Yastreb",

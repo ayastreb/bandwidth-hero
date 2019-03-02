@@ -8,7 +8,7 @@ it('should return new headers array with patched header', () => {
     },
     {
       name: 'Content-Security-Policy',
-      value: 'img-src https://google.com;'
+      value: 'img-src https://google.com; block-all-mixed-content'
     }
   ]
   const proxyUrl = 'https://webtask.io/bandwidth-hero'
@@ -19,7 +19,7 @@ it('should return new headers array with patched header', () => {
     },
     {
       name: 'Content-Security-Policy',
-      value: 'img-src https://webtask.io/bandwidth-hero https://google.com;'
+      value: 'img-src https://webtask.io https://google.com;'
     }
   ]
 

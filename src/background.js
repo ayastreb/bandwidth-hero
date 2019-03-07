@@ -91,6 +91,12 @@ chrome.storage.local.get(storedState => {
         ) {
           return { redirectUrl }
         }
+      }).catch(error => {
+          console.error(error)
+          if(error.response.status === 405)//HEAD method not allowed
+          {
+              return { redirectUrl }
+          }
       })
     }
   }
@@ -135,7 +141,7 @@ chrome.storage.local.get(storedState => {
     onBeforeRequestListener,
     {
       urls: ['<all_urls>'],
-      types: ['image']
+      types: isFirefox() ? ['imageset', 'image'] : ['image']
     },
     ['blocking']
   )
@@ -143,7 +149,7 @@ chrome.storage.local.get(storedState => {
     onCompletedListener,
     {
       urls: ['<all_urls>'],
-      types: ['image']
+      types: isFirefox() ? ['imageset', 'image'] : ['image']
     },
     ['responseHeaders']
   )

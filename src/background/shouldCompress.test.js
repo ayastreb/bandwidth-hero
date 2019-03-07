@@ -305,3 +305,28 @@ it('should not compress tracking pixels', () => {
     })
   ).toBeFalsy()
 })
+
+it('Should have a regexp with the file extension properly escaped', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://siliconera.com',
+      disabledHosts: [],
+      pageUrl: 'siliconera.com',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeTruthy()
+  
+  expect(
+    shouldCompress({
+      imageUrl: 'https://whoasvgomg.com',
+      disabledHosts: [],
+      pageUrl: 'siliconera.com',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeTruthy()
+})
+

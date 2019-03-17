@@ -58,12 +58,12 @@ chrome.storage.local.get(storedState => {
   /**
    * Intercept image loading request and decide if we need to compress it.
    */
-  function onBeforeRequestListener({ url }) {
+  function onBeforeRequestListener({ url, documentUrl }) {
     checkSetup()
     if (
       shouldCompress({
         imageUrl: url,
-        pageUrl,
+        pageUrl: pageUrl || parseUrl(documentUrl).host, //occasionally pageUrl is not ready in time on FF
         compressed,
         proxyUrl: state.proxyUrl,
         disabledHosts: state.disabledHosts,
@@ -91,6 +91,11 @@ chrome.storage.local.get(storedState => {
         ) {
           return { redirectUrl }
         }
+      }).catch(error => {
+          if(error.response.status === 405)//HEAD method not allowed
+          {
+              return { redirectUrl }
+          }
       })
     }
   }
@@ -135,7 +140,7 @@ chrome.storage.local.get(storedState => {
     onBeforeRequestListener,
     {
       urls: ['<all_urls>'],
-      types: ['image']
+      types: isFirefox() ? ['imageset', 'image'] : ['image']
     },
     ['blocking']
   )
@@ -143,7 +148,7 @@ chrome.storage.local.get(storedState => {
     onCompletedListener,
     {
       urls: ['<all_urls>'],
-      types: ['image']
+      types: isFirefox() ? ['imageset', 'image'] : ['image']
     },
     ['responseHeaders']
   )
@@ -151,7 +156,7 @@ chrome.storage.local.get(storedState => {
     onHeadersReceivedListener,
     {
       urls: ['<all_urls>'],
-      types: ['main_frame', 'sub_frame']
+      types: ['main_frame', 'sub_frame', 'xmlhttprequest']
     },
     ['blocking', 'responseHeaders']
   )

@@ -82,9 +82,9 @@ and build the extension:
 ```
 npm run build
 ->...
-->Hash: 75fb60eaf349759be26e
-->Version: webpack 3.8.1
-->Time: 42588ms
+->Hash: 5cc956a28d496fc03ff3
+->Version: webpack 4.29.6
+->Time: 3262ms
 ->...
 ```
 

@@ -1,10 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
+  mode: 'production',
   entry: {
     popup: './src/popup.js',
     setup: './src/setup.js',
@@ -23,14 +24,16 @@ module.exports = {
           path.resolve(__dirname, './src'),
           /pretty-bytes/ // <- ES6 module
         ],
-        use: 'babel-loader'
+        loader: 'babel-loader'
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        })
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          'css-loader'
+        ]
       },
       {
         test: /\.(ico|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
@@ -58,8 +61,13 @@ module.exports = {
     chunkOrigins: false,
     modules: false
   },
+  performance: {
+    hints: false
+  },
   plugins: [
-    new ExtractTextPlugin('bundle.css'),
+    new MiniCssExtractPlugin({
+      filename: 'bundle.css'
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       chunks: ['popup'],

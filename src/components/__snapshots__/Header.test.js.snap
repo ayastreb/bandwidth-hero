@@ -11,9 +11,7 @@ exports[`renders header correctly 1`] = `
       className="twelve wide column"
     >
       <img
-        alt={undefined}
         className="ui image"
-        height={undefined}
         src="test-file-stub"
         width={280}
       />

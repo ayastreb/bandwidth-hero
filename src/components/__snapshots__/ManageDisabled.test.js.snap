@@ -2,7 +2,6 @@
 
 exports[`renders disabled sites management correctly 1`] = `
 <form
-  action={undefined}
   className="ui form"
   onSubmit={[Function]}
 >
@@ -10,16 +9,13 @@ exports[`renders disabled sites management correctly 1`] = `
     className="field"
   >
     <textarea
-      disabled={undefined}
       onChange={[Function]}
-      required={undefined}
       rows={4}
       style={
         Object {
           "resize": "",
         }
       }
-      type={undefined}
       value=""
     />
   </div>

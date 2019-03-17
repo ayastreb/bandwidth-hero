@@ -6,10 +6,8 @@ exports[`renders disable button correctly 1`] = `
 >
   <button
     className="ui basic fluid positive button"
-    disabled={undefined}
     onClick={[Function]}
     role="button"
-    tabIndex={undefined}
   >
     Disable on this site
   </button>
@@ -22,10 +20,8 @@ exports[`renders enable button correctly 1`] = `
 >
   <button
     className="ui basic fluid negative button"
-    disabled={undefined}
     onClick={[Function]}
     role="button"
-    tabIndex={undefined}
   >
     Enable on this site
   </button>

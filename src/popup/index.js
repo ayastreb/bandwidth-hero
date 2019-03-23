@@ -18,7 +18,8 @@ export default class Popup extends React.Component {
       proxyUrl: props.proxyUrl
     }
 
-    chrome.runtime.onMessage.addListener(this.stateWasUpdatedFromBackground)
+    let port = chrome.runtime.connect({name:"state"})
+    port.onMessage.addListener(this.stateWasUpdatedFromBackground)
   }
 
   enableSwitchWasChanged = () => {
@@ -70,6 +71,7 @@ export default class Popup extends React.Component {
    */
   stateWasUpdatedFromBackground = newState => {
     this.setState(newState)
+    return true
   }
 
   render() {

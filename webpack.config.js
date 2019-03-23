@@ -66,7 +66,8 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'bundle.css'
+      filename: '[name].css',
+      chunkFilename: '[id].css'
     }),
     new HtmlWebpackPlugin({
       inject: true,
@@ -85,5 +86,6 @@ module.exports = {
       { from: './src/manifest.json' },
       { context: './src/assets', from: 'icon-**', to: 'assets' }
     ])
-  ]
-}
+  ],
+  
+};

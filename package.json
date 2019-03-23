@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "NODE_ENV=production webpack -p",
-    "watch": "webpack --watch",
+    "watch": "NODE_ENV=development webpack --watch",
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {

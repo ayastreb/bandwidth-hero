@@ -47,9 +47,27 @@ chrome.storage.local.get(storedState => {
         return true //acknowledge
     }
     
+    /**
+     * refreshState
+     */
+    function updateState(changes) {
+        var changedItems = Object.keys(changes)
+        for (var item of changedItems) {
+            if( state[item] !== changes[item].newValue){
+                state[item] = changes[item].newValue
+                if(item === "enabled"){
+                    state.enabled ? attachListeners() : detachListeners()
+                    chrome.browserAction.setIcon({
+                        path: state.enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
+                    })
+                }
+            }
+        }
+    }
+    
     function checkSetup() {
         if(state.enabled){
-        attachListeners()
+            attachListeners()
             if (
                 !setupOpen &&
                 (state.proxyUrl === '' || /compressor\.bandwidth-hero\.com/i.test(state.proxyUrl))
@@ -70,10 +88,10 @@ chrome.storage.local.get(storedState => {
             shouldCompress({
                 imageUrl: url,
                 pageUrl: pageUrl || parseUrl(documentUrl).host, //occasionally pageUrl is not ready in time on FF
-                           compressed,
-                           proxyUrl: state.proxyUrl,
-                           disabledHosts: state.disabledHosts,
-                           enabled: state.enabled
+                    compressed,
+                    proxyUrl: state.proxyUrl,
+                    disabledHosts: state.disabledHosts,
+                    enabled: state.enabled
             })
         ) {
             compressed.add(url)
@@ -126,9 +144,7 @@ chrome.storage.local.get(storedState => {
             state.statistics.bytesProcessed += bytesProcessed
             state.statistics.bytesSaved += bytesSaved
             
-            storage.set(state)
-            
-            chrome.runtime.sendMessage(state)
+            storage.set({statistics : state.statistics})
         }
     }
     
@@ -200,10 +216,10 @@ chrome.storage.local.get(storedState => {
         chrome.tabs.onUpdated.removeListener(tabUpdateListener)
     }
     
-    if(!chrome.runtime.onMessage.hasListener(setState)){
-        chrome.runtime.onMessage.addListener(setState)
+    if(!chrome.storage.onChanged.hasListener(updateState)){
+        chrome.storage.onChanged.addListener(updateState)
     }
-    if(!chrome.runtime.onInstalled.hasListener(setState)){
+    if(!chrome.runtime.onInstalled.hasListener(checkSetup)){
         chrome.runtime.onInstalled.addListener(checkSetup)
     }
 })

@@ -40,7 +40,6 @@ export default class Setup extends React.Component {
           this.setState({ isLoading: false, isValid: true })
           const localState = { ...this.props, proxyUrl: this.state.proxyUrl }
           chrome.storage.local.set(localState)
-          chrome.runtime.sendMessage(localState)
         })
         .catch(err => this.setState({ isLoading: false, isValid: false }))
     }

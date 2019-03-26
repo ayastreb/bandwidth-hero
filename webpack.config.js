@@ -4,8 +4,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-module.exports = {
-  mode: 'production',
+module.exports = env => {
+
+return{
+  mode: env.NODE_ENV,
+  devtool: 'inline-source-map',
   entry: {
     popup: './src/popup.js',
     setup: './src/setup.js',
@@ -87,5 +90,5 @@ module.exports = {
       { context: './src/assets', from: 'icon-**', to: 'assets' }
     ])
   ],
-  
 };
+}

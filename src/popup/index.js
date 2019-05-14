@@ -17,59 +17,79 @@ export default class Popup extends React.Component {
       compressionLevel: props.compressionLevel,
       proxyUrl: props.proxyUrl
     }
-
-    chrome.runtime.onMessage.addListener(this.stateWasUpdatedFromBackground)
+    if(!chrome.storage.onChanged.hasListener(this.stateWasUpdatedFromBackground)){
+        chrome.storage.onChanged.addListener(this.stateWasUpdatedFromBackground);
+    }
   }
 
   enableSwitchWasChanged = () => {
-    this.setState(prevState => ({ enabled: !prevState.enabled }), this.stateWasUpdatedFromUI)
+    this.setState(prevState => {
+        let enabled = { enabled: !prevState.enabled }
+        chrome.storage.local.set(enabled)
+        return enabled
+      }
+    )
   }
 
   siteWasDisabled = () => {
     const { hostname } = parseUrl(this.props.currentUrl)
     this.setState(
-      prevState => ({
-        disabledHosts: prevState.disabledHosts.concat(hostname)
-      }),
-      this.stateWasUpdatedFromUI
+      prevState => {
+          let disabledHosts = {disabledHosts: prevState.disabledHosts.concat(hostname)}
+          chrome.storage.local.set(disabledHosts)
+          return disabledHosts
+      }
     )
   }
 
   siteWasEnabled = () => {
     const { hostname } = parseUrl(this.props.currentUrl)
     this.setState(
-      prevState => ({
-        disabledHosts: prevState.disabledHosts.filter(site => site !== hostname)
-      }),
-      this.stateWasUpdatedFromUI
+      prevState => {
+        let disabledHosts = {disabledHosts: prevState.disabledHosts.filter(site => site !== hostname)}
+        chrome.storage.local.set(disabledHosts)
+        return disabledHosts
+      }
     )
   }
 
   disabledHostsWasChanged = (_, { value }) => {
-    this.setState(prevState => ({ disabledHosts: value.split('\n') }), this.stateWasUpdatedFromUI)
+    this.setState(() => {
+        let disabledHosts = { disabledHosts: value.split('\n') }
+        chrome.storage.local.set(disabledHosts)
+        return disabledHosts
+      }
+    )
   }
 
   convertBwWasChanged = () => {
-    this.setState(prevState => ({ convertBw: !prevState.convertBw }), this.stateWasUpdatedFromUI)
+    this.setState(prevState => {
+        let convertBw = { convertBw: !prevState.convertBw }
+        chrome.storage.local.set(convertBw)
+        return convertBw
+      }
+    )
   }
 
   compressionLevelWasChanged = (_, { value }) => {
-    this.setState(prevState => ({ compressionLevel: value }), this.stateWasUpdatedFromUI)
-  }
-
-  /**
-   * Sync every UI state change with local storage and background process.
-   */
-  stateWasUpdatedFromUI = () => {
-    chrome.storage.local.set(this.state)
-    chrome.runtime.sendMessage(this.state)
+    this.setState(() => { 
+        let compressionLvl = {compressionLevel: value }
+        chrome.storage.local.set(compressionLvl)
+        return compressionLvl
+      }
+    )
   }
 
   /**
    * Receive state changes from background process and update UI.
    */
-  stateWasUpdatedFromBackground = newState => {
-    this.setState(newState)
+  stateWasUpdatedFromBackground = changes => {
+    var changedItems = Object.keys(changes)
+    for (var item of changedItems) {
+        if( this.state[item] !== changes[item].newValue){
+            this.setState( { [item]: changes[item].newValue } )
+        }
+    }
   }
 
   render() {

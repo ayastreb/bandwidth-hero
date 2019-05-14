@@ -6,8 +6,8 @@
   "author": "Anatoliy Yastreb",
   "license": "MIT",
   "scripts": {
-    "build": "NODE_ENV=production webpack -p",
-    "watch": "webpack --watch",
+    "build": "NODE_ENV=production webpack --env.NODE_ENV=production -p",
+    "watch": "NODE_ENV=development webpack --env.NODE_ENV=none --watch",
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
@@ -17,7 +17,7 @@
     "pretty-bytes": "^4.0.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-router-dom": "^4.4.0",
+    "react-router-dom": "^5.0.0",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.71.5"
   },

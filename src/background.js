@@ -106,7 +106,7 @@ chrome.storage.local.get(storedState => {
                     // and perform redirect when this Promise is resolved.
                     // This allows us to run HEAD request before redirecting to compression
                     // to make sure that the image should be compressed.
-                    return axios.head(url).then(res => {
+                    return axios.head(url, {maxContentLength: 0}).then(res => {
                         if (
                             res.status === 200 &&
                             res.headers['content-length'] > 1024 &&

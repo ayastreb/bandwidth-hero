@@ -19,6 +19,8 @@ return headers.map(header => {
 
 function stripMixedContentCSP (CSPHeader, isHttp) {
     return isHttp ? 
-        CSPHeader.replace('block-all-mixed-content', '') : 
+        CSPHeader
+          .replace(/block-all-mixed-content/i, '')
+          .replace(/Upgrade-Insecure-Requests/i, ''): 
         CSPHeader;
 }

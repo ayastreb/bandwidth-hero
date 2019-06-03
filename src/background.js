@@ -1,5 +1,6 @@
 import shouldCompress from './background/shouldCompress'
 import patchContentSecurity from './background/patchContentSecurity'
+import isHttps from './background/isHttps'
 import getHeaderValue from './background/getHeaderIntValue'
 import parseUrl from './utils/parseUrl'
 import deferredStateStorage from './utils/deferredStateStorage'
@@ -41,9 +42,14 @@ chrome.storage.local.get(storedState => {
                 path: newState.enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
             })
         }
+        
+        if(state && state.proxyUrl !== newState.proxyUrl){
+            detachListeners()
+        }
+        
         state = newState
         //attach or remove listeners based on state.enabled
-        state.enabled ? attachListeners() : detachListeners()
+        state.enabled ? attachListeners(isHttps(state.proxyUrl)) : detachListeners()
         return true //acknowledge
     }
     
@@ -56,10 +62,16 @@ chrome.storage.local.get(storedState => {
             if( state[item] !== changes[item].newValue){
                 state[item] = changes[item].newValue
                 if(item === "enabled"){
-                    state.enabled ? attachListeners() : detachListeners()
+                    state.enabled ? attachListeners(isHttps(state.proxyUrl)) : detachListeners()
                     chrome.browserAction.setIcon({
                         path: state.enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
                     })
+                }
+                if(item === "proxyUrl"){
+                    if(state.enabled){
+                        detachListeners()
+                        attachListeners(isHttps(state.proxyUrl))
+                    }
                 }
             }
         }
@@ -67,14 +79,13 @@ chrome.storage.local.get(storedState => {
     
     function checkSetup() {
         if(state.enabled){
-            attachListeners()
+            attachListeners(isHttps(state.proxyUrl))
             if (
                 !setupOpen &&
                 (state.proxyUrl === '' || /compressor\.bandwidth-hero\.com/i.test(state.proxyUrl))
             ) {
                 chrome.tabs.create({ url: 'setup.html' })
                 setupOpen = true
-                
             }
         }
     }
@@ -106,7 +117,10 @@ chrome.storage.local.get(storedState => {
                     // and perform redirect when this Promise is resolved.
                     // This allows us to run HEAD request before redirecting to compression
                     // to make sure that the image should be compressed.
-                    return axios.head(url, {maxContentLength: 0}).then(res => {
+                    return axios.head(url, {
+                        maxContentLength: 0,
+                        timeout: 1000
+                    }).then(res => {
                         if (
                             res.status === 200 &&
                             res.headers['content-length'] > 1024 &&
@@ -169,13 +183,13 @@ chrome.storage.local.get(storedState => {
             responseHeaders: patchContentSecurity(responseHeaders, state.proxyUrl)
         }
     }
-    function attachListeners(){
+    function attachListeners(isHttps){
         if(!chrome.webRequest.onBeforeRequest.hasListener(onBeforeRequestListener)){
             chrome.webRequest.onBeforeRequest.addListener(
                 onBeforeRequestListener,
                 {
                     urls: ['<all_urls>'],
-                    types: isFirefox() ? ['imageset', 'image'] : ['image']
+                    types: isFirefox() && isHttps ? ['imageset', 'image'] : ['image']
                 },
                 ['blocking']
             )
@@ -185,7 +199,7 @@ chrome.storage.local.get(storedState => {
                 onCompletedListener,
                 {
                     urls: ['<all_urls>'],
-                    types: isFirefox() ? ['imageset', 'image'] : ['image']
+                    types: isFirefox() && isHttps ? ['imageset', 'image'] : ['image']
                 },
                 ['responseHeaders']
             )

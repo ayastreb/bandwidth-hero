@@ -57,21 +57,31 @@ chrome.storage.local.get(storedState => {
      * refreshState
      */
     function updateState(changes) {
+        var changeHandlers = {
+            'enabled': () => {
+                state.enabled ? attachListeners(isHttps(state.proxyUrl)) :          
+                    detachListeners()
+                 chrome.browserAction.setIcon({
+                    path: state.enabled ? 'assets/icon-128.png' : 'assets/icon-128- disabled.png'
+                })
+            },
+            'proxyUrl': (oldValue) => {
+                let isNewProxyHttps = isHttps(state.proxyUrl);
+                if(state.enabled 
+                    && isNewProxyHttps !== isHttps(oldValue) 
+                ){
+                    detachListeners()
+                    attachListeners(isNewProxyHttps)
+                }
+            }
+        }
+        
         var changedItems = Object.keys(changes)
         for (var item of changedItems) {
             if( state[item] !== changes[item].newValue){
                 state[item] = changes[item].newValue
-                if(item === "enabled"){
-                    state.enabled ? attachListeners(isHttps(state.proxyUrl)) : detachListeners()
-                    chrome.browserAction.setIcon({
-                        path: state.enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
-                    })
-                }
-                if(item === "proxyUrl"){
-                    if(state.enabled){
-                        detachListeners()
-                        attachListeners(isHttps(state.proxyUrl))
-                    }
+                if(changeHandlers[item]){
+                    changeHandlers[item](changes[item].oldValue);
                 }
             }
         }

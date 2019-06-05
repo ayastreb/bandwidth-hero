@@ -1,5 +1,9 @@
 export default (proxyUrl) =>
 {
-    proxyUrl = new URL(proxyUrl) || proxyUrl;
-    return proxyUrl.protocol === "https:";
+    try{
+        proxyUrl = new URL(proxyUrl)
+    }catch{
+        return null
+    }
+    return proxyUrl.protocol === "https:"
 }

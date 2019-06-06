@@ -25,6 +25,25 @@ chrome.storage.local.get(storedState => {
         isWebpSupported = isSupported
     })
     
+    const changeHandlers = {
+        'enabled': () => {
+            state.enabled ? attachListeners(isHttps(state.proxyUrl)) :          
+                detachListeners()
+            chrome.browserAction.setIcon({
+                path: state.enabled ? 'assets/icon-128.png' : 'assets/icon-128- disabled.png'
+            })
+        },
+        'proxyUrl': (oldValue) => {
+            let isNewProxyHttps = isHttps(state.proxyUrl);
+            if(state.enabled 
+                && isNewProxyHttps !== isHttps(oldValue) 
+            ){
+                detachListeners()
+                attachListeners(isNewProxyHttps)
+            }
+        }
+    }
+    
     async function checkWebpSupport() {
         if (!self.createImageBitmap) return false
             
@@ -57,25 +76,6 @@ chrome.storage.local.get(storedState => {
      * refreshState
      */
     function updateState(changes) {
-        var changeHandlers = {
-            'enabled': () => {
-                state.enabled ? attachListeners(isHttps(state.proxyUrl)) :          
-                    detachListeners()
-                 chrome.browserAction.setIcon({
-                    path: state.enabled ? 'assets/icon-128.png' : 'assets/icon-128- disabled.png'
-                })
-            },
-            'proxyUrl': (oldValue) => {
-                let isNewProxyHttps = isHttps(state.proxyUrl);
-                if(state.enabled 
-                    && isNewProxyHttps !== isHttps(oldValue) 
-                ){
-                    detachListeners()
-                    attachListeners(isNewProxyHttps)
-                }
-            }
-        }
-        
         var changedItems = Object.keys(changes)
         for (var item of changedItems) {
             if( state[item] !== changes[item].newValue){

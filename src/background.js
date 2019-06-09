@@ -129,7 +129,7 @@ chrome.storage.local.get(storedState => {
                     // to make sure that the image should be compressed.
                     return axios.head(url, {
                         maxContentLength: 0,
-                        timeout: 1000
+                        timeout: 60000
                     }).then(res => {
                         if (
                             res.status === 200 &&

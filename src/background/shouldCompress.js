@@ -2,8 +2,26 @@ import { Netmask } from 'netmask'
 
 export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enabled }) => {
   imageUrl = imageUrl.replace('#bh-no-compress=1', '')
-  const skip = [proxyUrl, 'favicon', '.*\\.ico', '.*\\.svg'].concat(disabledHosts)
+  const skip = [proxyUrl, 'favicon', '.*\\.ico', '.*\\.svg'].concat(
+    disabledHosts
+    .filter(
+        (disabledHost) => {
+            return disabledHost && disabledHost.length > 3 && disabledHost.includes('.')
+        }
+    )
+    .map( //sanitize for regExp
+        (disabledHost) => {
+            return disabledHost
+                .replace('.', '\\.')
+                .replace('?', '\\?')
+                .replace('+', '\\+')
+                .replace('*', '\\*');
+        }
+    )
+  )
   const skipRegExp = new RegExp(`(${skip.join('|')})`, 'i')
+  
+  console.log(pageUrl, disabledHosts);
 
   return (
     enabled &&

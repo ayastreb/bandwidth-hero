@@ -13,6 +13,7 @@ export default ({
   onSiteEnable,
   disabledOnChange,
   convertBwOnChange,
+  isWebpSupported,
   compressionLevelOnChange
 }) => (
   <div>
@@ -30,6 +31,7 @@ export default ({
     <SettingsAccordion
       disabledHosts={disabledHosts}
       convertBw={convertBw}
+      isWebpSupported={isWebpSupported}
       compressionLevel={compressionLevel}
       disabledOnChange={disabledOnChange}
       convertBwOnChange={convertBwOnChange}

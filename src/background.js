@@ -137,10 +137,10 @@ chrome.storage.local.get(storedState => {
      * Retrieve saved bytes info from response headers, update statistics in
      * app storage and notify UI about state changes.
      */
-    function onCompletedListener({ responseHeaders }) {
+    function onCompletedListener({ responseHeaders, fromCache }) {
         const bytesSaved = getHeaderValue(responseHeaders, 'x-bytes-saved')
         const bytesProcessed = getHeaderValue(responseHeaders, 'x-original-size')
-        if (bytesSaved !== false && bytesProcessed !== false) {
+        if (bytesSaved !== false && bytesProcessed !== false && fromCache === false) {
             state.statistics.filesProcessed += 1
             state.statistics.bytesProcessed += bytesProcessed
             state.statistics.bytesSaved += bytesSaved

@@ -309,7 +309,7 @@ it('should not compress tracking pixels', () => {
 it('Should have a regexp with the file extension properly escaped', () => {
   expect(
     shouldCompress({
-      imageUrl: 'https://siliconera.com',
+      imageUrl: 'https://siliconera.com/example.png',
       disabledHosts: [],
       pageUrl: 'siliconera.com',
       compressed: new Set(),
@@ -320,7 +320,7 @@ it('Should have a regexp with the file extension properly escaped', () => {
   
   expect(
     shouldCompress({
-      imageUrl: 'https://whoasvgomg.com',
+      imageUrl: 'https://whoasvgomg.com/example.png',
       disabledHosts: [],
       pageUrl: 'siliconera.com',
       compressed: new Set(),

@@ -83,7 +83,7 @@ chrome.storage.local.get(storedState => {
     /**
      * Intercept image loading request and decide if we need to compress it.
      */
-    function onBeforeRequestListener({ url, documentUrl }) {
+    function onBeforeRequestListener({ url, documentUrl, type }) {
         checkSetup()
         if (
             shouldCompress({
@@ -92,7 +92,8 @@ chrome.storage.local.get(storedState => {
                     compressed,
                     proxyUrl: state.proxyUrl,
                     disabledHosts: state.disabledHosts,
-                    enabled: state.enabled
+                    enabled: state.enabled,
+                    type
             })
         ) {
             compressed.add(url)
@@ -176,7 +177,7 @@ chrome.storage.local.get(storedState => {
                 onBeforeRequestListener,
                 {
                     urls: ['<all_urls>'],
-                    types: isFirefox() ? ['imageset', 'image'] : ['image']
+                    types: isFirefox() ? ['xmlhttprequest', 'imageset', 'image'] : ['image']
                 },
                 ['blocking']
             )
@@ -186,7 +187,7 @@ chrome.storage.local.get(storedState => {
                 onCompletedListener,
                 {
                     urls: ['<all_urls>'],
-                    types: isFirefox() ? ['imageset', 'image'] : ['image']
+                    types: isFirefox() ? ['xmlhttprequest', 'imageset', 'image'] : ['image']
                 },
                 ['responseHeaders']
             )

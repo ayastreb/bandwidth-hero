@@ -13,6 +13,7 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "axios": "^0.18.0",
+    "is-image": "^3.0.0",
     "netmask": "^1.0.6",
     "pretty-bytes": "^4.0.2",
     "react": "^16.8.4",

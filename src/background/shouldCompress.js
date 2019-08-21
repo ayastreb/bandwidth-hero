@@ -1,6 +1,7 @@
 import { Netmask } from 'netmask'
+import isImage from 'is-image';
 
-export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enabled }) => {
+export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enabled, type }) => {
   imageUrl = imageUrl.replace('#bh-no-compress=1', '')
   const skip = [proxyUrl, 'favicon', '.*\\.ico', '.*\\.svg'].concat(disabledHosts)
   const skipRegExp = new RegExp(`(${skip.join('|')})`, 'i')
@@ -14,7 +15,8 @@ export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enable
     !isPrivateNetwork(imageUrl) &&
     !isTracking(imageUrl) &&
     !disabledHosts.includes(pageUrl) &&
-    !skipRegExp.test(imageUrl)
+    !skipRegExp.test(imageUrl) &&
+    isImageUrl(imageUrl, type)
   )
 }
 
@@ -56,4 +58,16 @@ function isTracking(url) {
   }
 
   return false
+}
+
+function isImageUrl(imageUrl, type) {
+  if (type.toLowerCase() !== "xmlhttprequest") {
+    return true;
+  }
+  const url = stripQueryStringAndHashFromPath(imageUrl)
+  return isImage(url);
+}
+
+function stripQueryStringAndHashFromPath(url) {
+  return url.split("?")[0].split("#")[0];
 }

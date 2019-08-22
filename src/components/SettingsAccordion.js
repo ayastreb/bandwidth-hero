@@ -9,6 +9,7 @@ export default ({
   compressionLevel,
   disabledOnChange,
   convertBwOnChange,
+  isWebpSupported,
   compressionLevelOnChange
 }) => {
   return (
@@ -28,6 +29,7 @@ export default ({
         <Accordion.Content>
           <CompressionSettings
             convertBw={convertBw}
+            isWebpSupported={isWebpSupported}
             compressionLevel={compressionLevel}
             onConvertBwChange={convertBwOnChange}
             onCompressionLevelChange={compressionLevelOnChange}

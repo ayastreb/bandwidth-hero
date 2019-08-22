@@ -14,15 +14,16 @@ chrome.storage.local.get(storedState => {
     let pageUrl
     let compressed = new Set();
     let isWebpSupported
-    
+
     if (/compressor\.bandwidth-hero\.com/i.test(storedState.proxyUrl)) {
         chrome.storage.local.set({ ...storedState, proxyUrl: '' })
     }
-    
+
     setState({ ...defaultState, ...storedState })
-    
+
     checkWebpSupport().then(isSupported => {
         isWebpSupported = isSupported
+        chrome.storage.local.set({ ...storedState, isWebpSupported: isSupported })
     })
     
     const changeHandlers = {
@@ -43,15 +44,15 @@ chrome.storage.local.get(storedState => {
             }
         }
     }
-    
+
     async function checkWebpSupport() {
         if (!self.createImageBitmap) return false
-            
+
             const webpData = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA='
             const blob = await fetch(webpData).then(r => r.blob())
             return self.createImageBitmap(blob).then(() => true, () => false)
     }
-    
+
     /**
      * Sync state.
      */
@@ -71,7 +72,7 @@ chrome.storage.local.get(storedState => {
         state.enabled ? attachListeners(isHttps(state.proxyUrl)) : detachListeners()
         return true //acknowledge
     }
-    
+
     /**
      * refreshState
      */
@@ -86,7 +87,7 @@ chrome.storage.local.get(storedState => {
             }
         }
     }
-    
+
     function checkSetup() {
         if(state.enabled){
             attachListeners(isHttps(state.proxyUrl))
@@ -99,7 +100,7 @@ chrome.storage.local.get(storedState => {
             }
         }
     }
-    
+
     /**
      * Intercept image loading request and decide if we need to compress it.
      */
@@ -118,36 +119,36 @@ chrome.storage.local.get(storedState => {
             compressed.add(url)
             let redirectUrl = `${state.proxyUrl}?url=${encodeURIComponent(url)}`
             if (!isWebpSupported) redirectUrl += '&jpeg=1'
-                if (!state.convertBw) redirectUrl += '&bw=0'
-                    if (state.compressionLevel) {
-                        redirectUrl += '&l=' + parseInt(state.compressionLevel, 10)
-                    }
-                    if (!isFirefox()) return { redirectUrl }
-                    // Firefox allows onBeforeRequest event listener to return a Promise
-                    // and perform redirect when this Promise is resolved.
-                    // This allows us to run HEAD request before redirecting to compression
-                    // to make sure that the image should be compressed.
-                    return axios.head(url, {
-                        maxContentLength: 0,
-                        timeout: 60000
-                    }).then(res => {
-                        if (
-                            res.status === 200 &&
-                            res.headers['content-length'] > 1024 &&
-                            res.headers['content-type'] &&
-                            res.headers['content-type'].startsWith('image')
-                        ) {
-                            return { redirectUrl }
-                        }
-                    }).catch(error => {
-                        if(error.response.status === 405)//HEAD method not allowed
-                        {
-                            return { redirectUrl }
-                        }
-                    })
+            if (!state.convertBw) redirectUrl += '&bw=0'
+            if (state.compressionLevel) {
+                redirectUrl += '&l=' + parseInt(state.compressionLevel, 10)
+            }
+            if (!isFirefox()) return { redirectUrl }
+            // Firefox allows onBeforeRequest event listener to return a Promise
+            // and perform redirect when this Promise is resolved.
+            // This allows us to run HEAD request before redirecting to compression
+            // to make sure that the image should be compressed.
+            return axios.head(url, {
+                maxContentLength: 0,
+                timeout: 60000
+            }).then(res => {
+                if (
+                    res.status === 200 &&
+                    res.headers['content-length'] > 1024 &&
+                    res.headers['content-type'] &&
+                    res.headers['content-type'].startsWith('image')
+                ) {
+                    return { redirectUrl }
+                }
+            }).catch(error => {
+                if(error.response.status === 405)//HEAD method not allowed
+                {
+                    return { redirectUrl }
+                }
+            })
         }
     }
-    
+
     /**
      * Firefox user agent always has "rv:" and "Gecko"
      * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox
@@ -155,27 +156,27 @@ chrome.storage.local.get(storedState => {
     function isFirefox() {
         return /rv\:.*Gecko/.test(window.navigator.userAgent)
     }
-    
+
     /**
      * Retrieve saved bytes info from response headers, update statistics in
      * app storage and notify UI about state changes.
      */
-    function onCompletedListener({ responseHeaders }) {
+    function onCompletedListener({ responseHeaders, fromCache }) {
         const bytesSaved = getHeaderValue(responseHeaders, 'x-bytes-saved')
         const bytesProcessed = getHeaderValue(responseHeaders, 'x-original-size')
-        if (bytesSaved !== false && bytesProcessed !== false) {
+        if (bytesSaved !== false && bytesProcessed !== false && fromCache === false) {
             state.statistics.filesProcessed += 1
             state.statistics.bytesProcessed += bytesProcessed
             state.statistics.bytesSaved += bytesSaved
-            
+
             storage.set({statistics : state.statistics})
         }
     }
-    
+
     function tabActivationListener({tabId}) {
         chrome.tabs.get(tabId, tab => (pageUrl = parseUrl(tab.url).hostname))
     }
-    
+
     function tabUpdateListener(){
         if(compressed instanceof Set){
             compressed.clear()
@@ -183,7 +184,7 @@ chrome.storage.local.get(storedState => {
             compressed = new Set()
         }
     }
-    
+
     /**
      * Patch document's content security policy headers so that it will allow
      * images loading from our compression proxy URL.
@@ -231,7 +232,7 @@ chrome.storage.local.get(storedState => {
             chrome.tabs.onUpdated.addListener(tabUpdateListener)
         }
     }
-    
+
     function detachListeners(){
         chrome.webRequest.onBeforeRequest.removeListener(onBeforeRequestListener)
         chrome.webRequest.onCompleted.removeListener(onCompletedListener)
@@ -239,7 +240,7 @@ chrome.storage.local.get(storedState => {
         chrome.tabs.onActivated.removeListener(tabActivationListener)
         chrome.tabs.onUpdated.removeListener(tabUpdateListener)
     }
-    
+
     if(!chrome.storage.onChanged.hasListener(updateState)){
         chrome.storage.onChanged.addListener(updateState)
     }

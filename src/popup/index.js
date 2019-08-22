@@ -15,6 +15,7 @@ export default class Popup extends React.Component {
       disabledHosts: props.disabledHosts,
       convertBw: props.convertBw,
       compressionLevel: props.compressionLevel,
+      isWebpSupported: props.isWebpSupported,
       proxyUrl: props.proxyUrl
     }
     if(!chrome.storage.onChanged.hasListener(this.stateWasUpdatedFromBackground)){
@@ -72,7 +73,7 @@ export default class Popup extends React.Component {
   }
 
   compressionLevelWasChanged = (_, { value }) => {
-    this.setState(() => { 
+    this.setState(() => {
         let compressionLvl = {compressionLevel: value }
         chrome.storage.local.set(compressionLvl)
         return compressionLvl

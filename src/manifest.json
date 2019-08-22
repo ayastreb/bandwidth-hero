@@ -3,7 +3,7 @@
   "name": "Bandwidth Hero - Live Image Compression",
   "short_name": "Bandwidth Hero",
   "description": "Saves data by compressing images on the page.",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "icons": {
     "64": "assets/icon-128.png",
     "128": "assets/icon-256.png"

@@ -37,10 +37,8 @@ chrome.storage.local.get(storedState => {
      * Sync state.
      */
     function setState(newState) {
-        if (chrome.browserAction.setIcon && (!state || state.enabled !== newState.enabled)) {
-            chrome.browserAction.setIcon({
-                path: newState.enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
-            })
+        if (!state || state.enabled !== newState.enabled) {
+            setIcon(newState.enabled);
         }
         state = newState
         //attach or remove listeners based on state.enabled
@@ -49,18 +47,41 @@ chrome.storage.local.get(storedState => {
     }
 
     /**
+     * Sets the icons based on the disabled parameter.
+     * @param enabled
+     */
+    function setIcon(enabled) {
+        if (chrome.browserAction.setIcon) {
+            chrome.browserAction.setIcon({
+                path: enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
+            })
+        }
+    }
+
+    /**
+     * Checks if the proxy is disabled for the given url
+     * @param url
+     * @returns {boolean}
+     */
+    function isDisabledSite(url) {
+        const disabledHosts = state && state.disabledHosts || []
+        return disabledHosts.includes(url)
+    }
+
+    /**
      * refreshState
      */
     function updateState(changes) {
-        var changedItems = Object.keys(changes)
-        for (var item of changedItems) {
+        const changedItems = Object.keys(changes)
+        for (const item of changedItems) {
             if( state[item] !== changes[item].newValue){
                 state[item] = changes[item].newValue
                 if(item === "enabled"){
                     state.enabled ? attachListeners() : detachListeners()
-                    chrome.browserAction.setIcon({
-                        path: state.enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
-                    })
+                    setIcon(state.enabled);
+                } else if (item === "disabledHosts") {
+                    const disabled = isDisabledSite(pageUrl)
+                    setIcon(!disabled);
                 }
             }
         }
@@ -151,7 +172,11 @@ chrome.storage.local.get(storedState => {
     }
 
     function tabActivationListener({tabId}) {
-        chrome.tabs.get(tabId, tab => (pageUrl = parseUrl(tab.url).hostname))
+        chrome.tabs.get(tabId, tab => {
+            pageUrl = parseUrl(tab.url).hostname;
+            const disabled = isDisabledSite(pageUrl)
+            setIcon(!disabled)
+        });
     }
 
     function tabUpdateListener(){

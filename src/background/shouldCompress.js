@@ -1,7 +1,7 @@
 import { Netmask } from 'netmask'
 import isImage from 'is-image';
 
-export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enabled, type }) => {
+export default ({ imageUrl, pageUrl, compressed, proxyUrl, disabledHosts, enabled, type = 'image' }) => {
   imageUrl = imageUrl.replace('#bh-no-compress=1', '')
   const skip = [proxyUrl, 'favicon', '.*\\.ico', '.*\\.svg'].concat(disabledHosts)
   const skipRegExp = new RegExp(`(${skip.join('|')})`, 'i')

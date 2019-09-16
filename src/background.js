@@ -8,10 +8,10 @@ import axios from 'axios'
 
 chrome.storage.local.get(storedState => {
     const storage = deferredStateStorage()
+    const compressed = new Set();
     let setupOpen
     let state
     let pageUrl
-    let compressed = new Set();
     let isWebpSupported
 
     if (/compressor\.bandwidth-hero\.com/i.test(storedState.proxyUrl)) {
@@ -106,24 +106,24 @@ chrome.storage.local.get(storedState => {
      */
     function onBeforeRequestListener({ url, documentUrl, type }) {
         checkSetup()
+
+        // Occasionally currentPageUrl is not ready in time on FF
+        const pageUrl = currentPageUrl || parseUrl(documentUrl).host;
+
         if (
             shouldCompress({
                 imageUrl: url,
-                pageUrl: pageUrl || parseUrl(documentUrl).host, //occasionally pageUrl is not ready in time on FF
-                    compressed,
-                    proxyUrl: state.proxyUrl,
-                    disabledHosts: state.disabledHosts,
-                    enabled: state.enabled,
-                    type
+                pageUrl,
+                compressed,
+                proxyUrl: state.proxyUrl,
+                disabledHosts: state.disabledHosts,
+                enabled: state.enabled,
+                type
             })
         ) {
             compressed.add(url)
-            let redirectUrl = `${state.proxyUrl}?url=${encodeURIComponent(url)}`
-            if (!isWebpSupported) redirectUrl += '&jpeg=1'
-            if (!state.convertBw) redirectUrl += '&bw=0'
-            if (state.compressionLevel) {
-                redirectUrl += '&l=' + parseInt(state.compressionLevel, 10)
-            }
+            const redirectUrl = buildCompressUrl(url);
+
             if (!isFirefox()) return { redirectUrl }
             // Firefox allows onBeforeRequest event listener to return a Promise
             // and perform redirect when this Promise is resolved.
@@ -145,6 +145,26 @@ chrome.storage.local.get(storedState => {
                 }
             })
         }
+    }
+
+    /**
+     * Builds up a redirect URL. The original URL is encode and added as query
+     * parameter. If WebP isn't supported the url append a flag to let the
+     * server know to return in a JPEG format instead. Other flags that are
+     * added are: bw (this lets the proxy know to return image in grayscale
+     * as those have less color information and thus saving more space) and
+     * compression level.
+     * @param url
+     * @returns {string}
+     */
+    function buildCompressUrl(url) {
+        let redirectUrl = '';
+        redirectUrl += state.proxyUrl;
+        redirectUrl += `?url=${encodeURIComponent(url)}`;
+        redirectUrl += `&jpeg=${state.isWebpSupported ? 0 : 1}`;
+        redirectUrl += `&bw=${state.convertBw ? 1 : 0}`;
+        redirectUrl += `&l=${state.compressionLevel}`;
+        return redirectUrl;
     }
 
     /**
@@ -176,15 +196,15 @@ chrome.storage.local.get(storedState => {
             pageUrl = parseUrl(tab.url).hostname;
             const disabled = isDisabledSite(pageUrl)
             setIcon(!disabled)
+            compressed.clear(); // Reset our list of compressed images
         });
     }
 
+    // If we navigate to a new page within a tab and it is the same we have a
+    // bug where it does not process images. Because the images are still in
+    // compressed even though the page changed. With onTabUpdated we reset this.
     function tabUpdateListener(){
-        if(compressed instanceof Set){
-            compressed.clear()
-        }else{
-            compressed = new Set()
-        }
+      compressed.clear()
     }
 
     /**

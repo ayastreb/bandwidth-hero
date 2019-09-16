@@ -5,107 +5,112 @@ import parseUrl from './utils/parseUrl'
 import deferredStateStorage from './utils/deferredStateStorage'
 import defaultState from './defaults'
 import axios from 'axios'
+import isPrivateNetwork from './background/isPrivateNetwork';
 
 chrome.storage.local.get(storedState => {
     const storage = deferredStateStorage()
     const compressed = new Set();
-    let setupOpen
-    let state
-    let pageUrl
-    let isWebpSupported
+    let setupHasBeenOpened = false;
+    let state = { ...defaultState, ...storedState };
+    let currentPageUrl = null;
+    let currentPageProtocol = null;
 
     if (/compressor\.bandwidth-hero\.com/i.test(storedState.proxyUrl)) {
         chrome.storage.local.set({ ...storedState, proxyUrl: '' })
     }
 
-    setState({ ...defaultState, ...storedState })
-
     checkWebpSupport().then(isSupported => {
-        isWebpSupported = isSupported
         chrome.storage.local.set({ ...storedState, isWebpSupported: isSupported })
     })
 
     async function checkWebpSupport() {
         if (!self.createImageBitmap) return false
-
-            const webpData = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA='
-            const blob = await fetch(webpData).then(r => r.blob())
-            return self.createImageBitmap(blob).then(() => true, () => false)
-    }
-
-    /**
-     * Sync state.
-     */
-    function setState(newState) {
-        if (!state || state.enabled !== newState.enabled) {
-            setIcon(newState.enabled);
-        }
-        state = newState
-        //attach or remove listeners based on state.enabled
-        state.enabled ? attachListeners() : detachListeners()
-        return true //acknowledge
+        const webpData = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA='
+        const blob = await fetch(webpData).then(r => r.blob())
+        return self.createImageBitmap(blob).then(() => true, () => false)
     }
 
     /**
      * Sets the icons based on the disabled parameter.
-     * @param enabled
      */
-    function setIcon(enabled) {
+    function setIcon() {
+        const isEnabled = state.enabled && !isDisabledSite();
         if (chrome.browserAction.setIcon) {
             chrome.browserAction.setIcon({
-                path: enabled ? 'assets/icon-128.png' : 'assets/icon-128-disabled.png'
-            })
+                path: isEnabled ? "assets/icon-128.png" : "assets/icon-128-disabled.png"
+            });
         }
     }
 
     /**
      * Checks if the proxy is disabled for the given url
-     * @param url
      * @returns {boolean}
      */
-    function isDisabledSite(url) {
-        const disabledHosts = state && state.disabledHosts || []
-        return disabledHosts.includes(url)
+    function isDisabledSite() {
+        // If we don't have the URL or protocol we can't check if it is enabled.
+        if (!currentPageUrl || !currentPageProtocol) {
+            return true;
+        }
+
+        // Check if the page is a http/https page.
+        const supportedProtocols = ['http:', 'https:'];
+        if (!supportedProtocols.includes(currentPageProtocol)) {
+            return true;
+        }
+
+        // We are disabled when on localhost or site is hosted on private IP.
+        if (isPrivateNetwork(currentPageUrl)) {
+            return true;
+        }
+        return state.disabledHosts.includes(currentPageUrl);
     }
 
     /**
-     * refreshState
+     * Every time the storage of the browser changes we also update our in-memory state to keep up with the changes.
+     *
      */
-    function updateState(changes) {
-        const changedItems = Object.keys(changes)
+    function onStateChanged(changes) {
+        const changedItems = Object.keys(changes);
         for (const item of changedItems) {
-            if( state[item] !== changes[item].newValue){
-                state[item] = changes[item].newValue
-                if(item === "enabled"){
-                    state.enabled ? attachListeners() : detachListeners()
-                    setIcon(state.enabled);
-                } else if (item === "disabledHosts") {
-                    const disabled = isDisabledSite(pageUrl)
-                    setIcon(!disabled);
-                }
+            if (state[item] !== changes[item].newValue) {
+                state[item] = changes[item].newValue;
+                stateItemChanged(item, state[item]);
             }
+        }
+    }
+
+    /**
+     * Perform actions for certain changes to the state. Like changing the icon if we enable/disable the extension.
+     * @param key
+     * @param newValue
+     */
+    function stateItemChanged(key, newValue) {
+        switch (key) {
+            case 'enabled':
+            case 'disabledHosts':
+                setIcon(); // Update icon
+                break;
         }
     }
 
     function checkSetup() {
-        if(state.enabled){
-            attachListeners()
-            if (
-                !setupOpen &&
-                (state.proxyUrl === '' || /compressor\.bandwidth-hero\.com/i.test(state.proxyUrl))
-            ) {
-                chrome.tabs.create({ url: 'setup.html' })
-                setupOpen = true
-
-            }
+        if (!state.enabled) return;
+        if (setupHasBeenOpened) return;
+        if (state.proxyUrl === '' || /compressor\.bandwidth-hero\.com/i.test(state.proxyUrl)) {
+            chrome.tabs.create({ url: 'setup.html' });
+            setupHasBeenOpened = true;
         }
+    }
+
+    function onInstalled() {
+        checkSetup();
     }
 
     /**
      * Intercept image loading request and decide if we need to compress it.
      */
     function onBeforeRequestListener({ url, documentUrl, type }) {
-        checkSetup()
+        checkSetup();
 
         // Occasionally currentPageUrl is not ready in time on FF
         const pageUrl = currentPageUrl || parseUrl(documentUrl).host;
@@ -180,9 +185,10 @@ chrome.storage.local.get(storedState => {
      * app storage and notify UI about state changes.
      */
     function onCompletedListener({ responseHeaders, fromCache }) {
+        if (fromCache) return;
         const bytesSaved = getHeaderValue(responseHeaders, 'x-bytes-saved')
         const bytesProcessed = getHeaderValue(responseHeaders, 'x-original-size')
-        if (bytesSaved !== false && bytesProcessed !== false && fromCache === false) {
+        if (bytesSaved !== false && bytesProcessed !== false) {
             state.statistics.filesProcessed += 1
             state.statistics.bytesProcessed += bytesProcessed
             state.statistics.bytesSaved += bytesSaved
@@ -191,19 +197,20 @@ chrome.storage.local.get(storedState => {
         }
     }
 
-    function tabActivationListener({tabId}) {
+    function onTabActivated({tabId}) {
         chrome.tabs.get(tabId, tab => {
-            pageUrl = parseUrl(tab.url).hostname;
-            const disabled = isDisabledSite(pageUrl)
-            setIcon(!disabled)
+            const url = parseUrl(tab.url);
+            currentPageUrl = url.hostname;
+            currentPageProtocol = url.schema;
             compressed.clear(); // Reset our list of compressed images
+            setIcon();
         });
     }
 
     // If we navigate to a new page within a tab and it is the same we have a
     // bug where it does not process images. Because the images are still in
     // compressed even though the page changed. With onTabUpdated we reset this.
-    function tabUpdateListener(){
+    function onTabUpdated(){
       compressed.clear()
     }
 
@@ -216,57 +223,53 @@ chrome.storage.local.get(storedState => {
             responseHeaders: patchContentSecurity(responseHeaders, state.proxyUrl)
         }
     }
-    function attachListeners(){
-        if(!chrome.webRequest.onBeforeRequest.hasListener(onBeforeRequestListener)){
-            chrome.webRequest.onBeforeRequest.addListener(
-                onBeforeRequestListener,
-                {
-                    urls: ['<all_urls>'],
-                    types: isFirefox() ? ['xmlhttprequest', 'imageset', 'image'] : ['image']
-                },
-                ['blocking']
-            )
-        }
-        if(!chrome.webRequest.onCompleted.hasListener(onCompletedListener)){
-            chrome.webRequest.onCompleted.addListener(
-                onCompletedListener,
-                {
-                    urls: ['<all_urls>'],
-                    types: isFirefox() ? ['xmlhttprequest', 'imageset', 'image'] : ['image']
-                },
-                ['responseHeaders']
-            )
-        }
-        if(!chrome.webRequest.onHeadersReceived.hasListener(onHeadersReceivedListener)){
-            chrome.webRequest.onHeadersReceived.addListener(
-                onHeadersReceivedListener,
-                {
-                    urls: ['<all_urls>'],
-                    types: ['main_frame', 'sub_frame', 'xmlhttprequest']
-                },
-                ['blocking', 'responseHeaders']
-            )
-        }
-        if(!chrome.tabs.onActivated.hasListener(tabActivationListener)){
-            chrome.tabs.onActivated.addListener(tabActivationListener)
-        }
-        if(!chrome.tabs.onUpdated.hasListener(tabUpdateListener)){
-            chrome.tabs.onUpdated.addListener(tabUpdateListener)
-        }
+
+    if (!chrome.webRequest.onBeforeRequest.hasListener(onBeforeRequestListener)) {
+        chrome.webRequest.onBeforeRequest.addListener(
+            onBeforeRequestListener,
+            {
+                urls: ['<all_urls>'],
+                types: isFirefox() ? ['xmlhttprequest', 'imageset', 'image'] : ['image']
+            },
+            ['blocking']
+        )
     }
 
-    function detachListeners(){
-        chrome.webRequest.onBeforeRequest.removeListener(onBeforeRequestListener)
-        chrome.webRequest.onCompleted.removeListener(onCompletedListener)
-        chrome.webRequest.onHeadersReceived.removeListener(onHeadersReceivedListener)
-        chrome.tabs.onActivated.removeListener(tabActivationListener)
-        chrome.tabs.onUpdated.removeListener(tabUpdateListener)
+    if (!chrome.webRequest.onCompleted.hasListener(onCompletedListener)) {
+        chrome.webRequest.onCompleted.addListener(
+            onCompletedListener,
+            {
+                urls: ['<all_urls>'],
+                types: isFirefox() ? ['xmlhttprequest', 'imageset', 'image'] : ['image']
+            },
+            ['responseHeaders']
+        )
     }
 
-    if(!chrome.storage.onChanged.hasListener(updateState)){
-        chrome.storage.onChanged.addListener(updateState)
+    if (!chrome.webRequest.onHeadersReceived.hasListener(onHeadersReceivedListener)) {
+        chrome.webRequest.onHeadersReceived.addListener(
+            onHeadersReceivedListener,
+            {
+                urls: ['<all_urls>'],
+                types: ['main_frame', 'sub_frame', 'xmlhttprequest']
+            },
+            ['blocking', 'responseHeaders']
+        )
     }
-    if(!chrome.runtime.onInstalled.hasListener(checkSetup)){
-        chrome.runtime.onInstalled.addListener(checkSetup)
+
+    if (!chrome.tabs.onActivated.hasListener(onTabActivated)) {
+        chrome.tabs.onActivated.addListener(onTabActivated)
+    }
+
+    if (!chrome.tabs.onUpdated.hasListener(onTabUpdated)) {
+        chrome.tabs.onUpdated.addListener(onTabUpdated)
+    }
+
+    if (!chrome.storage.onChanged.hasListener(onChanged)) {
+        chrome.storage.onChanged.addListener(onChanged)
+    }
+
+    if (!chrome.runtime.onInstalled.hasListener(onInstalled)) {
+        chrome.runtime.onInstalled.addListener(onInstalled)
     }
 })

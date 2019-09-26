@@ -265,8 +265,8 @@ chrome.storage.local.get(storedState => {
         chrome.tabs.onUpdated.addListener(onTabUpdated)
     }
 
-    if (!chrome.storage.onChanged.hasListener(onChanged)) {
-        chrome.storage.onChanged.addListener(onChanged)
+    if (!chrome.storage.onChanged.hasListener(onStateChanged)) {
+        chrome.storage.onChanged.addListener(onStateChanged)
     }
 
     if (!chrome.runtime.onInstalled.hasListener(onInstalled)) {

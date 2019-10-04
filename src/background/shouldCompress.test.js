@@ -13,6 +13,19 @@ it('should not compress when app is disabled', () => {
   ).toBeFalsy()
 })
 
+it('should not compress when there is no proxy set', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://google.com/logo.png',
+      pageUrl: 'https://google.com',
+      compressed: new Set(),
+      proxyUrl: '',
+      disabledHosts: [],
+      enabled: true
+    })
+  ).toBeFalsy()
+})
+
 it('should only compress http or https schema URLs', () => {
   expect(
     shouldCompress({
@@ -57,6 +70,39 @@ it('should only compress http or https schema URLs', () => {
       enabled: true
     })
   ).toBeFalsy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'moz-extension:///logo.png',
+      pageUrl: 'moz-extension:///foo',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      disabledHosts: [],
+      enabled: true
+    })
+  ).toBeFalsy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'about:config',
+      pageUrl: 'about:config',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      disabledHosts: [],
+      enabled: true
+    })
+  ).toBeFalsy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP',
+      pageUrl: 'https://google.com',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      disabledHosts: [],
+      enabled: true
+    })
+  ).toBeFalsy()
 })
 
 it('should not compress when img is redirected', () => {
@@ -84,7 +130,7 @@ it('should not compress when img is redirected', () => {
   ).toBeFalsy()
 })
 
-it('should not compress favicons or .svg', () => {
+it('should not compress favicons, .ico, and .svg', () => {
   expect(
     shouldCompress({
       imageUrl: 'http://google.com/favicon.png',
@@ -304,6 +350,17 @@ it('should not compress tracking pixels', () => {
       enabled: true
     })
   ).toBeFalsy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'https://example.com/logo-200px.jpg',
+      disabledHosts: ['google.com'],
+      pageUrl: 'foo.com',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true
+    })
+  ).toBeTruthy()
 })
 
 it('Should have a regexp with the file extension properly escaped', () => {
@@ -330,3 +387,28 @@ it('Should have a regexp with the file extension properly escaped', () => {
   ).toBeTruthy()
 })
 
+it('should not compress image if the request type is XHR and url is not valid', () => {
+  expect(
+    shouldCompress({
+      imageUrl: 'https://whoasvgomg.com/example.png',
+      disabledHosts: [],
+      pageUrl: 'siliconera.com',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true,
+      type: 'xmlhttprequest'
+    })
+  ).toBeTruthy()
+
+  expect(
+    shouldCompress({
+      imageUrl: 'https://whoasvgomg.com/example',
+      disabledHosts: [],
+      pageUrl: 'siliconera.com',
+      compressed: new Set(),
+      proxyUrl: 'https://webtask.io/bandwidth-hero',
+      enabled: true,
+      type: 'xmlhttprequest'
+    })
+  ).toBeFalsy()
+});

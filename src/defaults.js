@@ -8,5 +8,6 @@ export default {
   disabledHosts: [],
   convertBw: true,
   compressionLevel: 40,
-  proxyUrl: ''
+  proxyUrl: '',
+  isWebpSupported: false,
 }

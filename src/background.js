@@ -163,14 +163,17 @@ chrome.storage.local.get(storedState => {
      * @returns {string}
      */
     function buildCompressUrl(url) {
-        const urlMatch = url.match(/^(\w+):\/\/(.*)$/);
+        const urlMatch = url.match(/^(\w+):\/\/(.*?)(\?.*)?$/);
         let redirectUrl = '';
         redirectUrl += state.proxyUrl;
         redirectUrl += urlMatch[1] + "/"; // protocol, mostly "https"
-        redirectUrl += urlMatch[2]; // rest of URL
+        redirectUrl += urlMatch[2]; // host + path
         redirectUrl += (state.convertBw ? ".b" : ".c"); // black-white or color
         redirectUrl += state.compressionLevel;
         redirectUrl += (state.isWebpSupported ? ".webp" : ".jpg");
+        if (urlMatch[3]) {
+          redirectUrl += urlMatch[3]; // query string
+        }
         return redirectUrl;
     }
 

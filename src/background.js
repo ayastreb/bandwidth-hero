@@ -163,12 +163,22 @@ chrome.storage.local.get(storedState => {
      * @returns {string}
      */
     function buildCompressUrl(url) {
+        const urlMatch = url.match(/^(\w+):\/\/(.*?)(\/+)?(\?.*)?$/);
         let redirectUrl = '';
         redirectUrl += state.proxyUrl;
-        redirectUrl += `?url=${encodeURIComponent(url)}`;
-        redirectUrl += `&jpeg=${state.isWebpSupported ? 0 : 1}`;
-        redirectUrl += `&bw=${state.convertBw ? 1 : 0}`;
-        redirectUrl += `&l=${state.compressionLevel}`;
+        if (urlMatch[3]) {
+          // trailing slashes in path are stripped
+          // add internal query string before protocol
+          redirectUrl += `appendPath=${encodeURIComponent(urlMatch[3])}/`;
+        }
+        redirectUrl += urlMatch[1] + "/"; // protocol, mostly "https"
+        redirectUrl += urlMatch[2]; // host + path
+        redirectUrl += (state.convertBw ? ".b" : ".c"); // black-white or color
+        redirectUrl += state.compressionLevel;
+        redirectUrl += (state.isWebpSupported ? ".webp" : ".jpg");
+        if (urlMatch[4]) {
+          redirectUrl += urlMatch[4]; // query string
+        }
         return redirectUrl;
     }
 
